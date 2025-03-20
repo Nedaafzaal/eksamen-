@@ -5,19 +5,22 @@
  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>logind</title>
+    <link href="./logind.css" rel="stylesheet">
+   
  </head>
  <body>
+   <h2>Log ind nedenfor </h2>
     <form action="/brugere" method="POST"> <!--definere hvilken rute formularen skal sendes til-->
-        <label for="brugernavn">Brugernavn</label>
+        <label for="brugernavn">Brugernavn:</label>
         <input type="text" id="brugernavn" name="brugernavn">
         <br>
         <br>
-        <label for="adgangskode">Adgangskode</label>
+        <label for="adgangskode">Adgangskode:</label>
         <input type="text" id="adgangskode" name="adgangskode">
         <br>
         <br>
-        <button type="submit">Send</button>
+        <button type="submit">Log ind</button>
     </form>
    <br>
 

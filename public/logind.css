@@ -1,0 +1,19 @@
+body {
+    margin: auto;
+    width: 30%;
+    border: 2px solid black;
+    border-radius: 25px;
+    padding: 20px;
+    text-align: center;
+    margin-top: 250px;
+  }
+  
+button{
+    width:150px;
+    background-color: #ffffff;
+    padding: 2px,2px,2px,2px;
+    margin: 20px 0;
+}
+
+button:hover{
+    color:rgb(100, 102, 249)}

@@ -5,6 +5,8 @@ const port = 3001; //definere hvilken port vores server skal køre på
 
 app.set("view engine", "ejs"); //fortæller serveren at den skal bruge EJS som view engine
 app.use(express.urlencoded({extended: true })); //gør at app kan læse data fra en HTML formular 
+app.use(express.static('public')) //Vi sætter alle vores statiske filer indenunder mappen public, så vi kan linke vores CSS. 
+
 
 let database =[]; //vores database
 
