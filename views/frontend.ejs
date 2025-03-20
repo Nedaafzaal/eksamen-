@@ -1,0 +1,28 @@
+<!-- installere ejs ved at skrive install ejs terminalen-->
+
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+ </head>
+ <body>
+    <form action="/brugere" method="POST"> <!--definere hvilken rute formularen skal sendes til-->
+        <label for="brugernavn">Brugernavn</label>
+        <input type="text" id="brugernavn" name="brugernavn">
+        <br>
+        <br>
+        <label for="adgangskode">Adgangskode</label>
+        <input type="text" id="adgangskode" name="adgangskode">
+        <br>
+        <br>
+        <button type="submit">Send</button>
+    </form>
+   <br>
+
+   <p>Eller <a href="/opretbruger">Opret Bruger</a></p>
+   
+
+ </body>
+ </html>
