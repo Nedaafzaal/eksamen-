@@ -1,6 +1,3 @@
-//opretter en server ved at skrive npm init 
-//henter derefter express pakken ved npm install express for at bygge vores webapplikation
-//control c for at slutte server og node --watch app.js så den automatisk ændre
 
 const express = require("express"); //vi kalder på express pakken 
 const app = express(); //appen er lig vores pakke 
