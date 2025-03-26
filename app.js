@@ -35,6 +35,7 @@ app.post("/brugere", (req, res) => { //opretter en sti til klienten så de kan s
 app.listen(port, () => {  //hvis port ændres i konstanten ændres det også her derfor kaldes den port
     console.log(`Example app listening on port http://localhost:${port}`) //printer linket i konsollen så vi kan komme ind på webapplikationen
 });
+.
 
 
 
