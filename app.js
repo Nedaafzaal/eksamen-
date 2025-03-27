@@ -14,28 +14,25 @@ app.get("/", (req, res) => {
     res.render('dashboard.ejs')
    }) 
 
+//get henter data fra serevren som er login.ejs og post sender data til serveren
 app.get("/login", (req, res) => {
-    res.render("login.ejs"); //når der sendes en get request til serveren så svare serveren med en HTML side fra frontend.ejs
+    res.render("login.ejs"); 
 })
 app.post("/login", (req, res) => {
     // login logik
-    res.redirect("http://localhost:3001/"); //når der sendes en get request til serveren så svare serveren med en HTML side fra frontend.ejs
+    res.redirect("http://localhost:3001/");
 })
 
+//get henter data fra serevren som er opretbruger.ejs og post sender data til serveren som brugeren kan se. Tilføjer den oprettede bruger til databasen. Sender svar med HTTP status og redirecter brugeren til dashboard.
 app.get("/opretbruger", (req, res) => {
-    res.render("opretbruger.ejs"); //når der sendes en get request til serveren så svare serveren med en HTML side fra opretbruger.ejs
+    res.render("opretbruger.ejs"); 
 })
 
-
-app.post("/opretbruger", (req, res) => { //opretter en sti til klienten så de kan sende en request om at logge ind 
-    console.log(req.body); //logger den data klienten har sendt
-    database.push(req.body.name); //pusher nye brugere ind i databasen 
-   res.status(200).redirect("http://localhost:3001/"); //serveren er fejlfri
+app.post("/opretbruger", (req, res) => { 
+    console.log(req.body); 
+    database.push(req.body.name); 
+   res.status(200).redirect("http://localhost:3001/"); 
 });
-
-
-
-
 
 app.listen(port, () => {  //hvis port ændres i konstanten ændres det også her derfor kaldes den port
     console.log(`Example app listening on port http://localhost:${port}`) //printer linket i konsollen så vi kan komme ind på webapplikationen
@@ -48,6 +45,9 @@ app.listen(port, () => {  //hvis port ændres i konstanten ændres det også her
 // Router
 // HTTP statuskoder
 // HTTP protokol meget kort 
+// Cookies
+// Session cookies i express
+// ekstra: hashing af adgangskode
 
 
 
