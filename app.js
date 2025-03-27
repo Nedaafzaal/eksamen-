@@ -11,7 +11,7 @@ app.use(express.static('public')) //Vi sætter alle vores statiske filer indenun
 let database =[]; //vores database
 
 app.get("/", (req, res) => {                              
-    res.render('dashboard.ejs')
+    res.render('login.ejs')
    }) 
 
 //get henter data fra serevren som er login.ejs og post sender data til serveren
@@ -20,7 +20,7 @@ app.get("/login", (req, res) => {
 })
 app.post("/login", (req, res) => {
     // login logik
-    res.redirect("http://localhost:3001/");
+    res.redirect("http://localhost:3001/dashboard");
 })
 
 //get henter data fra serevren som er opretbruger.ejs 
@@ -36,12 +36,16 @@ app.post("/opretbruger", (req, res) => {
    res.status(200).redirect("http://localhost:3001/"); 
 });
 
-
+app.get("/dashboard", (req, res) => {
+    res.render("dashboard.ejs")
+})
 //hvis port ændres i konstanten ændres det også her derfor kaldes den port
 //printer linket i konsollen så vi kan komme ind på webapplikationen
 app.listen(port, () => {  
     console.log(`Example app listening on port http://localhost:${port}`) 
 })
+
+
 
 
 // Session cookies
