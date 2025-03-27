@@ -23,7 +23,9 @@ app.post("/login", (req, res) => {
     res.redirect("http://localhost:3001/");
 })
 
-//get henter data fra serevren som er opretbruger.ejs og post sender data til serveren som brugeren kan se. Tilføjer den oprettede bruger til databasen. Sender svar med HTTP status og redirecter brugeren til dashboard.
+//get henter data fra serevren som er opretbruger.ejs 
+// og post sender data til serveren som brugeren kan se. 
+// Tilføjer den oprettede bruger til databasen. Sender svar med HTTP status og redirecter brugeren til dashboard.
 app.get("/opretbruger", (req, res) => {
     res.render("opretbruger.ejs"); 
 })
@@ -34,8 +36,11 @@ app.post("/opretbruger", (req, res) => {
    res.status(200).redirect("http://localhost:3001/"); 
 });
 
-app.listen(port, () => {  //hvis port ændres i konstanten ændres det også her derfor kaldes den port
-    console.log(`Example app listening on port http://localhost:${port}`) //printer linket i konsollen så vi kan komme ind på webapplikationen
+
+//hvis port ændres i konstanten ændres det også her derfor kaldes den port
+//printer linket i konsollen så vi kan komme ind på webapplikationen
+app.listen(port, () => {  
+    console.log(`Example app listening on port http://localhost:${port}`) 
 })
 
 
