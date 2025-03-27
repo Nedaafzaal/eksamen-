@@ -33,7 +33,7 @@ app.get("/opretbruger", (req, res) => {
 app.post("/opretbruger", (req, res) => { 
     console.log(req.body); 
     database.push(req.body.name); 
-   res.status(200).redirect("http://localhost:3001/"); 
+   res.status(200).redirect("http://localhost:3001/dashboard"); 
 });
 
 app.get("/dashboard", (req, res) => {
