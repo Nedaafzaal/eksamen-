@@ -34,6 +34,10 @@ app.post("/brugere", (req, res) => { //opretter en sti til klienten så de kan s
 
 app.listen(port, () => {  //hvis port ændres i konstanten ændres det også her derfor kaldes den port
     console.log(`Example app listening on port http://localhost:${port}`) //printer linket i konsollen så vi kan komme ind på webapplikationen
+
+/*app.post("/brugere", (req, res) => { //opretter en sti til klienten så de kan sende en request om at oprette bruger
+        console.log(req.body); //logger den data klienten har sendt
+       res.status(200);}) //serveren er fejlfri*/
 });
 
 
