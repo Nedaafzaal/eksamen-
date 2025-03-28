@@ -39,6 +39,8 @@ app.post("/opretbruger", (req, res) => {
 app.get("/dashboard", (req, res) => {
     res.render("dashboard.ejs")
 })
+
+
 //hvis port ændres i konstanten ændres det også her derfor kaldes den port
 //printer linket i konsollen så vi kan komme ind på webapplikationen
 app.listen(port, () => {  
