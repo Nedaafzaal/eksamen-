@@ -8,7 +8,7 @@ CREATE TABLE eksamenSQL.bruger (
     telefonnummer INT,
     CONSTRAINT PK_brugerID PRIMARY KEY (brugerID),
     CONSTRAINT FK_porteføljeID FOREIGN KEY (porteføljeID)
-        REFERENCES eksamenSQL.bruger(brugerID)
+        REFERENCES eksamenSQL.porteføljer(porteføljeID)
 );
 
 CREATE TABLE eksamenSQL.konto (
@@ -21,7 +21,7 @@ CREATE TABLE eksamenSQL.konto (
     bankreference VARCHAR(256),
     CONSTRAINT PK_kontoID PRIMARY KEY (kontoID),
     CONSTRAINT FK_brugerID FOREIGN key (brugerID)
-        REFERENCES eksamenSQL.konto(kontoID)
+        REFERENCES eksamenSQL.bruger(brugerID)
 );
 
 CREATE TABLE eksamenSQL.transaktioner (
@@ -81,3 +81,5 @@ CREATE TABLE eksamenSQL.porteføljer (
     CONSTRAINT FK_værdipapirID FOREIGN KEY (værdipapirID)
         REFERENCES eksamenSQL.værdipapir(værdipapirID)
 );
+
+
