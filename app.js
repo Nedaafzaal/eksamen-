@@ -2,6 +2,7 @@
 import express from 'express'; //vi kalder på express pakken 
 const app = express(); //appen er lig vores pakke 
 const port = 3001; //definere hvilken port vores server skal køre på 
+app.use(express.static('views'));
 
 app.set("view engine", "ejs"); //fortæller serveren at den skal bruge EJS som view engine
 app.use(express.urlencoded({extended: true })); //gør at app kan læse data fra en HTML formular 
