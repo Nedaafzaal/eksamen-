@@ -1,3 +1,57 @@
 body{
     background-color: black;
 }
+
+img{
+    width: 225px;
+    height: auto;
+}
+
+.sidemenu {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 150px;
+    height: 100vh;
+    background-color: #212121;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0px;
+  }
+  
+  .WebappLogo img {
+    width: 180px;
+    object-fit: contain;
+  }
+  
+  .Menu {
+    list-style: none;
+    padding: 0;
+    width: 160px;
+  }
+  
+  .Menu li {
+    margin-bottom: 15px;
+    width: 150px;
+  }
+  
+  .Menu a {
+    color: #cccccc;
+    font-style: Arial;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 13px 16px;
+    display: block;
+    border-radius: 8px;
+    transition: 0.5s;
+  }
+  
+  .Menu a:hover {
+    background-color: #2f2f2f;
+    color: #fffffff6;
+  }
+  
+  
+

@@ -6,6 +6,7 @@ body {
     padding: 20px;
     text-align: center;
     margin-top: 250px;
+    
   }
   
 button{
@@ -13,6 +14,7 @@ button{
     background-color: #ffffff;
     padding: 2px,2px,2px,2px;
     margin: 20px 0;
+    
 }
 
 button:hover{
