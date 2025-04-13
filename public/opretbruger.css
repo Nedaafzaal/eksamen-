@@ -1,13 +1,17 @@
 body {
-    margin: auto;
-    width: 30%;
-    border: 2px solid black;
-    border-radius: 25px;
-    padding: 20px;
-    text-align: center;
-    margin-top: 250px;
-    
-  }
+  background-color: black;
+}
+
+.opretBruger{
+  margin: auto;
+  width: 30%;
+  border: 2px solid black;
+  border-radius: 25px;
+  padding: 20px;
+  text-align: center;
+  margin-top: 250px;
+  background-color: rgb(243, 241, 241);
+}
   
 button{
     width:150px;

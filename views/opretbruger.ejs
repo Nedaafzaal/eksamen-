@@ -9,41 +9,42 @@
 
 </head>
 <body>
-   <h2>Opret bruger nedenfor</h2>
-   <form action="/opretbruger" method="POST"> <!--definere hvilken rute formularen skal sendes til-->
-
-      <label for="fornavn">Angiv fornavn:</label>
-       <input type="text" id="fornavn" name="fornavn" required>
-       <br>
-       <br>
-       <label for="efternavn">Angiv efternavn:</label>
-       <input type="text" id="efternavn" name="efternavn" required>
-       <br>
-       <br>
-       <label for="opretbrugernavn">Opret brugernavn:</label>
-       <input type="text" id="opretbrugernavn" name="opretbrugernavn" required>
-       <br>
-       <br>
-       <label for="opretadgangskode">Opret adgangskode:</label>
-       <input type="text" id="opretadgangskode" name="opretadgangskode" required>
-       <br>
-       <br>
-       <label for="e-mail">Indtast e-mail:</label>
-       <input type="text" id="e-mail" name="e-mail" required>
-       <br>
-       <br>
-       <label for="fødselsdag">Angiv fødselsdag:</label>
-       <input type="date" id="fødselsdag" name="fødselsdag" required>
-       <br>
-       <br>
-       <label for="tlf">Indtast telefon-nummer:</label>
-       <input type="number" id="tlf" name="tlf" requied>
-       <br>
-       <br>
-       <button type="submit">Opret</button>
-   </form>
-  
-  
-
+   <div class="opretBruger">
+      <h2>Opret bruger</h2>
+      <form action="/opretbruger" method="POST"> <!--definere hvilken rute formularen skal sendes til-->
+   
+         <label for="fornavn">Angiv fornavn:</label>
+          <input type="text" id="fornavn" name="fornavn" required>
+          <br>
+          <br>
+          <label for="efternavn">Angiv efternavn:</label>
+          <input type="text" id="efternavn" name="efternavn" required>
+          <br>
+          <br>
+          <label for="opretbrugernavn">Opret brugernavn:</label>
+          <input type="text" id="opretbrugernavn" name="opretbrugernavn" required>
+          <br>
+          <br>
+          <label for="opretadgangskode">Opret adgangskode:</label>
+          <input type="text" id="opretadgangskode" name="opretadgangskode" required>
+          <br>
+          <br>
+          <label for="e-mail">Indtast e-mail:</label>
+          <input type="text" id="e-mail" name="e-mail" required>
+          <br>
+          <br>
+          <label for="fødselsdag">Angiv fødselsdag:</label>
+          <input type="date" id="fødselsdag" name="fødselsdag" required>
+          <br>
+          <br>
+          <label for="tlf">Indtast telefon-nummer:</label>
+          <input type="number" id="tlf" name="tlf" requied>
+          <br>
+          <br>
+          <button type="submit">Opret</button>
+          <br>
+          <img src="logo.png" alt="WebappLogo">
+      </form>
+   </div>
 </body>
 </html>
