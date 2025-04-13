@@ -1,5 +1,5 @@
 
-const express = require("express"); //vi kalder på express pakken 
+import express from 'express'; //vi kalder på express pakken 
 const app = express(); //appen er lig vores pakke 
 const port = 3001; //definere hvilken port vores server skal køre på 
 
