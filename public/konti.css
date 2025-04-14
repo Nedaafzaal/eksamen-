@@ -65,3 +65,64 @@ img{
     font-weight: bold;
     color: white;
   }
+
+  /* indhold begynder*/
+  
+  body {
+    background-color: black;
+    margin: 0; 
+    font-family: 'Times New Roman', Times, serif;
+    color: white;
+  }
+
+  h1 {
+    margin-left: 200px;
+    margin-bottom: 20px;
+  }
+
+  .indhold {
+    margin-left: 100px; 
+    padding: 10px; 
+  }
+
+  .venstreØvreBoks {
+    background-color: rgb(31, 31, 31);
+    border-radius: 10px;
+    padding: 20px;
+    width:450px; 
+    height: 100px; 
+    margin-left: 200px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 40px;
+  }
+
+  .ændringer {
+    margin-top: 20px; 
+    line-height: 1.8; 
+    gap: 50px;
+    margin-bottom: 20px;
+    line-height: 2.8;
+  }
+
+  .højreØvreBoks {
+    background-color: rgb(31, 31, 31);
+    border-radius: 10px;
+    padding: 20px;
+    width: 700px; 
+    height: 200px; 
+    margin-left: 200px;
+    margin-bottom: 20px;
+  }
+
+  .oversigtBoks {
+    background-color: rgb(31, 31, 31);
+    border-radius: 10px;
+    padding: 20px;
+    width: 1020px; 
+    height: 350px; 
+    margin-left: 200px;
+    margin-bottom: 20px;
+  }
+
+
