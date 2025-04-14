@@ -10,10 +10,6 @@ body{
     color: white;
   }
 
-  h1 {
-    margin-left: 200px;
- 
-  }
 
   .indhold {
     margin-left: 100px; 
@@ -81,11 +77,16 @@ body{
 
   }
 
+  .overskrift {
+    margin-left: 200px;
+    margin-bottom: 10px;
+  }
+  
   .titel-knap {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-left: 710px;
+    margin-left: 730px;
     margin-right: 100px;
     background-color: rgb(31, 31, 31);
     border-radius: 10px;
@@ -102,7 +103,6 @@ body{
     border-radius: 8px;
     text-decoration: none;
     transition: 0.3s;
-    margin-left: 320px;
 
   }
   
