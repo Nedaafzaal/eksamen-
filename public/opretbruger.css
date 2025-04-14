@@ -6,21 +6,21 @@ body {
 
 .opretBruger{
   margin: auto;
-  width: 690px;
+  width: 650px;
   border-radius: 25px;
   padding: 20px;
   text-align: center;
   margin-top: 80px;
-  background-color: whitesmoke;
+  background-color: rgba(0, 0, 0, 0.4);
   background-size: cover;
-  border: 2px solid rgb(96, 14, 96);
+  border: 2px solid black;
 }
 
 .opretBruger h2{
   font-size: 45px;
   width: 100%;
-  color: black;
-  font-family:'Times New Roman', Times, serif
+  color: whitesmoke;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .opretBruger .opretBox{
@@ -38,37 +38,46 @@ body {
   width: 100%;
   height: 100%;
   background: transparent;
-  border: black;
+  border: 2px solid rgba(56, 47, 47, 0.678);
   border-radius: 100px;
   padding: 0px 10px;
   box-sizing: border-box;
+  background-color: transparent;
+  color: rgba(245, 245, 245, 0.95);
+  font-size: 13px;
 }
 
 .opretBox input::placeholder{
-  color: rgb(66, 66, 66);
-
+  color: rgb(236, 230, 230);
 }
 
 .opretBox i{
   position: absolute;
   right: 20px;
   top: 30%;
+  color: whitesmoke;
 }
 
-#knap2{
-  margin-top: 15px;
-  margin-bottom: 15px;
-  width: 30%;
+#sendFormular{
+  margin-top: 10px;
+  margin-bottom: 20px;
+  width: 170px;
   height: 45px;
+  color: white;
   border: 2px solid gray;
   border-radius: 100px;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 15px;
-  background-color: purple;
-  color: white;
+  background-color: transparent;
+}
+
+#sendFormular:hover{
+  background-color: rgba(233, 239, 239, 0.889);
+  color: black;
 }
 
 .logo img{
+  margin-top: 25px;
   width: 120px;
   height: auto;
 }

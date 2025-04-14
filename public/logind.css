@@ -6,21 +6,21 @@ body {
 
 .logindBox{
   margin: auto;
-  width: 690px;
+  width: 650px;
   border-radius: 25px;
   padding: 20px;
   text-align: center;
   margin-top: 80px;
-  background-color: whitesmoke;
+  background-color: rgba(0, 0, 0, 0.4);
   background-size: cover;
-  border: 2px solid rgb(96, 14, 96);
+  border: 2px solid black;
 }
 
 .logindBox h2{
   font-size: 45px;
   width: 100%;
-  color: black;
-  font-family:'Times New Roman', Times, serif
+  color: whitesmoke;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .logindBox .inputBox{
@@ -37,47 +37,61 @@ body {
   width: 100%;
   height: 100%;
   background: transparent;
-  border: black;
+  border: 2px solid rgba(56, 47, 47, 0.678);
   border-radius: 100px;
   padding: 0px 10px;
   box-sizing: border-box;
+  background-color: transparent;
+  color: rgba(245, 245, 245, 0.95);
+  font-size: 13px;
 }
 
 .inputBox input::placeholder{
-  color: rgb(66, 66, 66);
-
+  color: rgb(236, 230, 230);
 }
 
 .inputBox i{
   position: absolute;
   right: 20px;
   top: 30%;
+  color: whitesmoke;
 }
 
-#knap1 {
+#logIndKnap {
   margin-top: 40px;
-  width: 30%;
+  width: 170px;
   height: 45px;
   color: white;
   border: 2px solid gray;
   border-radius: 100px;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 15px;
-  background-color: purple;
+  background-color: transparent;
 }
 
-button:hover{
-    color:rgb(100, 102, 249)
+#logIndKnap:hover{
+    background-color: rgba(233, 239, 239, 0.889);
+    color: black;
 }
 
 .opretNyKnap{
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: Arial, Helvetica, sans-serif;
   margin-top: 50px;
   margin-bottom: 25px;
-  font-size: 15px;
+  font-size: 16px;
+  color: whitesmoke;
+}
+
+.opretNyKnap a{
+  color: white;
+}
+
+a:hover{
+  color: purple;
 }
 
 .logo img{
+  margin-top: 25px;
   width: 120px;
   height: auto;
 }
