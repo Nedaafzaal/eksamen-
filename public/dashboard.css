@@ -9,14 +9,14 @@ img{
 
 .sidemenu {
     position: fixed;
-    left: 0;
-    top: 0;
+    left: 5px;
+    top: 0px;
     width: 150px;
-    height: 100vh;
+    height: 100%;
     background-color: #212121;
-    padding: 15px;
+    padding: 20px;
     display: flex;
-    flex-direction: column;
+    flex-direction:column;
     align-items: center;
     gap: 0px;
   }
@@ -37,15 +37,23 @@ img{
     width: 150px;
   }
   
+  .Menu i{
+    color: white;
+    display: flex;
+    text-align: center;
+    margin-right: 10px;
+  }
+
   .Menu a {
     color: #cccccc;
-    font-style: Arial;
+    font-family: 'Times New Roman', Times, serif;
     text-decoration: none;
     font-size: 18px;
     padding: 13px 16px;
     display: block;
     border-radius: 8px;
     transition: 0.5s;
+    align-items: center;
   }
   
   .Menu a:hover {
