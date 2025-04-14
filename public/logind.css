@@ -1,25 +1,80 @@
 body {
-  background-color: black; 
+  background: url("baggrund.jpeg");
+  justify-content: center;
+  align-items: center;
 }
 
 .logindBox{
   margin: auto;
-  width: 30%;
-  border: 2px solid black;
+  width: 690px;
   border-radius: 25px;
   padding: 20px;
   text-align: center;
-  margin-top: 250px;
-  background-color: rgb(243, 241, 241)
+  margin-top: 80px;
+  background-color: whitesmoke;
+  background-size: cover;
+  border: 2px solid rgb(96, 14, 96);
 }
-  
-button{
-    width:150px;
-    background-color: #ffffff;
-    padding: 2px,2px,2px,2px;
-    margin: 20px 0;
 
+.logindBox h2{
+  font-size: 45px;
+  width: 100%;
+  color: black;
+  font-family:'Times New Roman', Times, serif
+}
+
+.logindBox .inputBox{
+  position: relative;
+  width: 90%;
+  height: 50px;
+  margin: 25px;
+  background-color: transparent;
+  border-radius: 100px;
+  border: 2px solid rgb(164, 161, 161);
+}
+
+.inputBox input{
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: black;
+  border-radius: 100px;
+  padding: 0px 10px;
+  box-sizing: border-box;
+}
+
+.inputBox input::placeholder{
+  color: rgb(66, 66, 66);
+
+}
+
+.inputBox i{
+  position: absolute;
+  right: 20px;
+  top: 30%;
+}
+
+#knap1 {
+  margin-top: 40px;
+  width: 30%;
+  height: 45px;
+  color: white;
+  border: 2px solid gray;
+  border-radius: 100px;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 15px;
+  background-color: purple;
 }
 
 button:hover{
-    color:rgb(100, 102, 249)}
+    color:rgb(100, 102, 249)
+}
+
+.opretNyKnap{
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  margin-top: 50px;
+  margin-bottom: 25px;
+  font-size: 15px;
+}
+
+

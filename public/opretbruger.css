@@ -1,25 +1,70 @@
 body {
-  background-color: black;
+  background: url("baggrund.jpeg");
+  justify-content: center;
+  align-items: center;
 }
 
 .opretBruger{
   margin: auto;
-  width: 30%;
-  border: 2px solid black;
+  width: 690px;
   border-radius: 25px;
   padding: 20px;
   text-align: center;
-  margin-top: 250px;
-  background-color: rgb(243, 241, 241);
-}
-  
-button{
-    width:150px;
-    background-color: #ffffff;
-    padding: 2px,2px,2px,2px;
-    margin: 20px 0;
-    
+  margin-top: 80px;
+  background-color: whitesmoke;
+  background-size: cover;
+  border: 2px solid rgb(96, 14, 96);
 }
 
-button:hover{
-    color:rgb(100, 102, 249)}
+.opretBruger h2{
+  font-size: 45px;
+  width: 100%;
+  color: black;
+  font-family:'Times New Roman', Times, serif
+}
+
+.opretBruger .opretBox{
+  position: relative;
+  width: 90%;
+  height: 50px;
+  margin: 25px;
+  background-color: transparent;
+  border-radius: 100px;
+  border: 2px solid rgb(164, 161, 161);
+
+}
+
+.opretBox input{
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: black;
+  border-radius: 100px;
+  padding: 0px 10px;
+  box-sizing: border-box;
+}
+
+.opretBox input::placeholder{
+  color: rgb(66, 66, 66);
+
+}
+
+.opretBox i{
+  position: absolute;
+  right: 20px;
+  top: 30%;
+}
+
+#knap2{
+  margin-top: 15px;
+  margin-bottom: 15px;
+  width: 30%;
+  height: 45px;
+  border: 2px solid gray;
+  border-radius: 100px;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 15px;
+  background-color: purple;
+  color: white;
+}
+

@@ -2,33 +2,40 @@
 
  <!DOCTYPE html>
  <html lang="en">
- <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>logind</title>
-    <link href="./logind.css" rel="stylesheet">
-   
- </head>
- <body>
-   <div class="logindBox">
-     <h2>Log ind</h2>
-     <form action="/login" method="POST"> <!--definere hvilken rute formularen skal sendes til-->
-         <label for="brugernavn">Brugernavn:</label>
-         <input type="text" id="brugernavn" name="brugernavn" required>
-         <br>
-         <br>
-         <label for="adgangskode">Adgangskode:</label>
-         <input type="text" id="adgangskode" name="adgangskode" required>
-         <br>
-         <br>
-         <button type="submit">Log ind</button>
-     </form>
-    <br>
-    <p>Eller <a href="/opretbruger">Opret Bruger</a></p>
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>logind</title>
+      <link href="./logind.css" rel="stylesheet">
+      <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
+  </head>
 
-   </class>
-   
-   <img src="logo.png" alt="WebappLogo">
+  <body>
+    <div class="logindBox">
+      <h2>Log ind</h2>
+      <form action="/login" method="POST"> <!--definere hvilken rute formularen skal sendes til-->
 
- </body>
+        <div class="inputBox">
+          <input type="text" name="brugernavn" placeholder="Brugernavn" required>
+          <i class='bx bxs-user'></i>
+        </div>
+
+        <div class="inputBox">
+          <input type="password" name="adgangskode" placeholder="Adgangskode" required>
+          <i class='bx bxs-lock-alt' ></i>
+        </div>
+
+          <button id="knap1" type="submit">Log ind</button>
+      </form>
+      <br>
+      <div class="opretNyKnap">
+        <p>Ikke oprettet endnu? <a href="/opretbruger">Opret dig her</a></p>
+      </div>
+    
+      <div class="logo">
+        <img src="logo.png" alt="WebappLogo">
+      </div>
+    
+    </class>
+    </body>
  </html>
