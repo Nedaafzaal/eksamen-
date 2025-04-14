@@ -64,7 +64,9 @@ app.listen(port, () => {
     console.log(`Example app listening on port http://localhost:${port}`) 
 })
 
-
+app.get("/logout", (req,res)=>{
+    res.redirect("/login.ejs")
+})
 
 
 // Session cookies

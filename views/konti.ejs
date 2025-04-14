@@ -1,70 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Konti</title>
-    <link href="./konti.css" rel="stylesheet">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Konti</title>
+  <link href="./konti.css" rel="stylesheet" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 </head>
+
 <body>
+  <!--ejs til sidemenu-->
+  <div class="sidemenu">
+    <div class="WebappLogo">
+      <img src="logo.jpeg" alt="WebappLogo" />
+    </div>
+
+    <button class="pil" onclick="skiftMenu()">
+      <i class="bx bxs-chevron-left"></i>
+    </button>
+
+    <ul>
+      <li><a href="/dashboard"><i class="bx bx-home"></i>Dashboard</a></li>
+      <li><a href="/konti"><i class="bx bxs-user-account"></i>Konti</a></li>
+      <li><a href="/portefoljer"><i class="bx bxs-doughnut-chart"></i>Porteføljer</a></li>
+    </ul>
+
+    <ul class="logUd">
+      <li><a href="/login"><i class="bx bx-log-out"></i>Log ud</a></li>
+    </ul>
+  </div>
+
   <div class="indhold">
     <h1 class="overskrift">Portefølje oversigt</h1>
 
+    <div class="titel-knap">
+      <a href="/opretportefolje" class="knap">Tilføj Portefølje</a>
+    </div>
 
-        <div class="titel-knap">
-          <a href="/opretportefolje" class="knap">Tilføj Portefølje</a>
-        </div>
-        
+    <div class="øversteIndhold">
+      <div class="venstreSide">
+        <div class="venstreØvreBoks">Total værdi i DKK</div>
 
-        <div class="øversteIndhold">
-          <div class="venstreSide">
-          <div class="venstreØvreBoks">Total værdi i DKK</div>
-
-          <div class="ændringer">
-            <span>Ændring i 24 timer:</span>
-            <span>Ændring i 7 dage:</span>
-            <span>Ændring i 30 dage:</span>
-          </div>
-        </div>
-        
-          <div class="højreØvreBoks">
-            <h3>Fordeling af værdi i porteføljer</h3>
-            <p>diagram kommer</p>
-          </div>
-        </div>
-
-        <div class="oversigtBoks">
-          <h3>Portefølje Navn - Oversigt</h3>
-          <p>tabel og porteføljer kommer</p>
+        <div class="ændringer">
+          <span>Ændring i 24 timer:</span>
+          <span>Ændring i 7 dage:</span>
+          <span>Ændring i 30 dage:</span>
         </div>
       </div>
 
-     
-      <!--ejs til sidemenu-->
-      <div class="sidemenu">
-        <div class="WebappLogo">
-            <img src="logo.jpeg" alt="WebappLogo">
-        </div>
-  
-        <button class="pil" onclick="skiftMenu()">
-            <i class='bx bxs-chevron-left'></i>
-        </button>
-  
-        <ul>
-            <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
-            <li><a href="/konti"><i class='bx bxs-user-account'></i>Konti</a></li>
-            <li><a href="/portefoljer"><i class='bx bxs-doughnut-chart'></i>Porteføljer</a></li>
-        </ul>
+      <div class="højreØvreBoks">
+        <h3>Fordeling af værdi i porteføljer</h3>
+        <p>diagram kommer</p>
+      </div>
     </div>
-      
-    <script>
-      const sidemenu = document.querySelector('.sidemenu');
-        function skiftMenu() { 
-         sidemenu.classList.toggle('lukket');
-        }
-    </script>
-    
+
+    <div class="oversigtBoks">
+      <h3>Portefølje Navn - Oversigt</h3>
+      <p>tabel og porteføljer kommer</p>
+    </div>
+  </div>
+
+  <script>
+    const sidemenu = document.querySelector('.sidemenu');
+    function skiftMenu() {
+      sidemenu.classList.toggle('lukket');
+    }
+  </script>
 </body>
 </html>

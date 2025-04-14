@@ -1,61 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link href="./dashboard.css" rel="stylesheet">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link href="./dashboard.css" rel="stylesheet">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
 </head>
 
 <body>
-   <!--ejs til sidemenu-->
-    <div class="sidemenu">
-      <div class="WebappLogo">
-          <img src="logo.jpeg" alt="WebappLogo">
-      </div>
 
-      <button class="pil" onclick="skiftMenu()"> <!---Når man trykker på pilen, udløser det funktionen under-->
-          <i class='bx bxs-chevron-left'></i>
-      </button>
+  <!-- Sidemenu -->
+  <div class="sidemenu">
+    <div class="WebappLogo">
+      <img src="logo.jpeg" alt="WebappLogo">
+    </div>
 
-      <ul>
-          <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
-          <li><a href="/konti"><i class='bx bxs-user-account'></i>Konti</a></li>
-          <li><a href="/portefoljer"><i class='bx bxs-doughnut-chart'></i>Porteføljer</a></li>
-      </ul>
+    <button class="pil" onclick="skiftMenu()"> <!-- Når man trykker på pilen, udløser det funktionen under -->
+      <i class='bx bxs-chevron-left'></i>
+    </button>
+
+    <ul>
+      <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
+      <li><a href="/konti"><i class='bx bxs-user-account'></i>Konti</a></li>
+      <li><a href="/portefoljer"><i class='bx bxs-doughnut-chart'></i>Porteføljer</a></li>
+    </ul>
+
+    <ul class="logUd">
+      <li><a href="/login"><i class='bx bx-log-out'></i>Log ud</a></li>
+    </ul>
   </div>
-    
+
+  <!-- Indhold -->
+  <div class="indhold">
+    <h1>Dashboard</h1>
+
+    <!-- Øverste boksrække -->
+    <div class="øvreBoks">
+      <div class="mindreBoks">Total værdi</div>
+      <div class="mindreBoks">Total Realiseret Gevinst</div>
+      <div class="mindreBoks">Total Urealiseret Gevinst</div>
+    </div>
+
+    <!-- Grafboks -->
+    <div class="grafBoks">
+      <h3>Samlet Værdi</h3>
+      <p>Graf kommer her</p>
+    </div>
+
+    <!-- Nederste bokse -->
+    <div class="nedreBoks">
+      <div class="lilleBoks">Top 5 værdipapirer baseret på værdi</div>
+      <div class="lilleBoks">Top 5 værdipapirer baseret på profit</div>
+    </div>
+  </div>
+
+  <!-- Script til at åbne/lukke sidemenu -->
   <script>
-      const sidemenu = document.querySelector('.sidemenu');
-      function skiftMenu() { 
+    const sidemenu = document.querySelector('.sidemenu');
+    function skiftMenu() {
       sidemenu.classList.toggle('lukket');
-      }
-      //når knappen trykkes på, udløser det denne funktion som kalder på sidemenu closed, hvilket altså gør, at sidemenuen forsvinder. 
+    }
+    // Når knappen trykkes på, udløser det denne funktion som kalder på sidemenu 'lukket',
+    // hvilket altså gør, at sidemenuen forsvinder.
   </script>
 
-    <div class="indhold">
-      <h1>Dashboard </h1>
-      <div class="øvreBoks">
-        <div class="mindreBoks"> Total værdi </div>
-        <div class="mindreBoks"> Total Realiseret Gevinst </div>
-        <div class="mindreBoks">Total Urealiseret Gevinst</div>
-      </div>
-
-      <div class="grafBoks">
-        <h3>Samlet Værdi</h3>
-        <p>Graf kommer her</p>
-      </div>
-
-          <div class="nedreBoks">
-            <div class="lilleBoks">Top 5 værdipapirer baseret på værdi</div>
-            <div class="lilleBoks">Top 5 værdipapirer baseret på profit</div>
-            
-          </div>
-        </div>
-        </div>
-      </div>
-    </div>
-      
 </body>
-</html> 
+</html>

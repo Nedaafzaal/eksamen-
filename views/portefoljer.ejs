@@ -1,90 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Porteføljer</title>
-    <link href="./portefoljer.css" rel="stylesheet">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Porteføljer</title>
+  <link href="./portefoljer.css" rel="stylesheet">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
 </head>
+
 <body>
+  <!-- Sidemenu -->
+  <div class="sidemenu">
+    <div class="WebappLogo">
+      <img src="logo.jpeg" alt="WebappLogo">
+    </div>
 
-<div class="indhold">
+    <button class="pil" onclick="skiftMenu()">
+      <i class='bx bxs-chevron-left'></i>
+    </button>
 
-<div class="overskrift">
-    <h1>Growth Tech Portfolio</h1>
+    <ul>
+      <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
+      <li><a href="/konti"><i class='bx bxs-user-account'></i>Konti</a></li>
+      <li><a href="/portefoljer"><i class='bx bxs-doughnut-chart'></i>Porteføljer</a></li>
+    </ul>
 
-<div class="knapper">
-    <a href="/handelshistorik" class="knap">Handels Historik</a>
-    <a href="/Registrerhandel" class="knap">Registrer Handel</a>
-</div>
-</div>
+    <ul class="logUd">
+      <li><a href="/login"><i class="bx bx-log-out"></i>Log ud</a></li>
+    </ul>
 
-<div class="øverste">
-    <div class="grafboks">
+  </div>
+
+  <!-- Indhold -->
+  <div class="indhold">
+
+    <!-- Overskrift og knapper -->
+    <div class="overskrift">
+      <h1>Growth Tech Portfolio</h1>
+      <div class="knapper">
+        <a href="/handelshistorik" class="knap">Handels Historik</a>
+        <a href="/Registrerhandel" class="knap">Registrer Handel</a>
+      </div>
+    </div>
+
+    <!-- Øverste sektion: graf + højreside -->
+    <div class="øverste">
+
+      <!-- Grafboks -->
+      <div class="grafboks">
         <h3>Samlet værdi af portefølje</h3>
         <p>grafen kommer</p>
-    </div>
+      </div>
 
+      <!-- Højreside (cirkeldiagram + total værdi) -->
+      <div class="højresideboks">
 
-<div class="højresideboks">
-    <div class="diagramBoks">
-        <h3>Fordeling af værdi</h3>
-        <p>cirkeldiagram</p>
-    </div>
-
-    <div class="højrenedreboks">
-        <h3>Total værdi i DKK</h3>
-        <p>data kommer</p>
-    </div>
-    </div>
-    </div>
-
-<div class="nedersteboks">
-    <h3>Aktier i portefølje</h3>
-    <p>tabel kommer</p>
-</div>
-</div>
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-   <!--ejs til sidemenu-->
-     <div class="sidemenu">
-        <div class="WebappLogo">
-            <img src="logo.jpeg" alt="WebappLogo">
+        <div class="diagramBoks">
+          <h3>Fordeling af værdi</h3>
+          <p>cirkeldiagram</p>
         </div>
-  
-        <button class="pil" onclick="skiftMenu()">
-            <i class='bx bxs-chevron-left'></i>
-        </button>
-  
-        <ul>
-            <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
-            <li><a href="/konti"><i class='bx bxs-user-account'></i>Konti</a></li>
-            <li><a href="/portefoljer"><i class='bx bxs-doughnut-chart'></i>Porteføljer</a></li>
-        </ul>
+
+        <div class="højrenedreboks">
+          <h3>Total værdi i DKK</h3>
+          <p>data kommer</p>
+        </div>
+
+      </div>
     </div>
-      
-    <script>
-      const sidemenu = document.querySelector('.sidemenu');
-        function skiftMenu() { 
-         sidemenu.classList.toggle('lukket');
-        }
-    </script>
+
+    <!-- Nederste sektion: tabel -->
+    <div class="nedersteboks">
+      <h3>Aktier i portefølje</h3>
+      <p>tabel kommer</p>
+    </div>
+
+  </div> <!-- Slut på indhold -->
+
+  <!-- Script -->
+  <script>
+    const sidemenu = document.querySelector('.sidemenu');
+    function skiftMenu() {
+      sidemenu.classList.toggle('lukket');
+    }
+  </script>
 
 </body>
 </html>

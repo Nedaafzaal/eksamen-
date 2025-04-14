@@ -46,9 +46,6 @@ body{
     height: 100px; 
     display: flex;
     gap: 40px;
-
-    
-    
   }
 
   .højreØvreBoks {
@@ -162,6 +159,10 @@ ul li a i {
   text-align: center;
   padding-right: 10px;
   font-size: 26px;
+}
+
+.logUd li a{
+  margin-top: 450px;
 }
 
 button.pil {

@@ -120,6 +120,10 @@ ul li a i {
   font-size: 26px;
 }
 
+.logUd li a{
+  margin-top: 450px;
+}
+
 button.pil {
   position: absolute;
   top: 40px;

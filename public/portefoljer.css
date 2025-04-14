@@ -147,6 +147,10 @@ ul li a {
   transition: 0.2s ease-out;
 }
 
+.logUd li a{
+  margin-top: 450px;
+}
+
 .sidemenu :hover{
   color: #fffffff6;
   
