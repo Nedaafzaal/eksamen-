@@ -133,7 +133,7 @@ button.pil {
   transition: 0.3s ease-in-out;
 }
 
-.sidemenu.closed {
+.sidemenu.lukket {
   left: -220px; /* Skub siden helt uden for skærmen */
   width: 0;
 }

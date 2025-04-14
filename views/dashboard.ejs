@@ -15,7 +15,7 @@
           <img src="logo.jpeg" alt="WebappLogo">
       </div>
 
-      <button class="pil" onclick="toggleSidebar()"> <!---Når man trykker på pilen, udløser det funktionen under-->
+      <button class="pil" onclick="skiftMenu()"> <!---Når man trykker på pilen, udløser det funktionen under-->
           <i class='bx bxs-chevron-left'></i>
       </button>
 
@@ -27,9 +27,9 @@
   </div>
     
   <script>
-    const sidemenu = document.querySelector('.sidemenu');
-      function toggleSidebar() { 
-       sidemenu.classList.toggle('closed');
+      const sidemenu = document.querySelector('.sidemenu');
+      function skiftMenu() { 
+      sidemenu.classList.toggle('lukket');
       }
       //når knappen trykkes på, udløser det denne funktion som kalder på sidemenu closed, hvilket altså gør, at sidemenuen forsvinder. 
   </script>

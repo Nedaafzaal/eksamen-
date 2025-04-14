@@ -127,10 +127,6 @@ body{
   transition: 0.5s;
 }
 
-.sidemenu.closed {
-  left: -220px; /* Skub siden helt uden for skærmen */
-  width: 0;
-}
 
 .sidemenu img {
   width: 100%;
@@ -181,5 +177,9 @@ button.pil {
   transition: 0.3s ease-in-out;
 }
 
+.sidemenu.lukket {
+  left: -220px; /* Skub siden helt uden for skærmen */
+  width: 0;
+}
 
 
