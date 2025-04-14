@@ -7,62 +7,108 @@ img{
     height: auto;
 }
 
-.sidemenu {
-    position: fixed;
-    left: 5px;
-    top: 0px;
-    width: 150px;
-    height: 100%;
-    background-color: #212121;
-    padding: 20px;
-    display: flex;
-    flex-direction:column;
-    align-items: center;
-    gap: 0px;
-  }
-  
-  .WebappLogo img {
-    width: 180px;
-    object-fit: contain;
-  }
-  
-  .Menu {
-    list-style: none;
-    padding: 0;
-    width: 160px;
-  }
-  
-  .Menu li {
-    margin-bottom: 15px;
-    width: 150px;
-  }
-  
-  .Menu i{
-    color: white;
-    display: flex;
-    text-align: center;
-    margin-right: 10px;
-  }
 
-  .Menu a {
-    color: #cccccc;
-    font-family: 'Times New Roman', Times, serif;
-    text-decoration: none;
-    font-size: 18px;
-    padding: 13px 16px;
-    display: block;
-    border-radius: 8px;
-    transition: 0.5s;
-    align-items: center;
-  }
-  
-  .Menu a:hover {
-    background-color: #2f2f2f;
-    color: #fffffff6;
-  }
   
   .Menu a.active {
     font-weight: bold;
     color: white;
   }
+
+  /* css til side menu */
+.sidemenu {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 200px;
+  height: 100%;
+  background-color: #161515;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  gap: 10px;
+  transition: 0.5s;
+}
+
+.sidemenu.closed {
+  left: -220px; /* Skub siden helt uden for skærmen */
+  width: 0;
+}
+
+.sidemenu img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+ul {
+  padding: 3px;
+}
+
+ul li {
+  list-style: none;
+}
+
+ul li a {
+  color: rgba(255, 255, 255, 0.544);
+  font-family: 'Times New Roman', Times, serif;
+  padding: 20px 0;
+  display: block;
+  text-decoration: none;
+  font-size: 18px;
+  transition: 0.2s ease-out;
+}
+
+.sidemenu :hover{
+  color: #fffffff6;
+
+}
+
+ul li a i {
+  width: 50px;
+  text-align: center;
+  padding-right: 10px;
+  font-size: 26px;
+}
+
+button.pil {
+  position: absolute;
+  top: 40px;
+  left: 220px;
+  background: rgb(46, 46, 46);
+  border-radius: 50px;
+  border: none;
+  color: rgba(245, 241, 241, 0.796);
+  font-size: 30px;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+/* Responsivitet */
+@media (max-width: 768px) {
+  .sidemenu {
+    left: -220px; /* Skjul sidebar uden for skærmen */
+    width: 220px;
+    padding: 10px;
+  }
+
+  .sidemenu.closed {
+    left: 0; /* Åbn sidebar'en, når den er i brug */
+    width: 0;
+  }
+
+  .sidemenu img {
+    width: 150px;
+  }
+
+  ul li a {
+    font-size: 16px;
+  }
+
+  button.pil {
+    left: 10px; /* Placer pilen i venstre hjørne af skærmen på mobile enheder */
+    top: 10px;
+  }
+}
 

@@ -5,19 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Porteføljer</title>
     <link href="./portefoljer.css" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
+
 </head>
 <body>
-    <div class="sidemenu">
+   <!--ejs til sidemenu-->
+     <div class="sidemenu">
         <div class="WebappLogo">
-          <img src="logo.jpeg" alt="WebappLogo">
+            <img src="logo.jpeg" alt="WebappLogo">
         </div>
-        
-        <ul class="Menu">
-          <li><a href="/dashboard">Dashboard <i class='bx bx-home'></i></a></li>
-          <li><a href="/konti">Konti <i class='bx bxs-user-account' ></i></a></li>
-          <li><a href="/portefoljer" class="active">Porteføljer <i class='bx bxs-doughnut-chart' ></i></a></li>
+  
+        <button class="pil" onclick="toggleSidebar()">
+            <i class='bx bxs-chevron-left'></i>
+        </button>
+  
+        <ul>
+            <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
+            <li><a href="/konti"><i class='bx bxs-user-account'></i>Konti</a></li>
+            <li><a href="/portefoljer" class="active"><i class='bx bxs-doughnut-chart'></i>Porteføljer</a></li>
         </ul>
-
-      </div>
+    </div>
+      
+    <script>
+        function toggleSidebar() {
+            document.querySelector('.sidemenu').classList.toggle('closed');
+        }
+    </script>
 </body>
 </html>

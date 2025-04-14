@@ -9,18 +9,31 @@
 </head>
 
 <body>
-    <div class="sidemenu">
-        <div class="WebappLogo">
+   <!--ejs til sidemenu-->
+      <div class="sidemenu">
+      <div class="WebappLogo">
           <img src="logo.jpeg" alt="WebappLogo">
-        </div>
-        
-        <ul class="Menu">
-          <li><a href="/dashboard" class="active">Dashboard <i class='bx bx-home'></i></a></li> 
-          <li><a href="/konti">Konti <i class='bx bxs-user-account' ></i></a></li>
-          <li><a href="/portefoljer">Porteføljer <i class='bx bxs-doughnut-chart' ></i></a></li>
-        </ul>
       </div>
- 
+
+      <button class="pil" onclick="toggleSidebar()">
+          <i class='bx bxs-chevron-left'></i>
+      </button>
+
+      <ul>
+          <li><a href="/dashboard" class="active"><i class='bx bx-home'></i>Dashboard</a></li>
+          <li><a href="/konti"><i class='bx bxs-user-account'></i>Konti</a></li>
+          <li><a href="/portefoljer"><i class='bx bxs-doughnut-chart'></i>Porteføljer</a></li>
+      </ul>
+  </div>
+    
+  <script>
+      function toggleSidebar() {
+          document.querySelector('.sidemenu').classList.toggle('closed');
+      }
+  </script>
+
+
+
       <div class="indhold">
       <h1>Dashboard </h1>
       <div class="øvreBoks">
@@ -39,10 +52,6 @@
             <div class="lilleBoks">Top 5 værdipapirer baseret på profit</div>
             
           </div>
-
-
-
-
         </div>
         </div>
       </div>
