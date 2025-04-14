@@ -68,3 +68,7 @@ body {
   color: white;
 }
 
+.logo img{
+  width: 120px;
+  height: auto;
+}
