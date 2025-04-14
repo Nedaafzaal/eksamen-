@@ -1,12 +1,6 @@
 body{
     background-color: black;
 }
-
-img{
-    width: 225px;
-    height: auto;
-}
-
   /* css til side menu */
 .sidemenu {
   position: fixed;
@@ -76,32 +70,5 @@ button.pil {
   font-size: 30px;
   cursor: pointer;
   transition: 0.3s ease-in-out;
-}
-
-/* Responsivitet */
-@media (max-width: 768px) {
-  .sidemenu {
-    left: -220px; /* Skjul sidebar uden for skærmen */
-    width: 220px;
-    padding: 10px;
-  }
-
-  .sidemenu.closed {
-    left: 0; /* Åbn sidebar'en, når den er i brug */
-    width: 0;
-  }
-
-  .sidemenu img {
-    width: 150px;
-  }
-
-  ul li a {
-    font-size: 16px;
-  }
-
-  button.pil {
-    left: 10px; /* Placer pilen i venstre hjørne af skærmen på mobile enheder */
-    top: 10px;
-  }
 }
 

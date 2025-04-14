@@ -10,16 +10,16 @@
 
 <body>
    <!--ejs til sidemenu-->
-      <div class="sidemenu">
+    <div class="sidemenu">
       <div class="WebappLogo">
           <img src="logo.jpeg" alt="WebappLogo">
       </div>
 
-      <button class="pil" onclick="toggleSidebar()">
+      <button class="pil" onclick="toggleSidebar()"> <!---Når man trykker på pilen, udløser det funktionen under-->
           <i class='bx bxs-chevron-left'></i>
       </button>
 
-      <ul class="liste">
+      <ul>
           <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
           <li><a href="/konti"><i class='bx bxs-user-account'></i>Konti</a></li>
           <li><a href="/portefoljer"><i class='bx bxs-doughnut-chart'></i>Porteføljer</a></li>
@@ -27,18 +27,18 @@
   </div>
     
   <script>
-      function toggleSidebar() {
-          document.querySelector('.sidemenu').classList.toggle('closed');
+    const sidemenu = document.querySelector('.sidemenu');
+      function toggleSidebar() { 
+       sidemenu.classList.toggle('closed');
       }
+      //når knappen trykkes på, udløser det denne funktion som kalder på sidemenu closed, hvilket altså gør, at sidemenuen forsvinder. 
   </script>
 
-
-
-      <div class="indhold">
+    <div class="indhold">
       <h1>Dashboard </h1>
       <div class="øvreBoks">
-        <div class="mindreBoks">Total værdi</div>
-        <div class="mindreBoks">Total Realiseret Gevinst</div>
+        <div class="mindreBoks"> Total værdi </div>
+        <div class="mindreBoks"> Total Realiseret Gevinst </div>
         <div class="mindreBoks">Total Urealiseret Gevinst</div>
       </div>
 
