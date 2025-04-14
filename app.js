@@ -42,6 +42,22 @@ app.get("/dashboard", (req, res) => {
 })
 
 
+app.post("dashboard/konti",(req,res)=>{
+    res.status(200).redirect("http://localhost:3001/konti") //konti
+})
+
+app.get("/konti",(req,res)=>{
+    res.render("konti.ejs") //konti
+})
+
+app.post("dashboard/portefoljer",(req,res)=>{
+    res.status(200).redirect("http://localhost:3001/portefoljer") //porteføljer
+});
+
+app.get("/portefoljer",(req,res)=>{
+    res.render("portefoljer.ejs") //porteføljer
+})
+
 //hvis port ændres i konstanten ændres det også her derfor kaldes den port
 //printer linket i konsollen så vi kan komme ind på webapplikationen
 app.listen(port, () => {  

@@ -61,9 +61,7 @@ img{
     color: #fffffff6;
   }
   
-  .Menu a.active { /*viser at det er denne side vi er inde på ved at det er fed skrift*/
+  .Menu a.active {
     font-weight: bold;
     color: white;
-  } 
-  
-
+  }
