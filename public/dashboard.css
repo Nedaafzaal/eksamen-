@@ -167,11 +167,6 @@ button.pil {
   button.pil {
     left: 10px; /* Placer pilen i venstre hjørne af skærmen på mobile enheder */
     top: 10px;
-  }
-
-  .Menu a.active { /*viser at det er denne side vi er inde på ved at det er fed skrift*/
-    font-weight: bold;
-    color: white;
   } 
 }
 

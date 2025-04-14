@@ -7,13 +7,6 @@ img{
     height: auto;
 }
 
-
-  
-  .Menu a.active {
-    font-weight: bold;
-    color: white;
-  }
-
   /* css til side menu */
 .sidemenu {
   position: fixed;
