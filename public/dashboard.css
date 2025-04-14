@@ -84,7 +84,7 @@ img{
     padding: 10px; 
   }
 
-  .øvreBoks, .nedreBoks {
+  .øvreBoks {
     display: flex; 
     gap: 20px; 
     margin-bottom: 20px; 
@@ -105,7 +105,7 @@ img{
     background-color: rgb(31, 31, 31);
     border-radius: 20px;
     padding: 10px; 
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     height: 300px;
     width: 1000px;
     margin-left: 200px;
@@ -113,7 +113,24 @@ img{
 
   }
 
-  .lilleBoks {
+  .nedreBoks {
+    display: flex; 
+    gap: 20px; 
+    margin-bottom: 20px; 
+    margin-left: 200px;
+    width: 1000px;   /* samme bredde som de andre bokse */
+    height: 300px;
+}
+
+.lilleBoks {
+    background-color: rgb(31, 31, 31);
+    border-radius: 10px;
+    padding: 20px;
+    flex: 1;          /* fylder halvdelen automatisk */
+    height: 300px;
+}
+
+ /* .lilleBoks {
     background-color: rgb(31, 31, 31);
     border-radius: 10px;
     padding: 20px;
@@ -123,7 +140,7 @@ img{
     width: 80%;
     height: 300px;
    
-  }
+  }*/
 
 
   
