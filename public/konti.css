@@ -81,9 +81,9 @@ body{
   
   .titel-knap {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
-    margin-left: 730px;
+    margin-left: 710px;
     margin-right: 100px;
     background-color: rgb(31, 31, 31);
     border-radius: 10px;
@@ -100,6 +100,8 @@ body{
     border-radius: 8px;
     text-decoration: none;
     transition: 0.3s;
+ 
+ 
 
   }
   
