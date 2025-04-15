@@ -7,7 +7,8 @@
   body {
     background-color: black;
     margin: 0; 
-    font-family: 'Times New Roman', Times, serif;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
     color: white;
   }
 
@@ -85,9 +86,10 @@
 
 .sidemenu img {
   width: 100%;
-  height: auto;
-  border-radius: 5px;
-  margin-bottom: 10px;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+  margin-bottom: 0;
 }
 
 ul {
@@ -100,17 +102,16 @@ ul li {
 
 ul li a {
   color: rgba(255, 255, 255, 0.544);
-  font-family: 'Times New Roman', Times, serif;
+  font-family: Arial, Helvetica, sans-serif;
   padding: 20px 0;
   display: block;
   text-decoration: none;
-  font-size: 18px;
+  font-size: 14px;
   transition: 0.2s ease-out;
 }
 
 .sidemenu :hover{
-  color: #fffffff6;
-  
+  color: #ffffff;
 }
 
 ul li a i {
