@@ -20,7 +20,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-left: 80px;
+  margin-left: 140px;
 }
 
 .øverste {
@@ -36,7 +36,7 @@ body {
   padding: 20px;
   width: 620px;
   height: 340px;
-  margin-left: 90px;
+  margin-left: 140px;
 }
 
 .højresideboks {
@@ -68,7 +68,7 @@ body {
   padding: 20px;
   width: 980px;
   height: 350px;
-  margin-left: 90px;
+  margin-left: 140px;
   margin-right: 200px;
 
 }
@@ -78,8 +78,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  margin-left: 90px;
-  margin-right: 90px;
+  margin-left: 140px;
+  margin-right: 120px;
   background-color: rgb(31, 31, 31);
   border-radius: 10px;
   padding: 20px;

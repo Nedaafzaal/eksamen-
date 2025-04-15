@@ -20,7 +20,7 @@ body{
   .øversteIndhold{
     display: flex;
     gap: 20px;
-    margin-left: 200px;
+    margin-left: 250px;
     margin-bottom: 20px;
 
   }
@@ -71,12 +71,12 @@ body{
     padding: 20px;
     width: 980px; 
     height: 350px; 
-    margin-left: 200px;
+    margin-left: 250px;
 
   }
 
   .overskrift {
-    margin-left: 200px;
+    margin-left: 250px;
     margin-bottom: 10px;
   }
   
@@ -84,7 +84,7 @@ body{
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    margin-left: 710px;
+    margin-left: 760px;
     margin-right: 100px;
     background-color: rgb(31, 31, 31);
     border-radius: 10px;
