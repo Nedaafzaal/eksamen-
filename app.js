@@ -10,7 +10,7 @@ app.set("view engine", "ejs"); //fortæller serveren at den skal bruge EJS som v
 app.use(express.urlencoded({extended: true })); //gør at app kan læse data fra en HTML formular 
 app.use(express.static('public')) //Vi sætter alle vores statiske filer indenunder mappen public, så vi kan linke vores CSS. 
 
-const sqlConfig = {
+const sqlConfig = { //kode hentet fra npmjs
     user: 'prog584',
     password: 'Hejhej123!',
     database: 'eksamenserver',
@@ -49,11 +49,11 @@ app.get("/opretbruger", (req, res) => {
 })
 
 app.post("/opretbruger", (req, res) => { 
-    (async () => {
+    (async () => { //connecter til vores database 
         try {
          // make sure that any items are correctly URL encoded in the connection string
          await sql.connect(sqlConfig)
-         const result = await sql.query`select * from [eksamenSQL].[Mehr]`
+         const result = await sql.query`insert into [eksamenSQL].[bruger]`
          console.dir(result)
         } catch (err) {
          // ... error checks
