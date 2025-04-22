@@ -53,7 +53,7 @@ app.post("/opretbruger", (req, res) => {
         try {
          // make sure that any items are correctly URL encoded in the connection string
          await sql.connect(sqlConfig)
-         const result = await sql.query`insert into [eksamenSQL].[bruger]`
+         const result = await sql.query`INSERT INTO [eksamenSQL].[bruger] (fornavn, efternavn, brugernavn, adgangskode, email, fødselsdato, telefonnummer) VALUES (@fornavn, @efternavn, @brugernavn, @adgangskode, @email, @fødselsdato, @telefonnummer)`
          console.dir(result)
         } catch (err) {
          // ... error checks
@@ -63,6 +63,8 @@ app.post("/opretbruger", (req, res) => {
     database.push(req.body.name); 
    res.status(200).redirect("http://localhost:3001/dashboard"); 
 });
+
+
 
 app.get("/dashboard", (req, res) => {
     res.render("dashboard.ejs")
