@@ -1,14 +1,31 @@
 
 import express from 'express'; //vi kalder på express pakken 
+import sql from 'mssql'
 const app = express(); //appen er lig vores pakke 
 const port = 3001; //definere hvilken port vores server skal køre på 
 app.use(express.static('views'));
+
 
 app.set("view engine", "ejs"); //fortæller serveren at den skal bruge EJS som view engine
 app.use(express.urlencoded({extended: true })); //gør at app kan læse data fra en HTML formular 
 app.use(express.static('public')) //Vi sætter alle vores statiske filer indenunder mappen public, så vi kan linke vores CSS. 
 
-
+const sqlConfig = {
+    user: 'prog584',
+    password: 'Hejhej123!',
+    database: 'eksamenserver',
+    server: 'eksamenserver1.database.windows.net',
+    pool: {
+      max: 10,
+      min: 0,
+      idleTimeoutMillis: 30000
+    },
+    options: {
+      encrypt: true, // for azure
+      trustServerCertificate: false // change to true for local dev / self-signed certs
+    }
+  }
+  
 let database =[]; //vores database
 
 app.get("/", (req, res) => {                              
@@ -32,6 +49,16 @@ app.get("/opretbruger", (req, res) => {
 })
 
 app.post("/opretbruger", (req, res) => { 
+    (async () => {
+        try {
+         // make sure that any items are correctly URL encoded in the connection string
+         await sql.connect(sqlConfig)
+         const result = await sql.query`select * from [eksamenSQL].[Mehr]`
+         console.dir(result)
+        } catch (err) {
+         // ... error checks
+        }
+       })()
     console.log(req.body); 
     database.push(req.body.name); 
    res.status(200).redirect("http://localhost:3001/dashboard"); 
@@ -60,12 +87,13 @@ app.get("/portefoljer",(req,res)=>{
 
 //hvis port ændres i konstanten ændres det også her derfor kaldes den port
 //printer linket i konsollen så vi kan komme ind på webapplikationen
-app.listen(port, () => {  
-    console.log(`Example app listening on port http://localhost:${port}`) 
-})
 
 app.get("/logout", (req,res)=>{
     res.redirect("/login.ejs")
+})
+
+app.listen(port, () => {  
+    console.log('running..')
 })
 
 
