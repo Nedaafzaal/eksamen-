@@ -108,6 +108,14 @@ app.get("/portefoljer",(req,res)=>{
     res.render("portefoljer.ejs") //porteføljer
 })
 
+app.post("dashboard/indstillinger",(req,res)=>{
+    res.status(200).redirect("http://localhost:3001/indstillinger") //indstillinger
+})
+
+app.get("/indstillinger", (req, res) => {
+    res.render("indstillinger.ejs");
+});
+
 //hvis port ændres i konstanten ændres det også her derfor kaldes den port
 //printer linket i konsollen så vi kan komme ind på webapplikationen
 
