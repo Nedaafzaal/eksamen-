@@ -31,11 +31,8 @@ let database =[]; //vores database
 (async () => {
     try {
      // make sure that any items are correctly URL encoded in the connection string
-     console.log('test');
      await sql.connect(sqlConfig)
-     console.log('test2');
      const result = await sql.query(`select * from eksamenSQL.bruger`)
-     console.log('test3');
      console.log(result)
     } catch (err) {
         console.log(err);
@@ -149,7 +146,7 @@ app.get("/logout", (req,res)=>{
 })
 
 app.listen(port, () => {  
-    console.log('running..')
+    console.log('http://localhost:3001/login')
 })
 
 
