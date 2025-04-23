@@ -49,12 +49,37 @@ app.get("/", (req, res) => {
 
 //get henter data fra serevren som er login.ejs og post sender data til serveren
 app.get("/login", (req, res) => {
-    res.render("login.ejs"); 
+    res.render("login.ejs", { fejl: null });; 
 })
-app.post("/login", (req, res) => {
-    // login logik
-    res.redirect("http://localhost:3001/dashboard");
-})
+app.post("/login", async (req, res) => {
+    const { brugernavn, adgangskode } = req.body; //trækker brugernavn og adgangskode ud af formularen 
+    try {
+      const pool = await sql.connect(sqlConfig); //opretter forbindelse til vores database
+  
+      const result = await pool //sender en forspørgsel til databasen om at finde brugeren med brugernavnet
+        .request()
+        .input("brugernavn", sql.NVarChar, brugernavn)
+        .query(`
+          SELECT adgangskode FROM [eksamenSQL].[bruger] WHERE brugernavn = @brugernavn 
+        `); //henter adgangskoden der matcher til 
+  
+      if (result.recordset.length === 0) { //hvis brugeren ikke findes sendes en alert
+        return res.render("login.ejs", { fejl: "Forkert brugernavn" });
+      }
+  
+      const adgangskodeFraDB = result.recordset[0].adgangskode; //henter adgangskoden 
+  
+      if (adgangskode === adgangskodeFraDB) { //sammenligner adgangskoden med adgangskoden fra databasen 
+        return res.redirect("http://localhost:3001/dashboard"); //hvis korrekt redirecter til dashboard
+      } else {
+        return res.render("login.ejs", { fejl: "Forkert adgangskode" }); //hvis forkert sendes en alert
+      }
+  
+    } catch (err) { //hvis nogte går galt send en fejl 
+      console.error("Login fejl:", err);
+      res.status(500).send("Noget gik galt på serveren.");
+    }
+  });
 
 //get henter data fra serevren som er opretbruger.ejs 
 // og post sender data til serveren som brugeren kan se. 

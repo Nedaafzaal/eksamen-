@@ -39,4 +39,12 @@
     
     </class>
     </body>
+
+    <script>
+      const fejl = "<%= fejl || '' %>"; //skriver værdien fejl som serveren har sendt til EJS hvis den er undefined send en tom string
+      if (fejl) { //hvis der er en fejl send en alert besked 
+        alert(fejl);
+      }
+    </script>
+    
  </html>
