@@ -51,16 +51,19 @@ app.get("/opretbruger", (req, res) => {
 app.post("/opretbruger", (req, res) => { 
     (async () => { //connecter til vores database 
         try {
+            console.log(req.body);
+            
          // make sure that any items are correctly URL encoded in the connection string
          await sql.connect(sqlConfig)
-         const result = await sql.query`INSERT INTO [eksamenSQL].[bruger] (fornavn, efternavn, brugernavn, adgangskode, email, fødselsdato, telefonnummer) VALUES (@fornavn, @efternavn, @brugernavn, @adgangskode, @email, @fødselsdato, @telefonnummer)`
+         const result = await sql.query`INSERT INTO [eksamenSQL].[bruger] (fornavn, efternavn, brugernavn, adgangskode, email, fødselsdato, telefonnummer) 
+                                        VALUES (@${req.body.fornavn}, @${req.body.efternavn}, @${req.body.opretbrugernavn}, @${req.body.opretadgangskode}, @${req.body.e-mail}, @${req.body.fødselsdag}, @${req.body.telefonnummer})`
          console.dir(result)
         } catch (err) {
          // ... error checks
         }
        })()
-    console.log(req.body); 
-    database.push(req.body.name); 
+    //console.log(req.body); 
+    //database.push(req.body.name); 
    res.status(200).redirect("http://localhost:3001/dashboard"); 
 });
 
