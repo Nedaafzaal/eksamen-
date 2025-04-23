@@ -25,8 +25,23 @@ const sqlConfig = { //kode hentet fra npmjs
       trustServerCertificate: false // change to true for local dev / self-signed certs
     }
   }
-  
+
 let database =[]; //vores database
+
+(async () => {
+    try {
+     // make sure that any items are correctly URL encoded in the connection string
+     console.log('test');
+     await sql.connect(sqlConfig)
+     console.log('test2');
+     const result = await sql.query(`select * from eksamenSQL.bruger`)
+     console.log('test3');
+     console.log(result)
+    } catch (err) {
+        console.log(err);
+        
+    }
+   })()
 
 app.get("/", (req, res) => {                              
     res.render('login.ejs')
@@ -54,10 +69,13 @@ app.post("/opretbruger", (req, res) => {
             console.log(req.body);
             
          // make sure that any items are correctly URL encoded in the connection string
+         console.log('forbinder...');
          await sql.connect(sqlConfig)
-         const result = await sql.query`INSERT INTO [eksamenSQL].[bruger] (fornavn, efternavn, brugernavn, adgangskode, email, fødselsdato, telefonnummer) 
-                                        VALUES (@${req.body.fornavn}, @${req.body.efternavn}, @${req.body.opretbrugernavn}, @${req.body.opretadgangskode}, @${req.body.e-mail}, @${req.body.fødselsdag}, @${req.body.telefonnummer})`
-         console.dir(result)
+         console.log('forbundet');
+         
+         const result = await sql.query(`INSERT INTO [eksamenSQL].[bruger] (fornavn, efternavn, brugernavn, adgangskode, email, fødselsdato, telefonnummer) 
+                                        VALUES (@${req.body.fornavn}, @${req.body.efternavn}, @${req.body.opretbrugernavn}, @${req.body.opretadgangskode}, @${req.body.e-mail}, @${req.body.fødselsdag}, @${req.body.telefonnummer})`)
+         console.log(result)
         } catch (err) {
          // ... error checks
         }

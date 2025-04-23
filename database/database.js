@@ -171,8 +171,8 @@ export default class Database {
 export const createDatabaseConnection = async (passwordConfig) => {
     database = new Database(passwordConfig);
     await database.connect();
-    await database.createTable();
-    database.executeQuery('select *')
+    //await database.createTable();
+    //database.executeQuery('select *')
     return database;
 };
 
