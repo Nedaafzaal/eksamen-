@@ -11,13 +11,15 @@
 
 
 <body>
-
-    <!-- Sidemenu -->
-    <div class="sidemenu">
-      <div class="WebappLogo">
-        <img src="logo.jpeg" alt="WebappLogo">
-      </div>
+  <h1>Profil indstillinger</h1>
   
+  <!-- Sidemenu -->
+  <div class="sidemenu">
+    <div class="WebappLogo">
+      <img src="logo.jpeg" alt="WebappLogo">
+    </div>
+    
+    
       <button class="pil" onclick="skiftMenu()"> <!-- Når man trykker på pilen, udløser det funktionen under -->
         <i class='bx bxs-chevron-left'></i>
       </button>
@@ -32,29 +34,35 @@
       <ul class="logUd">
         <li><a href="/login"><i class='bx bx-log-out'></i>Log ud</a></li>
       </ul>
-      
     </div>
-  
-    <!-- Indhold -->
-    <div class="indhold">
-      <h1>Profil indstillinger</h1>
+    
+      <!-- Knap til at ændre adgangskode -->
+    <button class="skiftAdgangskodeKnap" onclick="toggleForm()">Skift adgangskode</button>
 
-      <
-  
-      <!-- Øverste boksrække -->
-     
+    <!-- Formular til at ændre adgangskode -->
+    <div class="skiftAdgangskode-form" id="adgangskodeForm">
+        <h2>Skift adgangskode</h2>
+        <form action="/submit-adgangskode" method="POST">
+            <input type="text" placeholder="Gammel adgangskode" name="gammelAdgangskode" required>
+            <input type="text" placeholder="Ny adgangskode" name="nyAdgangskode" required>
+            <button type="submit">Opdater Adgangskode</button>
+        </form>
     </div>
-  
 
-    <!-- Script til at åbne/lukke sidemenu -->
-    <script>
-      const sidemenu = document.querySelector('.sidemenu');
-      function skiftMenu() {
-        sidemenu.classList.toggle('lukket');
-      }
-      // Når knappen trykkes på, udløser det denne funktion som kalder på sidemenu 'lukket',
-      // hvilket altså gør, at sidemenuen forsvinder.
-  
+      <!-- Script til at åbne/lukke sidemenu -->
+      <script>
+        const sidemenu = document.querySelector('.sidemenu');
+        function skiftMenu() {
+          sidemenu.classList.toggle('lukket');
+        }
+        // Når knappen trykkes på, udløser det denne funktion som kalder på sidemenu 'lukket',
+        // hvilket altså gør, at sidemenuen forsvinder.
+        
+        // Funktion til at udfolde/skjule formularen
+        function toggleForm() {
+            const form = document.getElementById('adgangskodeForm');
+            form.style.display = form.style.display === 'block' ? 'none' : 'block';
+        }
     </script>
   
 </body>
