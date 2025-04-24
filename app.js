@@ -28,7 +28,7 @@ const sqlConfig = { //kode hentet fra npmjs
 
 let database =[]; //vores database
 
-(async () => {
+/*(async () => {
     try {
      // make sure that any items are correctly URL encoded in the connection string
      await sql.connect(sqlConfig)
@@ -39,6 +39,7 @@ let database =[]; //vores database
         
     }
    })()
+  */
 
 app.get("/", (req, res) => {                              
     res.render('login.ejs')
@@ -160,7 +161,7 @@ app.get("/logout", (req,res)=>{
 })
 
 app.listen(port, () => {  
-    console.log('http://localhost:3001/login')
+    console.log('http://localhost:3001')
 })
 
 
