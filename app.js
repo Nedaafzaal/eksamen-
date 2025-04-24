@@ -95,17 +95,31 @@ app.post("/opretbruger", (req, res) => {
          await sql.connect(sqlConfig)
          console.log('forbundet');
          
-         const result = await sql.query(`INSERT INTO [eksamenSQL].[bruger] (fornavn, efternavn, brugernavn, adgangskode, email, fødselsdato, telefonnummer) 
-                                        VALUES (@${req.body.fornavn}, @${req.body.efternavn}, @${req.body.opretbrugernavn}, @${req.body.opretadgangskode}, @${req.body.e-mail}, @${req.body.fødselsdag}, @${req.body.telefonnummer})`)
-         console.log(result)
-        } catch (err) {
-         // ... error checks
-        }
-       })()
-    //console.log(req.body); 
-    //database.push(req.body.name); 
-   res.status(200).redirect("http://localhost:3001/dashboard"); 
-});
+         const request = await sql.connect(sqlConfig);
+
+        const result = await request
+          .request() //starter en sql request 
+          .input("fornavn", sql.NVarChar, req.body.fornavn)
+          .input("efternavn", sql.NVarChar, req.body.efternavn)
+          .input("brugernavn", sql.NVarChar, req.body.opretbrugernavn)
+          .input("adgangskode", sql.NVarChar, req.body.opretadgangskode)
+          .input("email", sql.NVarChar, req.body.email)
+          .input("fødselsdato", sql.Date, req.body.fødselsdag)
+          .input("telefonnummer", sql.NVarChar, req.body.telefonnummer)
+          .query(`
+            INSERT INTO [eksamenSQL].[bruger]
+            (fornavn, efternavn, brugernavn, adgangskode, email, fødselsdato, telefonnummer) 
+            VALUES (@fornavn, @efternavn, @brugernavn, @adgangskode, @email, @fødselsdato, @telefonnummer)
+          `);
+                console.log(result) //logger resultatet 
+                } catch (err) {
+                  console.log(err); //logger fejl hvis der skulle være nogen 
+                  res.sendStatus(500); //sender en status 500
+                }
+              })()
+        
+          res.status(200).redirect("http://localhost:3001/dashboard"); 
+        });
 
 
 
