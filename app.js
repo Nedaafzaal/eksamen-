@@ -164,15 +164,14 @@ app.listen(port, () => {
 })
 
 
-// Session cookies
+
 // Express redirect
 // ekstra: express middleware
 // Router
 // HTTP statuskoder
 // HTTP protokol meget kort 
-// Cookies
 // Session cookies i express
-// ekstra: hashing af adgangskode
+
 
 
 
