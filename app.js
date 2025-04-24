@@ -40,6 +40,7 @@ let database =[]; //vores database
     }
    })()
   */
+  
 
 app.get("/", (req, res) => {                              
     res.render('login.ejs')
@@ -124,10 +125,37 @@ app.post("/opretbruger", (req, res) => {
 
 
 
+        app.post("/submit-adgangskode", async (req, res) => {
+          const { brugernavn, gammelAdgangskode, nyAdgangskode } = req.body;
+        
+          try {
+            const pool = await sql.connect(sqlConfig);
+        
+            const result = await pool.request()
+              .input("brugernavn", sql.NVarChar, brugernavn)
+              .input("gammel", sql.NVarChar, gammelAdgangskode)
+              .query(`SELECT * FROM [eksamenSQL].[bruger] WHERE brugernavn = @brugernavn AND adgangskode = @gammel`);
+        
+            if (result.recordset.length === 0) {
+              return res.send("Forkert adgangskode");
+            }
+        
+            await pool.request()
+              .input("ny", sql.NVarChar, nyAdgangskode)
+              .input("brugernavn", sql.NVarChar, brugernavn)
+              .query(`UPDATE [eksamenSQL].[bruger] SET adgangskode = @ny WHERE brugernavn = @brugernavn`);
+        
+            res.send("Adgangskode opdateret");
+          } catch (err) {
+            console.error(err);
+            res.status(500).send("Noget gik galt på serveren");
+          }
+        });
+
+        
 app.get("/dashboard", (req, res) => {
     res.render("dashboard.ejs")
 })
-
 
 app.post("dashboard/konti",(req,res)=>{
     res.status(200).redirect("http://localhost:3001/konti") //konti
@@ -150,8 +178,11 @@ app.post("dashboard/indstillinger",(req,res)=>{
 })
 
 app.get("/indstillinger", (req, res) => {
-    res.render("indstillinger.ejs");
+  // Midlertidig måde at gemme brugernavn – det skal komme fra fx login tidligere
+  const brugernavn = "testbruger"; // <-- Du skal hente dette dynamisk senere
+  res.render("indstillinger.ejs", { brugernavn: brugernavn });
 });
+
 
 //hvis port ændres i konstanten ændres det også her derfor kaldes den port
 //printer linket i konsollen så vi kan komme ind på webapplikationen

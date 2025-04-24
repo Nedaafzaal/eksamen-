@@ -37,12 +37,15 @@
     </div>
     
       <!-- Knap til at ændre adgangskode -->
+  
+      
     <button class="skiftAdgangskodeKnap" onclick="toggleForm()">Skift adgangskode</button>
 
     <!-- Formular til at ændre adgangskode -->
     <div class="skiftAdgangskode-form" id="adgangskodeForm">
         <h2>Skift adgangskode</h2>
         <form action="/submit-adgangskode" method="POST">
+            <input type="text" placeholder="Brugernavn" name="brugernavn" required>
             <input type="text" placeholder="Gammel adgangskode" name="gammelAdgangskode" required>
             <input type="text" placeholder="Ny adgangskode" name="nyAdgangskode" required>
             <button type="submit">Opdater Adgangskode</button>
@@ -54,7 +57,7 @@
       <script>
         const sidemenu = document.querySelector('.sidemenu');
         function skiftMenu() {
-          sidemenu.classList.toggle('lukket');
+        sidemenu.classList.toggle('lukket');
         }
         // Når knappen trykkes på, udløser det denne funktion som kalder på sidemenu 'lukket',
         // hvilket altså gør, at sidemenuen forsvinder.
