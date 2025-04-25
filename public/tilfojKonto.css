@@ -1,14 +1,16 @@
 body {
- 
-  background-color: black;
+  background-color: #111;
+  display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 100vh;
+  margin: 0;
 }
 
 h2{
-  color: rgb(114, 46, 179);
-  margin-left: 650px;
-
+  color: white;
+  margin-left: 350px;
+  margin-right: 330px;
 }
 
 .opretKonto .opretBox{
@@ -18,7 +20,7 @@ h2{
   padding: 20px;
   text-align: center;
   margin-top: 10px;
-  background-color: rgb(114, 46, 179);
+  background-color: black;
   background-size: cover;
   border: 2px solid black;
 }
@@ -75,9 +77,9 @@ h2{
   border-radius: 100px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 15px;
-  margin-left: 630px;
   background-color: transparent;
-  
+  margin-right: 330px;
+  margin-left: 330px;
 }
 
 #sendFormular:hover{
@@ -89,4 +91,8 @@ h2{
   margin-top: 25px;
   width: 120px;
   height: auto;
+  margin-right: 330px;
+  margin-left: 355px;;
+  
 }
+
