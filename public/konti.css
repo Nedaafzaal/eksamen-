@@ -85,7 +85,7 @@
   }
   
   .knap {
-    background-color: rgb(31, 31, 31);
+    background-color: rgb(124, 122, 122);
     padding: 10px 20px;
     border-radius: 10px;
     color: white;
@@ -95,7 +95,7 @@
   }
   
   .knap:hover {
-    background-color: #3f3f3f;
+    background-color: #cdc9c9;
   }
   
   .dropdown {
@@ -117,7 +117,7 @@
   .dropdownVælg {
     display: block;
     padding: 10px 20px;
-    background-color: #2f2f2f;
+    background-color: rgb(124, 122, 122);
     color: white;
     text-decoration: none;
     border-radius: 8px;
@@ -126,7 +126,7 @@
   }
   
   .dropdownVælg:hover {
-    background-color: #3f3f3f;
+    background-color: #cdc9c9;
   }
   
   
@@ -204,29 +204,5 @@ button.pil {
   left: -220px; /* Skub siden helt uden for skærmen */
   width: 0;
 }
-
-/* css til dropdown-menuer */
-
-.dropdown-skjult {
-  display: none;
-  margin-top: 5px;
-  margin-bottom: 10px;
-}
-
-.dropdown-option {
-  display: block;
-  padding: 10px 20px;
-  background-color: #2f2f2f;
-  color: white;
-  text-decoration: none;
-  border-radius: 8px;
-  margin-top: 5px;
-  transition: background-color 0.3s;
-}
-
-.dropdown-option:hover {
-  background-color: #3f3f3f;
-}
-
 
 

@@ -180,3 +180,13 @@ button.pil {
   left: -220px; /* Skub siden helt uden for skærmen. Vi har valgt bredden skal være 220 så den skal bare være minus det */
   width: 0;
 }
+
+.gåTilbageBox a{
+  display: inline-block; /* VIGTIG: kun så stor som indholdet */
+  padding: 10px 20px;
+  background-color: #494848;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
