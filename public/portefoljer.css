@@ -1,3 +1,7 @@
+
+/*css til indhold*/
+
+
 body {
   background-color: black;
   margin: 0px;
@@ -5,16 +9,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
 }
-
-.logo img{
-  width: 12%;
-  height: 10%;
-  object-fit: cover;
-  border-radius: 0;
-  margin-bottom: 0;
-}
-
-/*css til indhold*/
 
 .indhold {
   margin-left: 200px;
@@ -186,13 +180,3 @@ button.pil {
   left: -220px; /* Skub siden helt uden for skærmen. Vi har valgt bredden skal være 220 så den skal bare være minus det */
   width: 0;
 }
-
-.gåTilbageBox a{
-  display: inline-block; /* VIGTIG: kun så stor som indholdet */
-  padding: 10px 20px;
-  background-color: #494848;
-  color: white;
-  text-decoration: none;
-  border-radius: 5px;
-}
-
