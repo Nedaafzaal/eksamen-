@@ -1,51 +1,51 @@
 
 
- <!DOCTYPE html>
- <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>logind</title>
-      <link href="./logind.css" rel="stylesheet">
-      <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
-  </head>
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>logind</title>
+     <link href="./logind.css" rel="stylesheet">
+     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
+ </head>
 
-  <body>
-    <div class="logindBox">
-      <h2>Log ind</h2>
-      <form action="/login" method="POST"> <!--definere hvilken rute formularen skal sendes til-->
+ <body>
+   <div class="logindBox">
+     <h2>Log ind</h2>
+     <form action="/login" method="POST"> <!--definere hvilken rute formularen skal sendes til-->
 
-        <div class="inputBox">
-          <input type="text" name="brugernavn" placeholder="Brugernavn" required>
-          <i class='bx bxs-user'></i>
-        </div>
+       <div class="inputBox">
+         <input type="text" name="brugernavn" placeholder="Brugernavn" required>
+         <i class='bx bxs-user'></i>
+       </div>
 
-        <div class="inputBox">
-          <input type="password" name="adgangskode" placeholder="Adgangskode" required>
-          <i class='bx bxs-lock-alt' ></i>
-        </div>
+       <div class="inputBox">
+         <input type="password" name="adgangskode" placeholder="Adgangskode" required>
+         <i class='bx bxs-lock-alt' ></i>
+       </div>
 
-          <button id="logIndKnap" type="submit">Log ind</button>
+         <button id="logIndKnap" type="submit">Log ind</button>
 
-      </form>
-      <br>
-      <div class="opretNyKnap">
-        <p>Ikke oprettet endnu? <a href="/opretbruger">Opret dig her</a></p>
-      </div>
-    
-      <div class="logo">
-        <img src="logo.jpeg" alt="WebappLogo">
-      </div>
-    
-    </class>
-    </body>
+     </form>
+     <br>
+     <div class="opretNyKnap">
+       <p>Ikke oprettet endnu? <a href="/opretbruger">Opret dig her</a></p>
+     </div>
+   
+     <div class="logo">
+       <img src="logo.jpeg" alt="WebappLogo">
+     </div>
+   
+   </class>
+   </body>
 
-    <script>
-  
-    const fejl = "<%= typeof fejl !== 'undefined' ? fejl : '' %>";
-    if (fejl) {
-      alert(fejl);
-  }
-    </script>
-    
- </html>
+   <script>
+ 
+   const fejl = "<%= typeof fejl !== 'undefined' ? fejl : '' %>";
+   if (fejl) {
+     alert(fejl);
+ }
+   </script>
+   
+</html>

@@ -21,8 +21,7 @@
 
     <ul>
       <li><a href="/dashboard"><i class="bx bx-home"></i>Dashboard</a></li>
-      <li><a href="/konti"><i class="bx bxs-user-account"></i>Konti</a></li>
-      <li><a href="/portefoljer"><i class="bx bxs-doughnut-chart"></i>Porteføljer</a></li>
+      <li><a href="/konti"><i class="bx bxs-user-account"></i>Konti</a>
       <li><a href="/indstillinger"><i class='bx bx-cog'></i>Indstillinger</a></li>
     </ul>
 
@@ -32,13 +31,34 @@
   </div>
 
   <div class="indhold">
-    <h1 class="overskrift">Portefølje oversigt</h1>
+    <h1 class="overskrift">Portefølje og konti oversigt</h1>
+    
+    <!--Knapper-->
+    <div class="knapBox">
+        <div class="dropdown">
+          <a href="#" class="knap" onclick="toggleKontoMenu()">Vælg konto</a>
+          <div id="kontoMenu" class="dropdownSkjult">
+            <a href="/konti" class="dropdownVælg">Grund konto</a>
+          </div>
+        </div>
 
-    <div class="titel-knap">
-      <a href="/opretportefolje" class="knap">Tilføj Portefølje</a>
-      <br>
-      <a href="/tilfojKonto" class="knap">Tilføj Konti</a>
-    </div>
+      <!--Tilføj konto-->
+        <a href="/tilfojKonto" class="knap">Tilføj konto</a>
+      
+      <!--Vælg portefølje-->
+        <div class="dropdown">
+          <a href="#" class="knap" onclick="togglePortefoljeMenu()">Vælg portefølje</a>
+          <div id="portefoljeMenu" class="dropdownSkjult">
+            <a href="/portefoljer" class="dropdownVælg">Grund portefølje</a>
+          </div>
+        </div>
+
+      <!--Tilføj portefølje-->
+        <a href="/opretportefolje" class="knap">Tilføj portefølje</a>
+      
+      <!--Saldo-->
+        <a href="/saldo" class="knap">Se saldo</a>
+  </div>      
 
     <div class="øversteIndhold">
       <div class="venstreSide">
@@ -68,6 +88,17 @@
     function skiftMenu() {
       sidemenu.classList.toggle('lukket');
     }
+  
+    function toggleKontoMenu() {
+      const menu = document.getElementById('kontoMenu');
+      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function togglePortefoljeMenu() {
+      const menu = document.getElementById('portefoljeMenu');
+      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+
   </script>
 </body>
 </html>
