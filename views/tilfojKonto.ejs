@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tilføj konto</title>
+    <link href="./tilfojKonto.css" rel="stylesheet" />
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+</head>
+<body>
+    <h1>
+        Tilføj konto
+    </h1>
+
+    <div class="opretBruger">
+        <h2>Opret bruger</h2>
+        <form action="/opretbruger" method="POST"> <!--definere hvilken rute formularen skal sendes til-->
+           
+           <div class="opretBox">
+              <input type="text" placeholder="Kontonavn" name="kontoNavn" required>
+           </div>
+           
+           <div class="opretBox">
+              <input type="text" placeholder="Valuta" name="valuta" required>
+           </div>
+     
+           <div class="opretBox">
+              <input type="number" placeholder="Bank reference" name="bankReference" required>
+           </div>
+     
+           <div class="opretBox">
+              <input type="number" placeholder="Adgangskode" name="opretadgangskode" required>
+           </div>
+     
+           <div class="opretBox">
+              <input type="email" placeholder="E-mail" name="e-mail" required>
+              <i class='bx bxs-envelope'></i>
+           </div>
+     
+           <div class="opretBox">
+              <input type="text" placeholder="Fødselsdagsdato YYYY-MM-DD" name="fødselsdag" required>
+           </div>
+     
+           <div class="opretBox">
+              <input type="tel" placeholder="Telefon nummer" name="telefonnummer" required>
+              <i class='bx bxs-phone' ></i>
+           </div>
+     
+           
+           <button id="sendFormular" type="submit">Opret</button>
+           <br>
+    
+</body>
+</html>

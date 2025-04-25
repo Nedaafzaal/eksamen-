@@ -124,35 +124,43 @@ app.post("/opretbruger", (req, res) => {
         });
 
 
-
+        //Ruten for man kan opdatere sin adgangskode
         app.post("/submit-adgangskode", async (req, res) => {
-          const { brugernavn, gammelAdgangskode, nyAdgangskode } = req.body;
+          const { brugernavn, gammelAdgangskode, nyAdgangskode } = req.body;//henter det brugeren har tastet ind. 
         
           try {
-            const pool = await sql.connect(sqlConfig);
+            const pool = await sql.connect(sqlConfig); //den skal prøve at connecte til vores databse
         
-            const result = await pool.request()
-              .input("brugernavn", sql.NVarChar, brugernavn)
+            const result = await pool.request() //vi laver en SQL forespørgsel
+              .input("brugernavn", sql.NVarChar, brugernavn) //tilføjer to parametre til forespørgslen 1: brugernavn 2: gammel adgangskode
               .input("gammel", sql.NVarChar, gammelAdgangskode)
-              .query(`SELECT * FROM [eksamenSQL].[bruger] WHERE brugernavn = @brugernavn AND adgangskode = @gammel`);
+              .query(`SELECT * FROM [eksamenSQL].[bruger] WHERE brugernavn = @brugernavn AND adgangskode = @gammel`); //her vi laver forespørgslen selv
         
-            if (result.recordset.length === 0) {
-              return res.send("Forkert adgangskode");
+            if (result.recordset.length === 0) { //hvis ikke forespørgslen finder brugeren i databasen
+              return res.render("indstillinger.ejs", { //skal den viderestille til indstillinger siden som man i forvejen er på med en alert "forkert adgangskode".
+                alert: "Forkert adgangskode",
+                brugernavn: brugernavn
+              });
+              
             }
         
-            await pool.request()
-              .input("ny", sql.NVarChar, nyAdgangskode)
-              .input("brugernavn", sql.NVarChar, brugernavn)
-              .query(`UPDATE [eksamenSQL].[bruger] SET adgangskode = @ny WHERE brugernavn = @brugernavn`);
+            await pool.request() //starter en ny SQL-forespørgsel via vores åbne databaseforbindelse 
+              .input("ny", sql.NVarChar, nyAdgangskode) //sætter SQL-parametren @ny til at være det nye kodeord, som brugeren skrev
+              .input("brugernavn", sql.NVarChar, brugernavn) //sætter brugernavn til det brugernavn der skal opdateres
+              .query(`UPDATE [eksamenSQL].[bruger] SET adgangskode = @ny WHERE brugernavn = @brugernavn`); //køre en SQL-kommando der opdaterer brugeren i databsen. 
         
-            res.send("Adgangskode opdateret");
+            return res.render("indstillinger.ejs", { //hvis brugeren findes, opdateres deres adgangskode til den nye 
+              alert: "Adgangskode opdateret!",
+              brugernavn: brugernavn
+            });
+              
           } catch (err) {
             console.error(err);
             res.status(500).send("Noget gik galt på serveren");
           }
         });
 
-        
+
 app.get("/dashboard", (req, res) => {
     res.render("dashboard.ejs")
 })
@@ -183,6 +191,13 @@ app.get("/indstillinger", (req, res) => {
   res.render("indstillinger.ejs", { brugernavn: brugernavn });
 });
 
+app.get("/tilfojKonto", (req, res) => {
+  res.render("tilfojKonto.ejs")
+})
+
+app.post("konti/tilfojKonto",(req,res)=>{
+  res.status(200).redirect("http://localhost:3001/tilfojKonto") //konti
+})
 
 //hvis port ændres i konstanten ændres det også her derfor kaldes den port
 //printer linket i konsollen så vi kan komme ind på webapplikationen
@@ -194,6 +209,7 @@ app.get("/logout", (req,res)=>{
 app.listen(port, () => {  
     console.log('http://localhost:3001')
 })
+
 
 
 

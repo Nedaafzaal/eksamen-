@@ -77,33 +77,25 @@
   
   .titel-knap {
     display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-left: 760px;
-    margin-right: 100px;
-    background-color: rgb(31, 31, 31);
-    border-radius: 10px;
-    padding: 20px;
-    width: 470px; 
-    height: 15px; 
-    margin-bottom: 20px;
+    padding-left: 62%;
+    gap: 10px;
+    margin: 0 50px 20px auto; /* højrejusteret med margin */
   }
   
-  .knap {
+  .titel-knap .knap {
     background-color: #2f2f2f;
     color: white;
     padding: 10px 20px;
     border-radius: 8px;
     text-decoration: none;
     transition: 0.3s;
- 
-
   }
   
   .knap:hover {
     background-color: #3f3f3f;
-    
   }
+  
+  
   
 /* css til side menu */
 .sidemenu {

@@ -54,20 +54,25 @@
 
 
       <!-- Script til at åbne/lukke sidemenu -->
-      <script>
-        const sidemenu = document.querySelector('.sidemenu');
-        function skiftMenu() {
+         <!-- Script til at åbne/lukke sidemenu -->
+    <script>
+      const sidemenu = document.querySelector('.sidemenu');
+      function skiftMenu() {
         sidemenu.classList.toggle('lukket');
-        }
-        // Når knappen trykkes på, udløser det denne funktion som kalder på sidemenu 'lukket',
-        // hvilket altså gør, at sidemenuen forsvinder.
-        
-        // Funktion til at udfolde/skjule formularen
-        function toggleForm() {
-            const form = document.getElementById('adgangskodeForm');
-            form.style.display = form.style.display === 'block' ? 'none' : 'block';
-        }
+      }
+
+      function toggleForm() {
+        const form = document.getElementById('adgangskodeForm');
+        form.style.display = form.style.display === 'block' ? 'none' : 'block';
+      }
     </script>
+
+    <% if (typeof alert !== "undefined" && alert) { %>
+      <script>
+        alert("<%= alert %>");
+      </script>
+    <% } %>
+
   
 </body>
   
