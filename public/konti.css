@@ -1,183 +1,208 @@
  /* css til indhold*/
-  body {
-    background-color: black;
-    margin: 0; 
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 16px;
-    color: white;
-  }
+ body {
+  background-color: black;
+  margin: 0; 
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: white;
+}
 
-  .indhold {
-    margin-left: 100px; 
-    padding: 10px; 
-  }
+.indhold {
+  margin-left: 100px; 
+  padding: 10px; 
+}
 
-  .øversteIndhold{
-    display: flex;
-    gap: 20px;
-    margin-left: 250px;
-    margin-bottom: 20px;
+.øversteIndhold{
+  display: flex;
+  gap: 20px;
+  margin-left: 250px;
+  margin-bottom: 20px;
 
-  }
-  .venstreØvreBoks {
-    background-color: rgb(31, 31, 31);
-    border-radius: 10px;
-    padding: 20px;
-    width:450px; 
-    height: 100px;
-    display: flex;
-    gap: 40px;
-
-  }
-
-  .ændringer {
- 
-    line-height: 1.8; 
-    gap: 50px;
-    line-height: 2.8;
-    background-color: rgb(31, 31, 31);
-    border-radius: 10px;
-    padding: 20px;
-    width:450px; 
-    height: 100px; 
-    display: flex;
-    gap: 40px;
-  }
-
-  .højreØvreBoks {
-    background-color: rgb(31, 31, 31);
-    border-radius: 10px;
-    padding: 20px;
-    width: 470px; 
-    height: 260px; 
-    margin-bottom: 20px;
-   
-  }
-
-  .venstreSide{
-    display: flex;
-    flex-direction: column;
-    gap:20px;
-    margin-bottom: 20px;
-  }
-  .oversigtBoks {
-    background-color: rgb(31, 31, 31);
-    border-radius: 10px;
-    padding: 20px;
-    width: 980px; 
-    height: 350px; 
-    margin-left: 250px;
-
-  }
-
-  .overskrift {
-    margin-left: 250px;
-    margin-bottom: 10px;
-  }
-  
-  .titel-knap {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin-left: 720px;
-    background-color: rgb(31, 31, 31);
-    border-radius: 10px;
-    padding: 20px;
-    width: 510px; 
-    height: 15px; 
-    margin-bottom: 20px;
-    gap: 10px;
-    
-  }
-  
-  .titel-knap .knap {
-    background-color: #2f2f2f;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: 0.3s;
-  }  
-  
-  .knap:hover {
-    background-color: #3f3f3f;
-  }
-  
-  
-  
-/* css til side menu */
-.sidemenu {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 200px;
-  height: 100%;
-  background-color: #161515;
+}
+.venstreØvreBoks {
+  background-color: rgb(31, 31, 31);
+  border-radius: 10px;
   padding: 20px;
+  width:450px; 
+  height: 100px;
+  display: flex;
+  gap: 40px;
+
+}
+
+.ændringer {
+  line-height: 1.8; 
+  gap: 50px;
+  line-height: 2.8;
+  background-color: rgb(31, 31, 31);
+  border-radius: 10px;
+  padding: 20px;
+  width:450px; 
+  height: 100px; 
+  display: flex;
+  gap: 40px;
+}
+
+.højreØvreBoks {
+  background-color: rgb(31, 31, 31);
+  border-radius: 10px;
+  padding: 20px;
+  width: 470px; 
+  height: 260px; 
+  margin-bottom: 20px;
+ 
+}
+
+.venstreSide{
   display: flex;
   flex-direction: column;
-  align-items: left;
+  gap:20px;
+  margin-bottom: 20px;
+}
+.oversigtBoks {
+  background-color: rgb(31, 31, 31);
+  border-radius: 10px;
+  padding: 20px;
+  width: 980px; 
+  height: 350px; 
+  margin-left: 250px;
+
+}
+
+.overskrift {
+  margin-left: 250px;
+  margin-bottom: 10px;
+}
+
+.knapBox {
+  display: flex;
+  justify-content: flex-end;  /* højrejusteret */
   gap: 10px;
-  transition: 0.5s;
+  margin-right: 520px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap; /* hvis de ikke kan være på én linje, rykkes de pænt ned */
+}
+
+.knap {
+  background-color: rgb(124, 122, 122);
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.knap:hover {
+  background-color: #cdc9c9;
+}
+
+.dropdown {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdownSkjult {
+  display: none;
+  position: absolute;
+  top: 100%; /* lige under knappen */
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  margin-top: 5px;
+}
+
+.dropdownVælg {
+  display: block;
+  padding: 10px 20px;
+  background-color: rgb(124, 122, 122);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+  white-space: nowrap;
+}
+
+.dropdownVælg:hover {
+  background-color: #cdc9c9;
+}
+
+
+/* css til side menu */
+.sidemenu {
+position: fixed;
+left: 0;
+top: 0;
+width: 200px;
+height: 100%;
+background-color: #161515;
+padding: 20px;
+display: flex;
+flex-direction: column;
+align-items: left;
+gap: 10px;
+transition: 0.5s;
 }
 
 .sidemenu img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 0;
-  margin-bottom: 0;
+width: 100%;
+height: 100%;
+object-fit: cover;
+border-radius: 0;
+margin-bottom: 0;
 }
 
 ul {
-  padding: 3px;
+padding: 3px;
 }
 
 ul li {
-  list-style: none;
+list-style: none;
 }
 
 ul li a {
-  color: rgba(255, 255, 255, 0.544);
-  font-family: Arial, Helvetica, sans-serif;
-  padding: 20px 0;
-  display: block;
-  text-decoration: none;
-  font-size: 14px;
-  transition: 0.2s ease-out;
+color: rgba(255, 255, 255, 0.544);
+font-family: Arial, Helvetica, sans-serif;
+padding: 20px 0;
+display: block;
+text-decoration: none;
+font-size: 14px;
+transition: 0.2s ease-out;
 }
 
 .sidemenu :hover{
-  color: #ffffff;
+color: #ffffff;
 }
 
 ul li a i {
-  width: 50px;
-  text-align: center;
-  padding-right: 10px;
-  font-size: 26px;
+width: 50px;
+text-align: center;
+padding-right: 10px;
+font-size: 26px;
 }
 
 .logUd li a{
-  margin-top: 450px;
+margin-top: 450px;
 }
 
 button.pil {
-  position: absolute;
-  top: 40px;
-  left: 220px;
-  background: rgb(46, 46, 46);
-  border-radius: 50px;
-  border: none;
-  color: rgba(245, 241, 241, 0.796);
-  font-size: 30px;
-  cursor: pointer;
-  transition: 0.3s ease-in-out;
+position: absolute;
+top: 40px;
+left: 220px;
+background: rgb(46, 46, 46);
+border-radius: 50px;
+border: none;
+color: rgba(245, 241, 241, 0.796);
+font-size: 30px;
+cursor: pointer;
+transition: 0.3s ease-in-out;
 }
 
 .sidemenu.lukket {
-  left: -220px; /* Skub siden helt uden for skærmen */
-  width: 0;
+left: -220px; /* Skub siden helt uden for skærmen */
+width: 0;
 }
 
 
