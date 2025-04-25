@@ -210,6 +210,11 @@ app.listen(port, () => {
     console.log('http://localhost:3001')
 })
 
+app.get("/saldo", (req, res) => {
+  res.render("saldo.ejs"); 
+});
+
+
 
 
 // Express redirect

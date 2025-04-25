@@ -1,12 +1,90 @@
 body {
     background-color: black;
-  }
-
-h1 {
-    text-align: center;
-    color: white;
-    font-family: Arial, Helvetica, sans-serif;
-    margin-top: 50px;
-    font-size: 40px;
+    justify-content: center;
+    align-items: center;
 }
-
+  
+h2{
+    color: rgb(114, 46, 179);
+    margin-left: 650px;
+  
+}
+  
+.opretKonto .opretBox{
+    margin: auto;
+    width: 200px;
+    border-radius: 25px;
+    padding: 20px;
+    text-align: center;
+    margin-top: 10px;
+    background-color: rgb(114, 46, 179);
+    background-size: cover;
+    border: 2px solid black;
+}
+  
+.Valuta{
+    font-size: 45px;
+    width: 100%;
+    color: whitesmoke;
+    font-family: Arial, Helvetica, sans-serif;
+}
+  
+.Bankreference{
+    position: relative;
+    width: 90%;
+    height: 50px;
+    margin: 25px;
+    background-color: transparent;
+    border-radius: 100px;
+    border: 2px solid rgb(164, 161, 161); 
+}
+  
+.opretBox input{
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: 2px solid rgba(56, 47, 47, 0.678);
+    border-radius: 100px;
+    padding: 0px 10px;
+    box-sizing: border-box;
+    background-color: transparent;
+    color: rgba(245, 245, 245, 0.95);
+    font-size: 13px;
+}
+  
+.opretBox input::placeholder{
+    color: rgb(236, 230, 230);
+}
+  
+.opretBox i{
+    position: absolute;
+    right: 20px;
+    top: 30%;
+    color: whitesmoke;
+}
+  
+#sendFormular{
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 170px;
+    height: 45px;
+    color: white;
+    border: 2px solid gray;
+    border-radius: 100px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    margin-left: 630px;
+    background-color: transparent;
+    
+}
+  
+#sendFormular:hover{
+    background-color: rgba(233, 239, 239, 0.889);
+    color: black;
+}
+  
+.logo img{
+    margin-top: 25px;
+    width: 120px;
+    height: auto;
+}
