@@ -169,16 +169,18 @@ app.post("dashboard/konti",(req,res)=>{
     res.status(200).redirect("http://localhost:3001/konti") //konti
 })
 
+/*
 app.get("/konti",(req,res)=>{
     res.render("konti.ejs") //konti
 })
+  */
 
 app.post("dashboard/portefoljer",(req,res)=>{
     res.status(200).redirect("http://localhost:3001/portefoljer") //porteføljer
 });
 
-app.get("/portefoljer",(req,res)=>{
-    res.render("portefoljer.ejs") //porteføljer
+app.get("/portefoljeOversigt",(req,res)=>{
+    res.render("portefoljeOversigt.ejs") //porteføljer
 })
 
 app.post("dashboard/indstillinger",(req,res)=>{

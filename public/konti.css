@@ -83,50 +83,26 @@
   margin-bottom: 20px;
   flex-wrap: wrap; /* hvis de ikke kan være på én linje, rykkes de pænt ned */
 }
+.tilføjKnapBox {
+  display: flex;
+  justify-content: flex-end; /* skubber indholdet (knappen) helt til højre */
+  margin-right: 320px; /* samme som alt andet margin fra venstre */
+  margin-bottom: 20px;
+}
 
-.knap {
-  background-color: rgb(124, 122, 122);
+.tilføjKnap {
+  background-color: rgb(31, 31, 31);
   padding: 10px 20px;
   border-radius: 10px;
   color: white;
   font-family: Arial, Helvetica, sans-serif;
   text-decoration: none;
   transition: background-color 0.3s;
+  display: inline-block;
 }
 
-.knap:hover {
-  background-color: #cdc9c9;
-}
-
-.dropdown {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
-
-.dropdownSkjult {
-  display: none;
-  position: absolute;
-  top: 100%; /* lige under knappen */
-  left: 0;
-  width: 100%;
-  z-index: 100;
-  margin-top: 5px;
-}
-
-.dropdownVælg {
-  display: block;
-  padding: 10px 20px;
-  background-color: rgb(124, 122, 122);
-  color: white;
-  text-decoration: none;
-  border-radius: 8px;
-  transition: background-color 0.3s;
-  white-space: nowrap;
-}
-
-.dropdownVælg:hover {
-  background-color: #cdc9c9;
+.tilføjKnap:hover {
+  background-color: #656363;
 }
 
 
