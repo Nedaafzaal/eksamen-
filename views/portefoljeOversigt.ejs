@@ -31,6 +31,8 @@
     </ul>
   </div>
 
+
+  <!--Indhold-->
   <div class="indhold">
     <h1 class="overskrift">Porteføljeoversigt</h1>
 
@@ -56,44 +58,43 @@
     </div>
 
     <!-- Oversigt over porteføljer -->
-    <div class="oversigtBoks">
-      <h3>Porteføljeoversigt</h3>
-
-      <div class="listeHeader">
-        <span>Navn</span>
-        <span>Konto</span>
-        <span>Forventet Værdi</span>
-        <span>Oprettet</span>
+    <div class="oversigtBox">
+      <div class="listeOverskrifter">
+        <span>Portefølje Navn</span>
+        <span>Bank Account</span>
+        <span>Sidste Handel</span>
+        <span>Total Value</span>
       </div>
 
-      <!--Boksen for oversigt over porteføljer-->
-      <% if (portefoljer.length > 0) { %> <!--Tjekker om der er porteføljer i listen -->
-        <% portefoljer.forEach(p => { %> <!--Hvis der er, skal den starte en forløkke som gennemgår for hvert portefølje (p=som objekt) -->
+      <% if (portefoljer.length > 0) { %> 
+        <% portefoljer.forEach(p => { %> 
+      
+          <!-- Sørger for man kan trykke hvor som helst på rækken for at blive viderestillet-->
+          <a href="/portefolje/<%= p.porteføljeID %>" class="aktieRækkeLink">
+      
+            <!-- Hele rækken -->
+            <div class="aktieRække"> 
 
-          <!--Div container for hver hver række -->
-          <div class="aktieRække"> 
+              <!--Indsætter porteføljenavnet-->
+              <div><%= p.navn %></div> 
 
-            <!--For navnet af porteføljet. Strong for at den ikke kun skal køre kode men vise teksten på siden -->
-            <div><strong><%= p.navn %></strong></div> 
+              <!--Indsætter kontotilknytningen-->
+              <div><%= p.kontotilknytning %></div> 
 
-            <!--For kontotilknytningen-->
-            <div><%= p.kontotilknytning %></div> 
+              <!--Sætter ind datoen som den omformaterer til javascript dansk metode-->
+              <div><%= new Date(p.dato).toLocaleDateString("da-DK") %></div>
 
-            <!--Viser forventet værdi. To fixed(2) = viser kun 2 decimaler for værdien -->
-            <div><%= p.forventetVærdi.toFixed(2) %> DKK</div> 
-
-            <!--Konverterer det til rigtig javascript dato  -->
-            <div><%= new Date(p.dato).toLocaleDateString("da-DK") %></div>
-          </div>
-
-          <!--Slutter løkken -->
+              <!--Bruger toFixed(2) til at kun bruge 2 decimaler-->
+              <div><%= p.forventetVærdi.toFixed(2) %> DKK</div> 
+            </div>
+      
+          </a>
+      
         <% }); %>
-
-        <!--Hvis porteføljen er tom skal give fejlmeddelse-->
       <% } else { %>
         <p>Ingen porteføljer fundet endnu.</p>
       <% } %>
-    </div>
+      
   </div>
 
   <script>

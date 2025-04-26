@@ -230,6 +230,34 @@ app.get("/portefoljeOversigt", async (req, res) => {
   }
 });
 
+app.get("/portefolje/:id", async (req, res) => {
+  const id = parseInt(req.params.id); // Fanger ID'et fra URL'en. skal være et tal og ikke string, hvorfor parseINT
+  try {
+    const pool = await sql.connect(sqlConfig);
+
+    const result = await pool.request()
+      .input('id', sql.Int, id)
+      .query(`
+        SELECT * FROM eksamenSQL.porteføljer
+        WHERE porteføljeID = @id
+      `);
+
+    if (result.recordset.length === 0) {
+      return res.status(404).send("Portefølje ikke fundet.");
+    }
+
+    const portefolje = result.recordset[0];
+
+    res.render("portefolje.ejs", { portefolje }); 
+    // 🔥 Husk: laver du portefolje.ejs fil i /views mappen!
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Fejl ved hentning af portefølje.");
+  }
+});
+
+
 /*app.get("/portefoljeOversigt",(req,res)=>{
   res.render("portefoljeOversigt.ejs") //porteføljer
 })
