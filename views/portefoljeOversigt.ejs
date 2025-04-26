@@ -1,27 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Konti</title>
-  <link href="./konti.css" rel="stylesheet" />
+  <title>Porteføljeoversigt</title>
+  <link href="./portefoljeOversigt.css" rel="stylesheet" />
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 </head>
 
 <body>
-   <!-- Sidemenu -->
-   <div class="sidemenu">
+  <!-- Sidemenu -->
+  <div class="sidemenu">
     <div class="WebappLogo">
       <img src="logo.jpeg" alt="WebappLogo">
     </div>
 
-    <button class="pil" onclick="skiftMenu()"> <!-- Når man trykker på pilen, udløser det funktionen under -->
+    <button class="pil" onclick="skiftMenu()">
       <i class='bx bxs-chevron-left'></i>
     </button>
 
     <ul class="menuValg">
       <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
-      <li><a href="/konti"><i class='bx bxs-user-account'></i>Konti</a>
+      <li><a href="/konti"><i class='bx bxs-user-account'></i>Konti</a></li>
       <li><a href="/portefoljeOversigt"><i class='bx bx-doughnut-chart'></i>Porteføljer</a></li>
       <li><a href="/indstillinger"><i class='bx bx-cog'></i>Indstillinger</a></li>
     </ul>
@@ -29,22 +29,19 @@
     <ul class="logUd">
       <li><a href="/login"><i class='bx bx-log-out'></i>Log ud</a></li>
     </ul>
-    
   </div>
 
   <div class="indhold">
-    <h1 class="overskrift">Portefølje oversigt</h1>
+    <h1 class="overskrift">Porteføljeoversigt</h1>
 
-      <!--Tilføj portefølje-->
-      <div class="tilføjKnapBox">
-        <a href="/opretportefolje" class="tilføjKnap">Tilføj portefølje</a>
-      </div>      
-      
-      <div class="øversteIndhold">
-        <div class="venstreSide">
-          <div class="venstreØvreBoks">Total værdi i DKK</div>
-          
+    <!-- Tilføj portefølje-knap -->
+    <div class="tilføjKnapBox">
+      <a href="/opretportefolje" class="tilføjKnap">Tilføj portefølje</a>
+    </div>      
 
+    <div class="øversteIndhold">
+      <div class="venstreSide">
+        <div class="venstreØvreBoks">Total værdi i DKK</div>
         <div class="ændringer">
           <span>Ændring i 24 timer:</span>
           <span>Ændring i 7 dage:</span>
@@ -54,22 +51,58 @@
 
       <div class="højreØvreBoks">
         <h3>Fordeling af værdi i porteføljer</h3>
-        <p>diagram kommer</p>
+        <p>Diagram kommer</p>
       </div>
     </div>
- 
+
+    <!-- Oversigt over porteføljer -->
     <div class="oversigtBoks">
-      <h3>Portefølje Navn - Oversigt</h3>
-      <p>tabel og porteføljer kommer</p>
+      <h3>Porteføljeoversigt</h3>
+
+      <div class="listeHeader">
+        <span>Navn</span>
+        <span>Konto</span>
+        <span>Forventet Værdi</span>
+        <span>Oprettet</span>
+      </div>
+
+      <!--Boksen for oversigt over porteføljer-->
+      <% if (portefoljer.length > 0) { %> <!--Tjekker om der er porteføljer i listen -->
+        <% portefoljer.forEach(p => { %> <!--Hvis der er, skal den starte en forløkke som gennemgår for hvert portefølje (p=som objekt) -->
+
+          <!--Div container for hver hver række -->
+          <div class="aktieRække"> 
+
+            <!--For navnet af porteføljet. Strong for at den ikke kun skal køre kode men vise teksten på siden -->
+            <div><strong><%= p.navn %></strong></div> 
+
+            <!--For kontotilknytningen-->
+            <div><%= p.kontotilknytning %></div> 
+
+            <!--Viser forventet værdi. To fixed(2) = viser kun 2 decimaler for værdien -->
+            <div><%= p.forventetVærdi.toFixed(2) %> DKK</div> 
+
+            <!--Konverterer det til rigtig javascript dato  -->
+            <div><%= new Date(p.dato).toLocaleDateString("da-DK") %></div>
+          </div>
+
+          <!--Slutter løkken -->
+        <% }); %>
+
+        <!--Hvis porteføljen er tom skal give fejlmeddelse-->
+      <% } else { %>
+        <p>Ingen porteføljer fundet endnu.</p>
+      <% } %>
     </div>
   </div>
 
   <script>
     const sidemenu = document.querySelector('.sidemenu');
+
     function skiftMenu() {
       sidemenu.classList.toggle('lukket');
     }
-  
+
     function toggleKontoMenu() {
       const menu = document.getElementById('kontoMenu');
       menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
@@ -78,8 +111,7 @@
     function togglePortefoljeMenu() {
       const menu = document.getElementById('portefoljeMenu');
       menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-}
-
+    }
   </script>
 </body>
 </html>

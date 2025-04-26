@@ -169,19 +169,16 @@ app.post("dashboard/konti",(req,res)=>{
     res.status(200).redirect("http://localhost:3001/konti") //konti
 })
 
-/*
+
 app.get("/konti",(req,res)=>{
     res.render("konti.ejs") //konti
 })
-  */
+
 
 app.post("dashboard/portefoljer",(req,res)=>{
     res.status(200).redirect("http://localhost:3001/portefoljer") //porteføljer
 });
 
-app.get("/portefoljeOversigt",(req,res)=>{
-    res.render("portefoljeOversigt.ejs") //porteføljer
-})
 
 app.post("dashboard/indstillinger",(req,res)=>{
     res.status(200).redirect("http://localhost:3001/indstillinger") //indstillinger
@@ -216,20 +213,24 @@ app.get("/saldo", (req, res) => {
   res.render("saldo.ejs"); 
 });
 
+//Henter nu værdipapirNavn, forventet værdi, dato, for at fremvise i tabel under portefølje oversigt
+app.get("/portefoljeOversigt", async (req, res) => {
+  try {
+    const pool = await sql.connect(sqlConfig);
+    const result = await pool.request().query(`
+      SELECT * FROM eksamenSQL.porteføljer
+    `);
 
+    const portefoljer = result.recordset;
+    res.render("portefoljeOversigt.ejs", { portefoljer });
 
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Fejl ved hentning af porteføljer");
+  }
+});
 
-
-// Express redirect
-// ekstra: express middleware
-// Router
-// HTTP statuskoder
-// HTTP protokol meget kort 
-// Session cookies i express
-
-
-
-
-
-
-/////
+/*app.get("/portefoljeOversigt",(req,res)=>{
+  res.render("portefoljeOversigt.ejs") //porteføljer
+})
+*/

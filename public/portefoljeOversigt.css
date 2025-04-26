@@ -181,4 +181,20 @@ left: -220px; /* Skub siden helt uden for skærmen */
 width: 0;
 }
 
+.listeHeader, .aktieRække {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  padding: 12px 0;
+  border-bottom: 1px solid #333;
+  align-items: center;
+  color: white;
+}
 
+.listeHeader {
+  font-weight: bold;
+  color: #aaa;
+}
+
+.aktieRække {
+  font-size: 15px;
+}
