@@ -242,7 +242,7 @@ app.get("/portefolje/:id", async (req, res) => {
         WHERE porteføljeID = @id
       `);
 
-    if (result.recordset.length === 0) {
+    if (result.recordset.length === 0) { //Hvis altså porteføljen ikke eksisterer, skal en fejlmeddelselse sendes.
       return res.status(404).send("Portefølje ikke fundet.");
     }
 
@@ -257,8 +257,11 @@ app.get("/portefolje/:id", async (req, res) => {
   }
 });
 
-
-/*app.get("/portefoljeOversigt",(req,res)=>{
-  res.render("portefoljeOversigt.ejs") //porteføljer
+app.get("/opretPortefolje", (req,res)=>{
+  res.render("opretPortefolje.ejs")
 })
-*/
+
+
+
+
+

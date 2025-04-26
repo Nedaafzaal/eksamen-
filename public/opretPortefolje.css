@@ -1,0 +1,80 @@
+body {
+    background: url("baggrund2.jpeg");
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+  }
+
+.opretPortefølje h1{
+    font-size: 45px;
+    width: 100%;
+    color: whitesmoke;
+    font-family: Arial, Helvetica, sans-serif;
+    padding-bottom: 50px;
+  }
+  
+
+.opretPortefølje{
+    margin: auto;
+    width: 650px;
+    border-radius: 25px;
+    padding: 20px;
+    text-align: center;
+    margin-top: 80px;
+    background-color: rgba(0, 0, 0, 0.7);
+    background-size: cover;
+    border: 2px solid black;
+}
+
+.opretPortefølje .opretBox{
+    position: relative;
+    width: 90%;
+    height: 50px;
+    margin: 25px;
+    background-color: transparent;
+    border-radius: 100px;
+    border: 2px solid rgb(164, 161, 161);
+  
+  }
+  
+.opretBox input{
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: 2px solid rgba(56, 47, 47, 0.678);
+    border-radius: 100px;
+    padding: 0px 10px;
+    box-sizing: border-box;
+    background-color: transparent;
+    color: rgba(245, 245, 245, 0.95);
+    font-size: 13px;
+}
+  
+.opretBox input::placeholder{
+    color: rgb(236, 230, 230);
+}
+  
+.opretBox i{
+    position: absolute;
+    right: 20px;
+    top: 30%;
+    color: whitesmoke;
+}
+  
+#sendFormular{
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 170px;
+    height: 45px;
+    color: white;
+    border: 2px solid gray;
+    border-radius: 100px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    background-color: transparent;
+}
+  
+#sendFormular:hover{
+    background-color: rgba(233, 239, 239, 0.889);
+    color: black;
+  }
