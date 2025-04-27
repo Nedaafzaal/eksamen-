@@ -165,14 +165,14 @@ app.get("/dashboard", (req, res) => {
     res.render("dashboard.ejs")
 })
 
-app.post("dashboard/konti",(req,res)=>{
-    res.status(200).redirect("http://localhost:3001/konti") //konti
+app.post("dashboard/kontiOversigt",(req,res)=>{
+    res.status(200).redirect("http://localhost:3001/kontiOversigt") //konti
 })
 
 
-app.get("/konti",(req,res)=>{
-    res.render("konti.ejs") //konti
-})
+// app.get("/konti",(req,res)=>{
+//     res.render("konti.ejs") //konti
+// })
 
 
 app.post("dashboard/portefoljer",(req,res)=>{
@@ -191,7 +191,7 @@ app.get("/indstillinger", (req, res) => {
 });
 
 app.get("/tilfojKonto", (req, res) => {
-  res.render("tilfojKonto.ejs")
+res.render("tilfojKonto.ejs")
 })
 
 app.post("/tilfojKonto", async (req,res)=>{
@@ -206,7 +206,7 @@ app.post("/tilfojKonto", async (req,res)=>{
       .input("kontonavn", sql.NVarChar, req.body.navn)
       .input("saldo", sql.Decimal, parseFloat (req.body.Saldo))
       .input("valuta", sql.NVarChar, req.body.valuta)
-      .input("oprettelsesdato", sql.Date, req.body.dato)
+      .input("oprettelsesdato", sql.Date, new Date()) //sætter automatisk datoen når brugeren opretter konto
       .input("bankreference", sql.NVarChar, req.body.bankreference)
       .query(`
         INSERT INTO [eksamenSQL].[konto]
@@ -215,7 +215,7 @@ app.post("/tilfojKonto", async (req,res)=>{
       `);
             console.log(result) //logger resultatet 
 
-            res.status(200).redirect("http://localhost:3001/konti"); 
+            res.status(200).redirect("http://localhost:3001/kontiOversigt"); 
 
             } catch (err) {
               console.log(err); //logger fejl hvis der skulle være nogen 
@@ -223,13 +223,6 @@ app.post("/tilfojKonto", async (req,res)=>{
             }
           });
     
-     
-  
-
-
-//hvis port ændres i konstanten ændres det også her derfor kaldes den port
-//printer linket i konsollen så vi kan komme ind på webapplikationen
-
 app.get("/logout", (req,res)=>{
     res.redirect("/login.ejs")
 })
@@ -238,9 +231,6 @@ app.listen(port, () => {
     console.log('http://localhost:3001')
 })
 
-app.get("/saldo", (req, res) => {
-  res.render("saldo.ejs"); 
-});
 
 //Henter nu værdipapirNavn, forventet værdi, dato, for at fremvise i tabel under portefølje oversigt
 app.get("/portefoljeOversigt", async (req, res) => {
@@ -306,19 +296,21 @@ app.get("/opretPortefolje", (req,res)=>{
   res.render("opretPortefolje.ejs")
 })
 
-//Denne rute sørger for at der oprettes nyt portefølje i databasen
+
+//Denne rute sørger for at der oprettes nyt portefølje i databasen.
 app.post("/opretPortefolje", async (req, res) => {
   const { navn, kontotilknytning, forventetVærdi } = req.body;
 
   try {
     const pool = await sql.connect(sqlConfig);
-
+    
+    //Tager fat i det, som brugeren taster ind i formularen. 
     await pool.request()
       .input('navn', sql.NVarChar, navn)
       .input('kontotilknytning', sql.NVarChar, kontotilknytning)
       .input('dato', sql.Date, new Date()) // sætter dagens dato
       .input('forventetVærdi', sql.Decimal(18, 2), forventetVærdi)
-      .input('værdipapirNavn', sql.NVarChar, 'Ingen endnu') // hvis du vil sætte en placeholder
+      .input('værdipapirNavn', sql.NVarChar, 'Ingen endnu')
       .query(`
         INSERT INTO eksamenSQL.porteføljer (navn, kontotilknytning, dato, forventetVærdi, værdipapirNavn)
         VALUES (@navn, @kontotilknytning, @dato, @forventetVærdi, @værdipapirNavn)
@@ -332,7 +324,22 @@ app.post("/opretPortefolje", async (req, res) => {
   }
 });
 
+//henter konti fra databasen
+app.get("/kontiOversigt", async (req, res) => {
+  try {
+    const pool = await sql.connect(sqlConfig);
+    const result = await pool.request().query(`
+      SELECT * FROM eksamenSQL.konto
+    `);
 
+    const konti = result.recordset;
+    res.render("kontiOversigt.ejs", { konti });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Fejl ved hentning af konti");
+  }
+});
 
 
 

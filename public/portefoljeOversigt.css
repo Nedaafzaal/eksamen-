@@ -184,7 +184,7 @@ button.pil {
   margin-left: 250px;
 }
 
-.listeOverskrifter, .aktieRække {
+.listeOverskrifter, .porteføljeRække {
   display: grid;
   grid-template-columns: 280px 280px 280px 280px; /* 🔥 faste bredder */
   padding: 12px 0;
@@ -195,17 +195,17 @@ button.pil {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.aktieRække {
+.porteføljeRække {
   font-size: 13px;
   border-radius: 5px;
 }
 
-.aktieRække:hover{
+.porteføljeRække:hover{
   background-color: #656363;
   font-size: 15px;
 }
 
-.aktieRækkeLink{
+.porteføljeRækkeLink{
   text-decoration: none;
   color: rgb(213, 209, 209);
   font-family: Arial, Helvetica, sans-serif;
