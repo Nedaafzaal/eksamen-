@@ -103,18 +103,23 @@ h1 {
         font-family: Arial, Helvetica, sans-serif;
         text-decoration: none;
         transition: background-color 0.3s;
-        display: inline-block;
+        margin-left: 100px
     }
 
-      .oversigtBox {
-        background-color: rgb(31, 31, 31);
-        border-radius: 10px;
-        padding: 20px;
-        width: 980px;
-        height: 350px;
-        margin: 20px auto; 
-      }
+    .tilføjKnap:hover{
+      background-color: #656363;
+    }
 
+    .oversigtBox {
+      background-color: rgb(31, 31, 31);
+      border-radius: 20px;
+      padding: 20px;
+      width: 1000px;
+      margin-left: 350px;
+      height: 600px;
+
+  }
+  
       .listeOverskrifter, .kontoRække {
         display: grid;
         grid-template-columns: 200px 200px 200px 200px 200px;
@@ -124,17 +129,18 @@ h1 {
         align-items: center;
         color: rgb(234, 230, 230);
         font-family: Arial, Helvetica, sans-serif;
-        font-size: 15px;
+        font-size: 17px;
       }
       
       .kontoRække {
-        font-size: 11px;
+        font-size: 15px;
         border-radius: 5px;
+        padding-bottom: 35px;
       }
       
       .kontoRække:hover{
         background-color: #656363;
-        font-size: 15px;
+        font-size: 16px;
       }
       
       .kontoRækkeLink{

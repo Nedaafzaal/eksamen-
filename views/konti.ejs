@@ -38,13 +38,38 @@
     <div class="overskrift">
       <h1><%= konto.kontonavn %></h1> <!-- navnet hentes fra valgt konto -->
 
-        <div class="højrenedreboks">
-          <h3>Dato oprettet</h3>
-          <p><%= new Date(konto.oprettelsesdato).toLocaleDateString('da-DK') %></p> <!-- dato hentes fra valgt portefølje -->
+      <div class="øvreBoks">
+        <div class="mindreBoks">
+            <p class="brødOverskrift">Saldo:</p>
+            <p><%=konto.saldo%></p>
+        </div>
+        <div class="mindreBoks">
+            <p class="brødOverskrift">Oprettelsesdato:</p>
+            <p><%= new Date(konto.oprettelsesdato).toLocaleDateString('da-DK') %></p>
+        </div>
+        <div class="mindreBoks">
+            <p class="brødOverskrift">Bankreference:</p>
+            <p> <%=konto.bankreference%></p>
         </div>
       </div>
-    </div>
 
+      <div class="midtBoks">
+        <h2>Transaktionsoversigt</h2>
+      </div>
+
+          <!-- Nederste bokse -->
+    <div class="nedreBoks">
+        <div class="venstreBoks">
+            <h2>Hæv eller indsæt værdi</h2>
+            <button class="knap">Indsæt værdi</button>
+            <button class="knap">Hæv værdi</button>
+        </div>
+        <div class="højreBoks">
+            <h2>Ønsker du at lukke din konto?</h2>
+            <p>Vær opmærksom på, at transaktioner ikke kan foretages når konto er lukket.</p>
+        </div>
+    </div>
+</div>
 
   <script>
     const sidemenu = document.querySelector('.sidemenu');
