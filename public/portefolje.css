@@ -178,5 +178,39 @@ button.pil {
   width: 0;
 }
 
+.oversigtBox {
+  background-color: rgb(31, 31, 31);
+  border-radius: 10px;
+  padding: 20px;
+  width: 980px; 
+  height: 350px; 
+  margin-left: 142px;
+}
 
+.listeOverskrifter, .aktieRække {
+  display: grid;
+  grid-template-columns: 280px 280px 280px 280px; /* 🔥 faste bredder */
+  padding: 12px 0;
+  padding-bottom: 25px;
+  border-bottom: 1px solid #333;
+  align-items: center;
+  color: rgb(213, 209, 209);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.aktieRække {
+  font-size: 13px;
+  border-radius: 5px;
+}
+
+.aktieRække:hover{
+  background-color: #656363;
+  font-size: 15px;
+}
+
+.aktieRækkeLink{
+  text-decoration: none;
+  color: rgb(213, 209, 209);
+  font-family: Arial, Helvetica, sans-serif;
+}
 

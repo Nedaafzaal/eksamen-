@@ -47,7 +47,7 @@
     <div class="øverste">
       <div class="grafboks">
         <h3>Samlet værdi</h3>
-        <p><%= portefolje.forventetVærdi.toFixed(2) %> DKK</p> <!-- værdien hentes fra netop det valgte portefølje -->
+        <p><%= portefolje.forventetVærdi %> DKK</p> <!-- værdien hentes fra netop det valgte portefølje -->
       </div>
 
       <div class="højresideboks">
@@ -63,11 +63,32 @@
       </div>
     </div>
 
-    <div class="nedersteboks">
-      <h3>Aktier i portefølje</h3>
-      <p>Her kommer aktier...</p>
-    </div>
+<!-- Oversigt over aktier i portefølje -->
+<div class="oversigtBox">
+  <h3>Aktier i portefølje</h3>
+
+  <div class="listeOverskrifter">
+    <span>Aktie Navn</span>
+    <span>Antal</span>
+    <span>Pris</span>
+    <span>Value</span>
   </div>
+
+  <% if (aktier.length > 0) { %> 
+    <% aktier.forEach(a => { %> 
+    
+      <div class="aktieRække"> 
+        <div><%= a.aktieNavn %></div> 
+        <div><%= a.antal %></div> 
+        <div><%= a.købspris.toFixed(2) %> DKK</div>
+        <div><%= a.nuværendeVærdi.toFixed(2) %> DKK</div> 
+      </div>
+
+    <% }); %>
+  <% } else { %>
+    <p>Ingen aktier fundet endnu.</p>
+  <% } %>
+</div> <!-- Lukker oversigtBox -->
 
   <script>
     const sidemenu = document.querySelector('.sidemenu');

@@ -231,25 +231,40 @@ app.get("/portefoljeOversigt", async (req, res) => {
 });
 
 app.get("/portefolje/:id", async (req, res) => {
-  const id = parseInt(req.params.id); // Fanger ID'et fra URL'en. skal være et tal og ikke string, hvorfor parseINT
+  const id = parseInt(req.params.id, 10);
+
+  if (isNaN(id)) {
+    return res.status(400).send("Ugyldigt portefølje-ID");
+  }
+
   try {
     const pool = await sql.connect(sqlConfig);
 
-    const result = await pool.request()
+    // Hent porteføljen
+    const portefoljeResult = await pool.request()
       .input('id', sql.Int, id)
       .query(`
         SELECT * FROM eksamenSQL.porteføljer
         WHERE porteføljeID = @id
       `);
 
-    if (result.recordset.length === 0) { //Hvis altså porteføljen ikke eksisterer, skal en fejlmeddelselse sendes.
-      return res.status(404).send("Portefølje ikke fundet.");
+    if (portefoljeResult.recordset.length === 0) {
+      return res.status(404).send("Portefølje ikke fundet");
     }
 
-    const portefolje = result.recordset[0];
+    const portefolje = portefoljeResult.recordset[0];
 
-    res.render("portefolje.ejs", { portefolje }); 
-    // 🔥 Husk: laver du portefolje.ejs fil i /views mappen!
+    // Hent aktier der hører til porteføljen
+    const aktierResult = await pool.request()
+      .input('porteføljeID', sql.Int, id)
+      .query(`
+        SELECT * FROM eksamenSQL.aktier
+        WHERE porteføljeID = @porteføljeID
+      `);
+
+    const aktier = aktierResult.recordset;
+
+    res.render("portefolje", { portefolje, aktier });
 
   } catch (err) {
     console.error(err);
@@ -257,9 +272,36 @@ app.get("/portefolje/:id", async (req, res) => {
   }
 });
 
+
 app.get("/opretPortefolje", (req,res)=>{
   res.render("opretPortefolje.ejs")
 })
+
+//Denne rute sørger for at der oprettes nyt portefølje i databasen
+app.post("/opretPortefolje", async (req, res) => {
+  const { navn, kontotilknytning, forventetVærdi } = req.body;
+
+  try {
+    const pool = await sql.connect(sqlConfig);
+
+    await pool.request()
+      .input('navn', sql.NVarChar, navn)
+      .input('kontotilknytning', sql.NVarChar, kontotilknytning)
+      .input('dato', sql.Date, new Date()) // sætter dagens dato
+      .input('forventetVærdi', sql.Decimal(18, 2), forventetVærdi)
+      .input('værdipapirNavn', sql.NVarChar, 'Ingen endnu') // hvis du vil sætte en placeholder
+      .query(`
+        INSERT INTO eksamenSQL.porteføljer (navn, kontotilknytning, dato, forventetVærdi, værdipapirNavn)
+        VALUES (@navn, @kontotilknytning, @dato, @forventetVærdi, @værdipapirNavn)
+      `);
+
+    
+    res.redirect("/portefoljeOversigt"); // efter oprettelse, redirecter tilbage til oversigten
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Fejl ved oprettelse af portefølje.");
+  }
+});
 
 
 
