@@ -194,9 +194,38 @@ app.get("/tilfojKonto", (req, res) => {
   res.render("tilfojKonto.ejs")
 })
 
-app.post("konti/tilfojKonto",(req,res)=>{
-  res.status(200).redirect("http://localhost:3001/tilfojKonto") //konti
-})
+app.post("/tilfojKonto", async (req,res)=>{
+    try {
+        console.log(req.body);
+
+        await sql.connect(sqlConfig);
+     
+     const request = new sql.Request();
+
+    const result = await request 
+      .input("kontonavn", sql.NVarChar, req.body.navn)
+      .input("saldo", sql.Decimal, parseFloat (req.body.Saldo))
+      .input("valuta", sql.NVarChar, req.body.valuta)
+      .input("oprettelsesdato", sql.Date, req.body.dato)
+      .input("bankreference", sql.NVarChar, req.body.bankreference)
+      .query(`
+        INSERT INTO [eksamenSQL].[konto]
+        (kontonavn, saldo, valuta, oprettelsesdato, bankreference) 
+        VALUES (@kontonavn, @saldo, @valuta, @oprettelsesdato, @bankreference)
+      `);
+            console.log(result) //logger resultatet 
+
+            res.status(200).redirect("http://localhost:3001/konti"); 
+
+            } catch (err) {
+              console.log(err); //logger fejl hvis der skulle være nogen 
+              res.sendStatus(500); //sender en status 500
+            }
+          });
+    
+     
+  
+
 
 //hvis port ændres i konstanten ændres det også her derfor kaldes den port
 //printer linket i konsollen så vi kan komme ind på webapplikationen
