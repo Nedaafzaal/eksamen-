@@ -362,3 +362,33 @@ app.get('/konti/:id', async (req, res) => {
   }
 });
 
+app.get("/indsætVærdi", (req, res) => {
+  res.render("indsætVærdi.ejs")
+})
+
+//Denne rute sørger for at der indsættes værdi i databasen.
+app.post("/indsætVærdi", async (req, res) => {
+  const { navn, kontotilknytning, forventetVærdi } = req.body;
+
+  try {
+    const pool = await sql.connect(sqlConfig);
+    
+    //Tager fat i det, som brugeren taster ind i formularen. 
+    await pool.request()
+      .input('', sql.NVarChar, navn)
+      .input('kontotilknytning', sql.NVarChar, kontotilknytning)
+      .input('dato', sql.Date, new Date()) // sætter dagens dato
+      .input('forventetVærdi', sql.Decimal(18, 2), forventetVærdi)
+      .input('værdipapirNavn', sql.NVarChar, 'Ingen endnu')
+      .query(`
+        INSERT INTO eksamenSQL.porteføljer (navn, kontotilknytning, dato, forventetVærdi, værdipapirNavn)
+        VALUES (@navn, @kontotilknytning, @dato, @forventetVærdi, @værdipapirNavn)
+      `);
+
+    
+    res.redirect("/portefoljeOversigt"); // efter oprettelse, redirecter tilbage til oversigten
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Fejl ved oprettelse af portefølje.");
+  }
+});

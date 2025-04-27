@@ -5,24 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= konto.kontonavn %></title>
   <link href="/konti.css" rel="stylesheet">
-  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
 
 <body>
-<!-- Sidemenu -->
   <!-- Sidemenu -->
   <div class="sidemenu">
     <div class="WebappLogo">
       <img src="/logo.jpeg" alt="WebappLogo">
     </div>
 
-    <button class="pil" onclick="skiftMenu()"> <!-- Når man trykker på pilen, udløser det funktionen under -->
+    <button class="pil" onclick="skiftMenu()"> 
       <i class='bx bxs-chevron-left'></i>
     </button>
 
     <ul class="menuValg">
       <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
-      <li><a href="/kontiOversigt"><i class='bx bxs-user-account'></i>Konti</a>
+      <li><a href="/kontiOversigt"><i class='bx bxs-user-account'></i>Konti</a></li>
       <li><a href="/portefoljeOversigt"><i class='bx bx-doughnut-chart'></i>Porteføljer</a></li>
       <li><a href="/indstillinger"><i class='bx bx-cog'></i>Indstillinger</a></li>
     </ul>
@@ -30,46 +29,54 @@
     <ul class="logUd">
       <li><a href="/login"><i class='bx bx-log-out'></i>Log ud</a></li>
     </ul>
-    
   </div>
 
   <!-- Indhold -->
   <div class="indhold">
+    
     <div class="overskrift">
-      <h1><%= konto.kontonavn %></h1> <!-- navnet hentes fra valgt konto -->
-
-      <div class="øvreBoks">
-        <div class="mindreBoks">
-            <p class="brødOverskrift">Saldo:</p>
-            <p><%=konto.saldo%></p>
-        </div>
-        <div class="mindreBoks">
-            <p class="brødOverskrift">Oprettelsesdato:</p>
-            <p><%= new Date(konto.oprettelsesdato).toLocaleDateString('da-DK') %></p>
-        </div>
-        <div class="mindreBoks">
-            <p class="brødOverskrift">Bankreference:</p>
-            <p> <%=konto.bankreference%></p>
-        </div>
-      </div>
-
-      <div class="midtBoks">
-        <h2>Transaktionsoversigt</h2>
-      </div>
-
-          <!-- Nederste bokse -->
-    <div class="nedreBoks">
-        <div class="venstreBoks">
-            <h2>Hæv eller indsæt værdi</h2>
-            <button class="knap">Indsæt værdi</button>
-            <button class="knap">Hæv værdi</button>
-        </div>
-        <div class="højreBoks">
-            <h2>Ønsker du at lukke din konto?</h2>
-            <p>Vær opmærksom på, at transaktioner ikke kan foretages når konto er lukket.</p>
-        </div>
+      <h1><%= konto.kontonavn %></h1> <!-- Navnet på kontoen -->
     </div>
-</div>
+
+    <div class="øvreBoks">
+      <div class="mindreBoks">
+        <p class="brødOverskrift">Saldo:</p>
+        <p><%= konto.saldo %></p>
+      </div>
+      <div class="mindreBoks">
+        <p class="brødOverskrift">Oprettelsesdato:</p>
+        <p><%= new Date(konto.oprettelsesdato).toLocaleDateString('da-DK') %></p>
+      </div>
+      <div class="mindreBoks">
+        <p class="brødOverskrift">Bankreference:</p>
+        <p><%= konto.bankreference %></p>
+      </div>
+    </div>
+
+    <div class="midtBoks">
+      <h2>Transaktionsoversigt</h2>
+    </div>
+
+    <div class="nedreBoks">
+      <div class="venstreBoks">
+        <h2>Hæv eller indsæt værdi</h2>
+        <div class="knapBoks">
+          <a href="/indsætVærdi" class="knap">Indsæt værdi</a>
+          <br><br>
+          <a href="/hævVærdi" class="knap">Hæv værdi</a>
+        </div>
+      </div>
+
+      <div class="højreBoks">
+        <h2>Ønsker du at lukke din konto?</h2>
+        <p>Vær opmærksom på, at transaktioner ikke kan foretages, når konto er lukket.</p>
+        <div class="knapBoks">
+         <a href="/lukKonto" class="knap2">Luk konto</a>
+        </div>
+      </div>
+    </div> <!-- Slutter nedreBoks -->
+
+  </div> <!-- Slutter indhold -->
 
   <script>
     const sidemenu = document.querySelector('.sidemenu');
