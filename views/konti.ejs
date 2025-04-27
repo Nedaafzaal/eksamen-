@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= konto.kontonavn %></title>
+  <link href="/konti.css" rel="stylesheet">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
+</head>
+
+<body>
+<!-- Sidemenu -->
+  <!-- Sidemenu -->
+  <div class="sidemenu">
+    <div class="WebappLogo">
+      <img src="/logo.jpeg" alt="WebappLogo">
+    </div>
+
+    <button class="pil" onclick="skiftMenu()"> <!-- Når man trykker på pilen, udløser det funktionen under -->
+      <i class='bx bxs-chevron-left'></i>
+    </button>
+
+    <ul class="menuValg">
+      <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
+      <li><a href="/kontiOversigt"><i class='bx bxs-user-account'></i>Konti</a>
+      <li><a href="/portefoljeOversigt"><i class='bx bx-doughnut-chart'></i>Porteføljer</a></li>
+      <li><a href="/indstillinger"><i class='bx bx-cog'></i>Indstillinger</a></li>
+    </ul>
+
+    <ul class="logUd">
+      <li><a href="/login"><i class='bx bx-log-out'></i>Log ud</a></li>
+    </ul>
+    
+  </div>
+
+  <!-- Indhold -->
+  <div class="indhold">
+    <div class="overskrift">
+      <h1><%= konto.kontonavn %></h1> <!-- navnet hentes fra valgt konto -->
+
+        <div class="højrenedreboks">
+          <h3>Dato oprettet</h3>
+          <p><%= new Date(konto.oprettelsesdato).toLocaleDateString('da-DK') %></p> <!-- dato hentes fra valgt portefølje -->
+        </div>
+      </div>
+    </div>
+
+
+  <script>
+    const sidemenu = document.querySelector('.sidemenu');
+    function skiftMenu() {
+      sidemenu.classList.toggle('lukket');
+    }
+  </script>
+
+</body>
+</html>

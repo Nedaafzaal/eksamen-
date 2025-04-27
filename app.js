@@ -341,5 +341,24 @@ app.get("/kontiOversigt", async (req, res) => {
   }
 });
 
+//Henter information om konto fra oversigtKonti til konti.ejs
+//ruten svarer på en GET-request til URL'en /konti/:id.
+//Så alt efter hvilken kontoID
+app.get('/konti/:id', async (req, res) => {
+  try {
+      const kontoID = req.params.id;//tager fat i kontoID og gemmer den i en variabel
+      await sql.connect(sqlConfig); //opretter en forbindelse til databasen. sqlConfig indeholder information som brugernavn, adgangskode osv.
+      const request = new sql.Request(); //laver en forespørgsel
+      const result = await request
+          .input('kontoID', sql.Int, kontoID)
+          .query('SELECT * FROM eksamenSQL.konto WHERE kontoID = @kontoID');
 
+      const konto = result.recordset[0];
+
+      res.render('konti', { konto: konto }); // <-- SEND konto til EJS
+  } catch (err) {
+      console.error(err);
+      res.status(500).send('Kunne ikke hente');
+  }
+});
 

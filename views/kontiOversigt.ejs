@@ -54,14 +54,15 @@
 
       <% if (konti.length > 0) { %> 
         <% konti.forEach(k => { %> 
-        
-          <div class="kontoRække"> 
-            <div><%= k.kontonavn %></div> 
-            <div><%= k.saldo %></div> 
-            <div><%= k.valuta %></div>
-            <div><%= new Date(k.oprettelsesdato).toLocaleDateString('da-DK') %></div>
-            <div><%= k.bankreference %></div> 
-          </div>
+          <a href="/konti/<%= k.kontoID %>" class="kontoRækkeLink">
+            <div class="kontoRække"> 
+              <div><%= k.kontonavn %></div> 
+              <div><%= k.saldo %></div> 
+              <div><%= k.valuta %></div>
+              <div><%= new Date(k.oprettelsesdato).toLocaleDateString('da-DK') %></div>
+              <div><%= k.bankreference %></div> 
+            </div>
+          </a>
     
         <% }); %>
       <% } else { %>
