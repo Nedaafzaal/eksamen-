@@ -61,9 +61,11 @@
       <div class="venstreBoks">
         <h2>Hæv eller indsæt værdi</h2>
         <div class="knapBoks">
-          <a href="/indsætVærdi" class="knap">Indsæt værdi</a>
+
+            <!--Den tager fat i det kontoID man er inde på-->
+            <a href="/insertValue/<%= konto.kontoID %>" class="knap">Indsæt værdi</a> 
           <br><br>
-          <a href="/hævVærdi" class="knap">Hæv værdi</a>
+          <a href="/hævVærdi/<%=konto.kontoID %>" class="knap">Hæv værdi</a>
         </div>
       </div>
 

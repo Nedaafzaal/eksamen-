@@ -66,11 +66,16 @@
         <span>Total Value</span>
       </div>
 
+      <!--Tjekker om der er nogle porteføljer. Hvis der er porteføljer:-->
       <% if (portefoljer.length > 0) { %> 
+
+        <!--Gennemgår den en forløkke for hvert portefølje p-->
         <% portefoljer.forEach(p => { %> 
       
           <!-- Sørger for man kan trykke hvor som helst på rækken for at blive viderestillet-->
-          <a href="/portefolje/<%= p.porteføljeID %>" class="porteføljeRækkeLink">
+          <a href="/portefolje/<%= p.porteføljeID %>" 
+            
+            class="porteføljeRækkeLink">
       
             <!-- Hele rækken -->
             <div class="porteføljeRække"> 

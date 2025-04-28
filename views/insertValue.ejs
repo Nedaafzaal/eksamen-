@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indsæt Værdi</title>
+  <link href="/insertValue.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="opretInsert">
+    <h1>Indsæt værdi på <%=konto.kontonavn %> </h1>
+
+    <form action="/insertValue" method="POST"> <!-- Definerer hvilken rute formularen sendes til -->
+
+    <!--Så serveren ved, hvilken konto beløbet skal sættes på-->
+    <input type="hidden" name="kontoID" value="<%= konto.kontoID %>">
+
+      <div class="opretBox">
+        <input type="number" placeholder="Beløb" name="beløb" required>
+      </div>
+
+      <div class="opretBox">
+        <input type="text" placeholder="Valuta" name="valuta" required>
+      </div>
+
+      <button id="sendFormular" type="submit">Indsæt</button>
+    </form>
+  </div>
+</body>
+</html>

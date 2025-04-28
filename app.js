@@ -239,7 +239,7 @@ app.get("/portefoljeOversigt", async (req, res) => {
     const result = await pool.request().query(`
       SELECT * FROM eksamenSQL.porteføljer
     `);
-
+//Skriv bedrer text hvad der sker her! Det er mega vigtigt
     const portefoljer = result.recordset;
     res.render("portefoljeOversigt.ejs", { portefoljer });
 
@@ -354,41 +354,58 @@ app.get('/konti/:id', async (req, res) => {
           .query('SELECT * FROM eksamenSQL.konto WHERE kontoID = @kontoID');
 
       const konto = result.recordset[0];
-
       res.render('konti', { konto: konto }); // <-- SEND konto til EJS
+
   } catch (err) {
       console.error(err);
       res.status(500).send('Kunne ikke hente');
   }
 });
 
-app.get("/indsætVærdi", (req, res) => {
-  res.render("indsætVærdi.ejs")
-})
-
-//Denne rute sørger for at der indsættes værdi i databasen.
-app.post("/indsætVærdi", async (req, res) => {
-  const { navn, kontotilknytning, forventetVærdi } = req.body;
-
+//Indsættelse af værdi. Tager fat i den valgte konto efter ID.
+app.get("/insertValue/:id", async (req, res) => {
   try {
-    const pool = await sql.connect(sqlConfig);
-    
-    //Tager fat i det, som brugeren taster ind i formularen. 
-    await pool.request()
-      .input('', sql.NVarChar, navn)
-      .input('kontotilknytning', sql.NVarChar, kontotilknytning)
-      .input('dato', sql.Date, new Date()) // sætter dagens dato
-      .input('forventetVærdi', sql.Decimal(18, 2), forventetVærdi)
-      .input('værdipapirNavn', sql.NVarChar, 'Ingen endnu')
-      .query(`
-        INSERT INTO eksamenSQL.porteføljer (navn, kontotilknytning, dato, forventetVærdi, værdipapirNavn)
-        VALUES (@navn, @kontotilknytning, @dato, @forventetVærdi, @værdipapirNavn)
-      `);
+    const kontoID = req.params.id;
 
-    
-    res.redirect("/portefoljeOversigt"); // efter oprettelse, redirecter tilbage til oversigten
+    await sql.connect(sqlConfig); //skaber forbindelse til serveren
+    const request = new sql.Request();
+
+    const result = await request
+      .input('kontoID', sql.Int, kontoID) //sætter valgt kontoID ind. laver en forespørgsel hvor den tager alt fra konto, der hvor kontoID er = den valgte kontoID.
+      .query('SELECT * FROM eksamenSQL.konto WHERE kontoID = @kontoID'); //
+
+    const konto = result.recordset[0];
+
+    res.render("insertValue.ejs", { konto: konto }); // sender kontoen til insertValue.ejs
   } catch (err) {
     console.error(err);
-    res.status(500).send("Fejl ved oprettelse af portefølje.");
+    res.status(500).send('Fejl ved hentning af konto til indsæt værdi.');
   }
 });
+
+
+app.post('/insertValue', async (req, res) => {
+  try {
+    const { beløb, valuta, kontoID } = req.body;
+
+    await sql.connect(sqlConfig);
+    const request = new sql.Request();
+
+    //Opdaterer saldo ved at sætte det beløb man indsætter + det man havde i forvejen. 
+    await request
+      .input('beløb', sql.Int, beløb)
+      .input('kontoID', sql.Int, kontoID)
+      .query(`
+        UPDATE eksamenSQL.konto
+        SET saldo = saldo + @beløb
+        WHERE kontoID = @kontoID
+      `);
+
+      res.redirect(`/konti/${kontoID}`);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Fejl ved indsættelse af værdi');
+  }
+});
+

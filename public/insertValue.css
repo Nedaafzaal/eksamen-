@@ -5,7 +5,7 @@ body {
     background-position: center;
   }
   
-  .opretKonto h1{
+  .opretInsert h1{
     font-size: 45px;
     width: 100%;
     color: whitesmoke;
@@ -14,7 +14,7 @@ body {
   }
   
   
-  .opretKonto{
+  .opretInsert{
     margin: auto;
     width: 650px;
     border-radius: 25px;
@@ -27,7 +27,7 @@ body {
   
   }
   
-  .opretKonto .opretBox{
+  .opretInsert .opretBox{
     position: relative;
     width: 90%;
     height: 50px;
