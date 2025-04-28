@@ -125,7 +125,7 @@ app.post("/opretbruger", (req, res) => {
 
 
         //Ruten for man kan opdatere sin adgangskode
-        app.post("/submit-adgangskode", async (req, res) => {
+        app.post("/skiftAdgangskode", async (req, res) => {
           const { brugernavn, gammelAdgangskode, nyAdgangskode } = req.body;//henter det brugeren har tastet ind. 
         
           try {
@@ -185,10 +185,13 @@ app.post("dashboard/indstillinger",(req,res)=>{
 })
 
 app.get("/indstillinger", (req, res) => {
-  // Midlertidig måde at gemme brugernavn – det skal komme fra fx login tidligere
-  const brugernavn = "testbruger"; // <-- Du skal hente dette dynamisk senere
-  res.render("indstillinger.ejs", { brugernavn: brugernavn });
+  const brugernavn = "testbruger"; 
+  res.render("indstillinger.ejs", { 
+    brugernavn: brugernavn,
+    alert: null 
+  });
 });
+
 
 app.get("/tilfojKonto", (req, res) => {
 res.render("tilfojKonto.ejs")

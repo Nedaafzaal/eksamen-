@@ -35,35 +35,33 @@
     </ul>
     
   </div>
-    
-      <!-- Knap til at ændre adgangskode -->
-  
-      
-    <button class="skiftAdgangskodeKnap" onclick="toggleForm()">Skift adgangskode</button>
-
     <!-- Formular til at ændre adgangskode -->
-    <div class="skiftAdgangskode-form" id="adgangskodeForm">
-        <h2>Skift adgangskode</h2>
-        <form action="/submit-adgangskode" method="POST">
-            <input type="text" placeholder="Brugernavn" name="brugernavn" required>
-            <input type="text" placeholder="Gammel adgangskode" name="gammelAdgangskode" required>
-            <input type="text" placeholder="Ny adgangskode" name="nyAdgangskode" required>
-            <button type="submit">Opdater Adgangskode</button>
-        </form>
+    <h2>Skift adgangskode</h2>
+    
+    <div class="skiftAdgangskodeBox">
+      <form action="/skiftAdgangskode" method="POST">
+        
+        <div class="inputBox">
+          <input type="text" placeholder="Brugernavn" name="brugernavn" required>
+        </div>
+        
+        <div class="inputBox">
+          <input type="password" placeholder="Gammel adgangskode" name="gammelAdgangskode" required>
+        </div>
+        
+        <div class="inputBox">
+          <input type="password" placeholder="Ny adgangskode" name="nyAdgangskode" required>
+        </div>
+        
+        <button id="submit">Opdater Adgangskode</button>
+      </form>
     </div>
-
-
-      <!-- Script til at åbne/lukke sidemenu -->
-         <!-- Script til at åbne/lukke sidemenu -->
+        
+    <!-- Script til at åbne/lukke sidemenu -->
     <script>
       const sidemenu = document.querySelector('.sidemenu');
       function skiftMenu() {
         sidemenu.classList.toggle('lukket');
-      }
-
-      function toggleForm() {
-        const form = document.getElementById('adgangskodeForm');
-        form.style.display = form.style.display === 'block' ? 'none' : 'block';
       }
     </script>
 
