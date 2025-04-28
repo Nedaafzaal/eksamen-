@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Indsæt Værdi</title>
-  <link href="/insertValue.css" rel="stylesheet">
+  <link href="/removeValue.css" rel="stylesheet">
 </head>
 
 <body>
-  <div class="opretInsert">
-    <h1>Indsæt værdi på <br> <%=konto.kontonavn %> </h1>
+  <div class="opretRemove">
+    <h1>Hæv værdi på <br> <%=konto.kontonavn %> </h1>
 
-    <form action="/insertValue" method="POST"> <!-- Definerer hvilken rute formularen sendes til -->
+    <form action="/removeValue" method="POST"> <!-- Definerer hvilken rute formularen sendes til -->
 
     <!--Så serveren ved, hvilken konto beløbet skal sættes på-->
     <input type="hidden" name="kontoID" value="<%= konto.kontoID %>">

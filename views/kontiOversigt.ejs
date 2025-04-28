@@ -50,17 +50,24 @@
         <span>Valuta</span>
         <span>Dato Oprettelse</span>
         <span>Bankreference</span>
+        <span>Aktiv/deaktiv</span>
       </div>
 
+      <!--Det array der er lavet i app.js, gennemgår den nu. Der er tale om et array, hvorfor vi kan lave .length på den-->
+
+      <!--Hvis konti listen IKKE er tom, gør den følgende-->
       <% if (konti.length > 0) { %> 
+
+        <!--Laver en forløkke gennem hvert objekt i listen. Her står k for hvert objekt. Den gennemgår altså alt der er i arrayet, herunder navn, saldo, valuta osv.-->
         <% konti.forEach(k => { %> 
           <a href="/konti/<%= k.kontoID %>" class="kontoRækkeLink">
             <div class="kontoRække"> 
               <div><%= k.kontonavn %></div> 
-              <div><%= k.saldo %></div> 
+              <div><%= new Intl.NumberFormat('da-DK').format(k.saldo) %></div> 
               <div><%= k.valuta %></div>
-              <div><%= new Date(k.oprettelsesdato).toLocaleDateString('da-DK') %></div>
+              <div><%= new Date(k.oprettelsesdato).toLocaleDateString('da-DK')%></div> <!--Mangler forklaring-->
               <div><%= k.bankreference %></div> 
+              <div><%=k.aktiv %></div>
             </div>
           </a>
     

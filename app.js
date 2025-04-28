@@ -341,26 +341,43 @@ app.get("/kontiOversigt", async (req, res) => {
   }
 });
 
-//Henter information om konto fra oversigtKonti til konti.ejs
-//ruten svarer på en GET-request til URL'en /konti/:id.
-//Så alt efter hvilken kontoID
+
+// Route til visning af en bestemt konto og dens transaktionsoversigt
 app.get('/konti/:id', async (req, res) => {
   try {
-      const kontoID = req.params.id;//tager fat i kontoID og gemmer den i en variabel
-      await sql.connect(sqlConfig); //opretter en forbindelse til databasen. sqlConfig indeholder information som brugernavn, adgangskode osv.
-      const request = new sql.Request(); //laver en forespørgsel
-      const result = await request
-          .input('kontoID', sql.Int, kontoID)
-          .query('SELECT * FROM eksamenSQL.konto WHERE kontoID = @kontoID');
+    const kontoID = req.params.id; // Henter kontoID fra URL'en
 
-      const konto = result.recordset[0];
-      res.render('konti', { konto: konto }); // <-- SEND konto til EJS
+    await sql.connect(sqlConfig); // Forbind til SQL server
+
+    // Første request: henter konto-information
+    const request1 = new sql.Request();
+    const kontoResult = await request1
+      .input('kontoID', sql.Int, kontoID)
+      .query('SELECT * FROM eksamenSQL.konto WHERE kontoID = @kontoID');
+
+    const konto = kontoResult.recordset[0]; // Gemmer den første række
+
+    // Anden request: henter transaktioner relateret til kontoen
+    const request2 = new sql.Request();
+    const transaktionResult = await request2
+      .input('kontoID', sql.Int, kontoID)
+      .query(`
+        SELECT * FROM eksamenSQL.transaktioner
+        WHERE sælgerKontoID = @kontoID OR modtagerKontoID = @kontoID
+      `);
+
+    const transaktioner = transaktionResult.recordset; // Gemmer listen af transaktioner
+
+    // Sender konto og transaktioner videre til konti.ejs
+    res.render('konti', { konto: konto, transaktioner: transaktioner });
 
   } catch (err) {
-      console.error(err);
-      res.status(500).send('Kunne ikke hente');
+    console.error(err); // Logger fejl til konsollen
+    res.status(500).send('Kunne ikke hente konto eller transaktioner.');
   }
 });
+
+
 
 //Indsættelse af værdi. Tager fat i den valgte konto efter ID.
 app.get("/insertValue/:id", async (req, res) => {
@@ -374,9 +391,9 @@ app.get("/insertValue/:id", async (req, res) => {
       .input('kontoID', sql.Int, kontoID) //sætter valgt kontoID ind. laver en forespørgsel hvor den tager alt fra konto, der hvor kontoID er = den valgte kontoID.
       .query('SELECT * FROM eksamenSQL.konto WHERE kontoID = @kontoID'); //
 
-    const konto = result.recordset[0];
+    const konto = result.recordset[0]; //recordset laver et array med objekter indeni. Den gemmer altså alt den henter fra databasen i en liste i et array.
 
-    res.render("insertValue.ejs", { konto: konto }); // sender kontoen til insertValue.ejs
+    res.render("insertValue.ejs", { konto: konto }); //denne variabel sender den til insertvalue.ejs, så den også er tilgængelig derinde. 
   } catch (err) {
     console.error(err);
     res.status(500).send('Fejl ved hentning af konto til indsæt værdi.');
@@ -401,6 +418,28 @@ app.post('/insertValue', async (req, res) => {
         WHERE kontoID = @kontoID
       `);
 
+      //Tilføjer det til vores transaktionstabel som allerede eksisterer i vores database.
+      const request2 = new sql.Request(); //laver ny forespørgsel til databasen
+      
+      const nu = new Date();
+      const tid = nu.toTimeString();
+     
+      await request2
+        .input('sælgerkontoID', sql.Int, null) // Ingen sælger ved indsæt, hvorfor den sættes til null.
+        .input('modtagerkontoID', sql.Int, kontoID) //ved indsæt er modtagerkontoID bare den givet kontoID
+        .input('værditype', sql.VarChar(20), 'Kontant')
+        .input('dato', sql.Date, nu) //sætter datoen til den dato det er, når der indsættes værdi
+        .input('tidspunkt', sql.Time, tid) //samme gælder ved tidspunkt
+        .input('transaktionstype', sql.VarChar(20), 'Indsæt') //Typen af transaktionen
+        .input('pris', sql.Int, beløb) //det beløb som brugeren vil indsætte
+        .input('gebyr', sql.Int, 0) //vi har ingen gebyrer ved indsættelse
+        //selve forespørgslen laves ved at tage fat i alle de kolonner der skal indsættes i. 
+        .query(`
+          INSERT INTO eksamenSQL.transaktioner 
+          (sælgerkontoID, modtagerkontoID, værditype, dato, tidspunkt, transaktionstype, pris, gebyr)
+          VALUES (@sælgerkontoID, @modtagerkontoID, @værditype, @dato, @tidspunkt, @transaktionstype, @pris, @gebyr)
+        `);
+
       res.redirect(`/konti/${kontoID}`);
 
   } catch (err) {
@@ -409,3 +448,109 @@ app.post('/insertValue', async (req, res) => {
   }
 });
 
+
+//Bruger samme logik som insertValue til removeValue.
+app.get("/removeValue/:id", async (req, res) => {
+  try {
+    const kontoID = req.params.id;
+
+    await sql.connect(sqlConfig); //skaber forbindelse til serveren
+    const request = new sql.Request();
+
+    const result = await request
+      .input('kontoID', sql.Int, kontoID) //sætter valgt kontoID ind. laver en forespørgsel hvor den tager alt fra konto, der hvor kontoID er = den valgte kontoID.
+      .query('SELECT * FROM eksamenSQL.konto WHERE kontoID = @kontoID'); //
+
+    const konto = result.recordset[0]; //recordset laver et array med objekter indeni. Den gemmer altså alt den henter fra databasen i en liste i et array.
+
+    res.render("removeValue.ejs", { konto: konto }); //denne variabel sender den til insertvalue.ejs, så den også er tilgængelig derinde. 
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Fejl ved hentning af konto til hævning af værdi.');
+  }
+});
+
+//til forskel for insertValue, trækker jeg beløbet fra saldoen
+app.post('/removeValue', async (req, res) => {
+  try {
+    const { beløb, valuta, kontoID } = req.body;
+
+    await sql.connect(sqlConfig);
+    const request = new sql.Request();
+
+    //Opdaterer saldo ved at sætte det beløb man indsætter - det man havde i forvejen. 
+    await request
+      .input('beløb', sql.Int, beløb)
+      .input('kontoID', sql.Int, kontoID)
+      .query(`
+        UPDATE eksamenSQL.konto
+        SET saldo = saldo - @beløb
+        WHERE kontoID = @kontoID
+      `);
+
+    //Tilføjer det til vores transaktionstabel som allerede eksisterer i vores database.
+    const request2 = new sql.Request(); //laver ny forespørgsel til databasen
+    await request2
+      .input('sælgerkontoID', sql.Int, kontoID) // Sælger er det kontoID man er inde på
+      .input('modtagerkontoID', sql.Int, null) //ved hæv er modtagerkontoID null (fra vores persepktiv)
+      .input('værditype', sql.VarChar(20), 'Kontant')
+      .input('dato', sql.Date, new Date()) //sætter datoen til den dato det er, når der indsættes værdi
+      .input('tidspunkt', sql.Time, new Date()) //samme gælder ved tidspunkt
+      .input('transaktionstype', sql.VarChar(20), 'Hæv') //Typen af transaktionen
+      .input('pris', sql.Int, beløb) //det beløb som brugeren vil hæve
+      .input('gebyr', sql.Int, 0) //vi har ingen gebyrer ved hæv
+      //selve forespørgslen laves ved at tage fat i alle de kolonner der skal indsættes i. 
+      .query(`
+        INSERT INTO eksamenSQL.transaktioner 
+        (sælgerkontoID, modtagerkontoID, værditype, dato, tidspunkt, transaktionstype, pris, gebyr)
+        VALUES (@sælgerkontoID, @modtagerkontoID, @værditype, @dato, @tidspunkt, @transaktionstype, @pris, @gebyr)
+      `);
+
+    res.redirect(`/konti/${kontoID}`);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Fejl ved hævelse af værdi');
+  }
+});
+
+//En rute der deaktiverer kontoen
+app.get("/lukKonto/:id", async (req, res) => {
+  try {
+    const kontoID = req.params.id;
+
+    await sql.connect(sqlConfig); 
+
+    const request = new sql.Request();
+
+    await request
+      .input('kontoID', sql.Int, kontoID) 
+      .query('UPDATE eksamenSQL.konto SET aktiv = 0 WHERE kontoID = @kontoID'); 
+
+    res.redirect(`/konti/${kontoID}`);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Fejl ved lukning af konto.');
+  }
+});
+
+app.get("/openKonto/:id", async (req, res) => {
+  try {
+    const kontoID = req.params.id;
+
+    await sql.connect(sqlConfig); 
+
+    const request = new sql.Request();
+
+    await request
+      .input('kontoID', sql.Int, kontoID) 
+      .query('UPDATE eksamenSQL.konto SET aktiv = 1 WHERE kontoID = @kontoID'); 
+
+    res.redirect(`/konti/${kontoID}`);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Fejl ved åbning af konto.');
+  }
+});
