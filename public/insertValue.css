@@ -1,4 +1,4 @@
-body {
+  body {
     background: url("baggrund2.jpeg");
     justify-content: center;
     background-size: cover;
@@ -13,7 +13,6 @@ body {
     padding-bottom: 50px;
   }
   
-  
   .opretInsert{
     margin: auto;
     width: 650px;
@@ -24,7 +23,6 @@ body {
     background-color: rgba(0, 0, 0, 0.7);
     background-size: cover;
     border: 2px solid black;
-  
   }
   
   .opretInsert .opretBox{
@@ -35,7 +33,6 @@ body {
     background-color: transparent;
     border-radius: 100px;
     border: 2px solid rgb(164, 161, 161);
-  
   }
   
   .opretBox input{

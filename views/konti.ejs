@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <!-- Sidemenu -->
+  <!--Sidemenu navigation-->
   <div class="sidemenu">
     <div class="WebappLogo">
       <img src="/logo.jpeg" alt="WebappLogo">
@@ -31,35 +31,42 @@
     </ul>
   </div>
 
-  <!-- Indhold -->
+  
+
+  <!-- Indhold på siden-->
   <div class="indhold">
     
     <div class="overskrift">
-      <h1><%= konto.kontonavn %></h1> <!-- Navnet på kontoen -->
+      <h1><%= konto.kontonavn %></h1> <!--kontoens navn som overskrift-->>
     </div>
 
+  <!--øvre boks med konto informationer-->
     <div class="øvreBoks">
+      <!--boks med kontoens saldo-->
       <div class="mindreBoks">
         <p class="brødOverskrift">Saldo:</p>
         <p>
-            <%= new Intl.NumberFormat('da-DK', { style: 'currency', currency: konto.valuta }).format(konto.saldo) %>
+            <%= new Intl.NumberFormat('da-DK', { style: 'currency', currency: konto.valuta }).format(konto.saldo) %> <!--viser kontoens saldo i korrekt valuta format-->
         </p>
-          
       </div>
+      <!--boks med kontoens oprettelsesdato-->
       <div class="mindreBoks">
         <p class="brødOverskrift">Oprettelsesdato:</p>
-        <p><%= new Date(konto.oprettelsesdato).toLocaleDateString('da-DK') %></p>
+        <p><%= new Date(konto.oprettelsesdato).toLocaleDateString('da-DK') %></p> <!--dansk dato format-->
       </div>
+      <!--boks med kontoens bankreference-->
       <div class="mindreBoks">
         <p class="brødOverskrift">Bankreference:</p>
-        <p><%= konto.bankreference %></p>
+        <p><%= konto.bankreference %></p> <!--viser bankreference-->
       </div>
     </div>
-<!-- Midtboks sektionen hvor vi viser transaktioner -->
+
+
+<!--Midtboks transaktionsoversigt-->
 <div class="midtBoks">
     <h3>Transaktionsoversigt</h3> <!-- (Manglede overskrift) -->
     
-    <!-- Overskrift til kolonnerne -->
+    <!--Overskrifter for hver kolonne i listen-->
     <div class="listeOverskrifter">
       <span>Transaktionstype</span> 
       <span>Værdi type</span>
@@ -69,74 +76,61 @@
       <span>Gebyr</span> 
     </div>
   
-    <!-- Starter EJS if-sætning: Tjekker om der findes transaktioner -->
+  <!--starter ejs if sætning, tjekker om der findes transaktioner-->
     <% if (transaktioner.length > 0) { %> 
   
-      <!-- Løkke gennem alle transaktioner -->
+    <!--løber igennem alle transaktioner-->
       <% transaktioner.forEach(t => { %> 
         
-        <!-- En række for hver transaktion -->
+        <!--En række for hver transaktion-->
         <div class="transaktionRække">
-            
-            <!-- Transaktionstype (Indsæt eller Hæv) -->
             <div><%= t.transaktionstype %></div>
-  
-            <!-- Værditype (f.eks. Kontant) -->
             <div><%= t.værditype %></div>
-  
-            <!-- Beløb, formateret med tusind-separator og kr. -->
-            <div><%= new Intl.NumberFormat('da-DK').format(t.pris) %> kr</div>
-  
-            <!-- Dato, formateret til dansk format -->
+            <div><%= new Intl.NumberFormat('da-DK').format(t.pris) %> kr</div> <!--pris med KR-->
             <div><%= new Date(t.dato).toLocaleDateString('da-DK') %></div>
-  
-            <!-- Tidspunkt, korrekt formatteret -->
             <div><%= new Date('1970-01-01T' + t.tidspunkt).toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' }) %></div>
-  
-            <!-- Gebyr, vises i kroner -->
             <div><%= t.gebyr %> kr</div>
+        </div> 
+      <% }); %> <!--Slut på forEach-->
   
-        </div> <!-- Slutter én transaktionRække -->
-      <% }); %> <!-- Slut på forEach løkken -->
-  
-    <% } else { %> 
-      <!-- Hvis der ingen transaktioner er -->
-      <p>Ingen transaktioner fundet endnu.</p>
-    <% } %> <!-- Slut på if-sætning -->
-  
-  </div> <!-- Slut på midtBoks -->
+    <% } else { %>
+      <p>Ingen transaktioner fundet endnu.</p> <!--Hvis der ingen transaktioner findes-->
+    <% } %> 
+  </div> 
 
+
+<!--nederste boks (indsæt/hæv) (åben/luk)-->
     <div class="nedreBoks">
+  <!--hæv eller indsæt penge boks-->
       <div class="venstreBoks">
         <h2>Hæv eller indsæt værdi</h2>
         <div class="knapBoks">
-
-            <!--Den tager fat i det kontoID man er inde på-->
-            <a href="/insertValue/<%= konto.kontoID %>" class="knap">Indsæt værdi</a> 
+            <a href="/insertValue/<%= konto.kontoID %>" class="knap">Indsæt værdi</a> <!--Den tager fat i det kontoID man er inde på-->
           <br><br>
-          <a href="/removeValue/<%=konto.kontoID %>" class="knap">Hæv værdi</a>
+          <a href="/removeValue/<%=konto.kontoID %>" class="knap">Hæv værdi</a> <!--link til at hæve værdi fra den aktuelle konto-->
         </div>
       </div>
 
+  <!--luk eller åben boks-->
       <div class="højreBoks">
-        <% if (konto.aktiv) { %>
+        <% if (konto.aktiv) { %> <!--hvis kontoen er aktiv-->
           <h2>Ønsker du at lukke din konto?</h2>
           <p>Vær opmærksom på, at transaktioner ikke kan foretages, når konto er lukket.</p>
           <div class="knapBoks">
-            <a href="/lukKonto/<%= konto.kontoID %>" class="knap2">Luk konto</a>
+            <a href="/lukKonto/<%= konto.kontoID %>" class="knap2">Luk konto</a> <!--link til at lukke kontoen-->
           </div>
-        <% } else { %>
+        <% } else { %> <!--hvis kontoen er lukket-->
           <h2>Ønsker du at åbne din konto?</h2>
           <p>Når kontoen genåbnes, er der igen mulighed for handel.</p>
           <div class="knapBoks">
-            <a href="/openKonto/<%= konto.kontoID %>" class="knap2">Åbn konto</a>
+            <a href="/openKonto/<%= konto.kontoID %>" class="knap2">Åbn konto</a> <!--link til at åbne kontoen-->
           </div>
         <% } %>
-      </div> <!-- Slutter højreBoks -->
-    </div> <!-- Slutter nedreBoks -->
+      </div> 
+    </div> 
+  </div> 
 
-  </div> <!-- Slutter indhold -->
-
+<!--script til at åbne og lukke side menuen-->
   <script>
     const sidemenu = document.querySelector('.sidemenu');
     function skiftMenu() {

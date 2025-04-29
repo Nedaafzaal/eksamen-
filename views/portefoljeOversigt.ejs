@@ -32,16 +32,18 @@
   </div>
 
 
-  <!--Indhold-->
+  <!--Indhold på siden-->
   <div class="indhold">
     <h1 class="overskrift">Porteføljeoversigt</h1>
 
-    <!-- Tilføj portefølje-knap -->
+    <!--Tilføj portefølje-knap-->
     <div class="tilføjKnapBox">
       <a href="/opretPortefolje" class="tilføjKnap">Opret ny portefølje</a>
     </div>      
 
+    <!--øverste sektion med samlede indhold-->
     <div class="øversteIndhold">
+      <!--venstre side med total værdi og ændringer-->
       <div class="venstreSide">
         <div class="venstreØvreBoks">Total værdi i DKK</div>
         <div class="ændringer">
@@ -57,7 +59,7 @@
       </div>
     </div>
 
-    <!-- Oversigt over porteføljer -->
+    <!--Oversigt over eksisterende porteføljer-->
     <div class="oversigtBox">
       <div class="listeOverskrifter">
         <span>Portefølje Navn</span>
@@ -66,55 +68,40 @@
         <span>Total Value</span>
       </div>
 
-      <!--Tjekker om der er nogle porteføljer. Hvis der er porteføljer:-->
-      <% if (portefoljer.length > 0) { %> 
-
-        <!--Gennemgår den en forløkke for hvert portefølje p-->
-        <% portefoljer.forEach(p => { %> 
+      <% if (portefoljer.length > 0) { %> <!--hvis der findes porteføljer vis dem-->
+        <% portefoljer.forEach(p => { %> <!--løber gennem hver portefølje-->
       
-          <!-- Sørger for man kan trykke hvor som helst på rækken for at blive viderestillet-->
+          <!--Sørger for man kan trykke hvor som helst på rækken for at blive viderestillet-->
           <a href="/portefolje/<%= p.porteføljeID %>" 
             
             class="porteføljeRækkeLink">
       
-            <!-- Hele rækken -->
+            <!--Hele rækken, viser værdierne nedenfor-->
             <div class="porteføljeRække"> 
-
-              <!--Indsætter porteføljenavnet-->
               <div><%= p.navn %></div> 
-
-              <!--Indsætter kontotilknytningen-->
               <div><%= p.kontotilknytning %></div> 
-
-              <!--Sætter ind datoen som den omformaterer til javascript dansk metode-->
               <div><%= new Date(p.dato).toLocaleDateString("da-DK") %></div>
-
-              <!--Bruger toFixed(2) til at kun bruge 2 decimaler-->
               <div><%= new Intl.NumberFormat('da-DK', { style: 'currency', currency: 'DKK' }).format(p.forventetVærdi) %></div>
             </div>
-      
           </a>
-      
         <% }); %>
       <% } else { %>
-        <p>Ingen porteføljer fundet endnu.</p>
+        <p>Ingen porteføljer fundet endnu.</p> <!--hvis der ingen porteføljer er-->
       <% } %>
-      
   </div>
 
-  <script>
+  <script> //funktion til at åbne og lukke side menu
     const sidemenu = document.querySelector('.sidemenu');
-
     function skiftMenu() {
       sidemenu.classList.toggle('lukket');
     }
 
-    function toggleKontoMenu() {
+    function toggleKontoMenu() { //Funktion til at åbne/lukke konto-menu dropdown
       const menu = document.getElementById('kontoMenu');
       menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
     }
 
-    function togglePortefoljeMenu() {
+    function togglePortefoljeMenu() { //Funktion til at åbne/lukke portefølje-menu dropdown
       const menu = document.getElementById('portefoljeMenu');
       menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
     }

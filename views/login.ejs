@@ -11,6 +11,8 @@
  </head>
 
  <body>
+
+  <!--boks der indeholder login formular-->
    <div class="logindBox">
      <h2>Log ind</h2>
      <form action="/login" method="POST"> <!--definere hvilken rute formularen skal sendes til-->
@@ -26,11 +28,12 @@
        </div>
 
          <button id="logIndKnap" type="submit">Log ind</button>
-
      </form>
      <br>
-     <div class="opretNyKnap">
-       <p>Ikke oprettet endnu? <a href="/opretbruger">Opret dig her</a></p>
+
+
+    <div class="opretNyKnap">
+       <p>Ikke oprettet endnu? <a href="/opretbruger">Opret dig her</a></p> <!--link til oprettelse af ny bruger-->
      </div>
    
      <div class="logo">
@@ -40,9 +43,8 @@
    </class>
    </body>
 
-   <script>
- 
-   const fejl = "<%= typeof fejl !== 'undefined' ? fejl : '' %>";
+   <script> //script til at ise alert hvis login fejler
+   const fejl = "<%= typeof fejl !== 'undefined' ? fejl : '' %>"; //henter fejlbesked fra serveren
    if (fejl) {
      alert(fejl);
  }

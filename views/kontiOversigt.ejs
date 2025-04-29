@@ -32,15 +32,17 @@
     </ul>
   </div>
 
-  <!-- Indhold -->
-  <div class="indhold">
 
+  <!--Indhold på siden-->
+  <div class="indhold">
     <h1 class="overskrift">Konti oversigt</h1>
 
+    <!--knap til oprette en ny konto-->
     <div class="tilføjKnapBox">
       <a href="/tilfojKonto" class="tilføjKnap">Opret ny konto</a>
     </div> 
 
+    <!--boks der indholder en oversigt over eksisterende konti-->
     <div class="oversigtBox">
       <h3>Oversigt over konti</h3>
 
@@ -53,35 +55,31 @@
         <span>Aktiv/deaktiv</span>
       </div>
 
+      
       <!--Det array der er lavet i app.js, gennemgår den nu. Der er tale om et array, hvorfor vi kan lave .length på den-->
-
-      <!--Hvis konti listen IKKE er tom, gør den følgende-->
-      <% if (konti.length > 0) { %> 
-
-        <!--Laver en forløkke gennem hvert objekt i listen. Her står k for hvert objekt. Den gennemgår altså alt der er i arrayet, herunder navn, saldo, valuta osv.-->
-        <% konti.forEach(k => { %> 
-          <a href="/konti/<%= k.kontoID %>" class="kontoRækkeLink">
-            <div class="kontoRække"> 
+      <% if (konti.length > 0) { %> <!--tjekker om konti arrayet har nogle konti-->
+        <% konti.forEach(k => { %> <!--løber igennem hver konto i arrayet, k står for hvert objekt-->
+          <a href="/konti/<%= k.kontoID %>" class="kontoRækkeLink"> <!--hver konti bliver et klikbart link til kontoens detaljer-->
+            
+            <div class="kontoRække"> <!--visning af kontoens data-->
               <div><%= k.kontonavn %></div> 
               <div><%= new Intl.NumberFormat('da-DK').format(k.saldo) %></div> 
               <div><%= k.valuta %></div>
-              <div><%= new Date(k.oprettelsesdato).toLocaleDateString('da-DK')%></div> <!--Mangler forklaring-->
+              <div><%= new Date(k.oprettelsesdato).toLocaleDateString('da-DK')%></div> 
               <div><%= k.bankreference %></div> 
               <div><%=k.aktiv %></div>
             </div>
           </a>
-    
         <% }); %>
+
       <% } else { %>
-        <p>Ingen konto fundet.</p>
+        <p>Ingen konto fundet.</p> <!--hvis ingen konto er fundet-->
       <% } %>
-    </div> <!-- Lukker oversigtBox -->
-    
+    </div> 
+    </div> 
+  </div> 
 
-    </div> <!-- Lukker oversigtBox -->
-
-  </div> <!-- Lukker indhold -->
-
+<!--åbne og lukke side menuen-->
   <script>
     const sidemenu = document.querySelector('.sidemenu');
     function skiftMenu() {

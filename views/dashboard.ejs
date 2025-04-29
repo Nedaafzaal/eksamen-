@@ -5,22 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard</title>
   <link href="/dashboard.css" rel="stylesheet">
-  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"> <!--Linker til de ikoner vi bruger-->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  <!--Henter Chart.js bibloteket til at lave grafer-->
 </head>
 
 <body>
-
   <!-- Sidemenu -->
   <div class="sidemenu">
     <div class="WebappLogo">
-      <img src="/logo.jpeg" alt="WebappLogo">
+      <img src="/logo.jpeg" alt="WebappLogo"> 
     </div>
 
-    <button class="pil" onclick="skiftMenu()">
-      <i class='bx bxs-chevron-left'></i>
+    <button class="pil" onclick="skiftMenu()"> <!--Knap til at åbne og lukke side menuen-->
+      <i class='bx bxs-chevron-left'></i>  <!--ikon-->
     </button>
 
+  <!--Navigations menu-->
     <ul class="menuValg">
       <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
       <li><a href="/kontiOversigt"><i class='bx bxs-user-account'></i>Konti</a></li>
@@ -28,68 +28,74 @@
       <li><a href="/indstillinger"><i class='bx bx-cog'></i>Indstillinger</a></li>
     </ul>
 
+  <!--Log ud knap-->
     <ul class="logUd">
       <li><a href="/login"><i class='bx bx-log-out'></i>Log ud</a></li>
     </ul>
   </div>
 
-  <!-- Indhold -->
+
+<!--Hoved indhold på siden-->
   <div class="indhold">
     <h1>Dashboard</h1>
 
-    <!-- Øverste boksrække -->
+    <!-- Øverste boksrække med nøgletal -->
     <div class="øvreBoks">
       <div class="mindreBoks">Total værdi</div>
       <div class="mindreBoks">Total Realiseret Gevinst</div>
       <div class="mindreBoks">Total Urealiseret Gevinst</div>
     </div>
 
-    <!-- Graf og liste -->
+    <!-- Boks med graf -->
     <div class="grafBoks">
-      <canvas id="chart" width="400" height="200"></canvas> <!-- TILFØJET canvas -->
+      <canvas id="chart" width="400" height="200"></canvas> <!--tilføjet canvas-->
     </div>
 
-    <!-- Nederste bokse -->
+    <!-- Nederste sektion med top 5 lister-->
     <div class="nedreBoks">
+    <!--boks for top 5 baseret på værdi-->
       <div class="lilleBoks">
         <h3>Top 5 Værdipapirer baseret på værdi</h3>
-        <div class="top5-header">
+        <div class="top5-header"> <!--header række-->
           <div class="kolonne">Name</div>
           <div class="kolonne">Portfolio</div>
           <div class="kolonne">Value</div>
         </div>
 
-        <!-- Data-rækker -->
+        <!--Datarækker-->
         <% top5.forEach(function(stock) { %>
           <div class="top5-row">
             <div class="kolonne">
-              <strong><%= stock.name %></strong><br>
-              <small><%= stock.symbol %></small>
+              <strong><%= stock.name %></strong><br> <!--navn på aktie-->
+              <small><%= stock.symbol %></small> 
             </div>
-            <div class="kolonne">Growth Tech</div> <!-- Hardcoded Portfolio navn -->
-            <div class="kolonne"><%= stock.marketCap.toLocaleString() %> DKK</div>
+            <div class="kolonne">Growth Tech</div> <!--Fast skrevet protefølje navn-->
+            <div class="kolonne"><%= stock.marketCap.toLocaleString() %> DKK</div> <!--market cap formateret-->
           </div>
         <% }); %>
       </div>
 
+    <!--boks for top 5 baseret på profit-->
       <div class="lilleBoks">
         <h3>Top 5 Værdipapirer baseret på profit</h3>
-        <div class="top5-header">
+        <div class="top5-header"> <!--header række-->
           <div class="kolonne">Name</div>
           <div class="kolonne">Portfolio</div>
           <div class="kolonne">Value</div>
         </div>
-        <!-- Indhold til profit liste kan laves senere -->
+
+        <!-- Indhold til profit liste tilføjes senere -->
       </div>
     </div>
   </div>
 
-  <!-- Script til sidemenu -->
+  <!-- Script til funktionalitet for sidemenu -->
   <script>
     const sidemenu = document.querySelector('.sidemenu');
     function skiftMenu() {
       sidemenu.classList.toggle('lukket');
     }
   </script>
+  
 </body>
 </html>

@@ -6,8 +6,7 @@ body {
   font-size: 16px;
 }
 
-/*css til indhold*/
-
+/* CSS til indhold på siden*/
 .indhold {
   margin-left: 200px;
   padding: 20px;
@@ -60,7 +59,6 @@ body {
   padding: 20px;
   width: 300px;
   height: 80px;
-
 }
 
 .nedersteboks {
@@ -72,16 +70,15 @@ body {
   margin-left: 140px;
   margin-right: 200px;
   color: rgb(166, 164, 164);
-
 }
 
 .søgBox {
   display: flex;
-  justify-content: center; /* Centrer søgeboksen */
+  justify-content: center; 
   margin-right: 310px;
-  width: 300px; /* SMALLERE bredde */
+  width: 300px; 
   background-color: #2f2f2f;
-  padding: 8px 12px; /* Mindre padding */
+  padding: 8px 12px;
   border-radius: 10px;
 }
 
@@ -95,7 +92,7 @@ body {
   background-color: transparent;
   color: white;
   border: none;
-  font-size: 14px; /* Mindre skriftstørrelse */
+  font-size: 14px; 
   padding: 6px;
 }
 
@@ -103,11 +100,11 @@ body {
   background-color: #2e8045;
   color: white;
   border: none;
-  padding: 6px 10px; /* Mindre knap */
+  padding: 6px 10px; 
   margin-left: 8px;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 14px; /* Mindre skriftstørrelse */
+  font-size: 14px; 
 }
 
 .søgForm button:hover {
@@ -115,8 +112,7 @@ body {
 }
 
 
-
-  /* css til side menu */
+/* CSS til side menu */
 .sidemenu {
   position: fixed;
   left: 0;
@@ -137,7 +133,6 @@ body {
   height: 100%;
   object-fit: cover;
 }
-
 
 ul {
   padding: 3px;
@@ -188,10 +183,11 @@ button.pil {
 }
 
 .sidemenu.lukket {
-  left: -220px; /* Skub siden helt uden for skærmen. Vi har valgt bredden skal være 220 så den skal bare være minus det */
+  left: -220px; 
   width: 0;
 }
 
+/* CSS til indhold på siden*/
 .oversigtBox {
   background-color: rgb(31, 31, 31);
   border-radius: 10px;
@@ -203,7 +199,7 @@ button.pil {
 
 .listeOverskrifter, .aktieRække {
   display: grid;
-  grid-template-columns: 280px 280px 280px 280px; /* 🔥 faste bredder */
+  grid-template-columns: 280px 280px 280px 280px; 
   padding: 12px 0;
   padding-bottom: 25px;
   border-bottom: 1px solid #333;

@@ -8,13 +8,13 @@
 </head>
 
 <body>
+  <!--container til hævning af værdi-->
   <div class="opretRemove">
-    <h1>Hæv værdi på <br> <%=konto.kontonavn %> </h1>
+    <h1>Hæv værdi på <br> <%=konto.kontonavn %> </h1> <!--overskrift der viser hvilken konto der hæves fra-->
 
-    <form action="/removeValue" method="POST"> <!-- Definerer hvilken rute formularen sendes til -->
+    <form action="/removeValue" method="POST">
 
-    <!--Så serveren ved, hvilken konto beløbet skal sættes på-->
-    <input type="hidden" name="kontoID" value="<%= konto.kontoID %>">
+    <input type="hidden" name="kontoID" value="<%= konto.kontoID %>"> <!--skjult input felt, sender konto ID så serevren ved hvilken konto beløbet skal indsættes på-->
 
       <div class="opretBox">
         <input type="number" placeholder="Beløb" name="beløb" required>

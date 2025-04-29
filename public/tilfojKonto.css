@@ -13,7 +13,6 @@ body {
   padding-bottom: 50px;
 }
 
-
 .opretKonto{
   margin: auto;
   width: 650px;
@@ -24,7 +23,6 @@ body {
   background-color: rgba(0, 0, 0, 0.7);
   background-size: cover;
   border: 2px solid black;
-
 }
 
 .opretKonto .opretBox{
@@ -35,7 +33,6 @@ body {
   background-color: transparent;
   border-radius: 100px;
   border: 2px solid rgb(164, 161, 161);
-
 }
 
 .opretBox input{
@@ -73,7 +70,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 15px;
   background-color: transparent;
- 
 }
 
 #sendFormular:hover{

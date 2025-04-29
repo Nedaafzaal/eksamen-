@@ -11,9 +11,9 @@ h1 {
     color: white;
     margin-left: 360px;
     margin-top: 30px;
-}
+  }
 
-/* css side menu */
+/* CSS til side menu */
 .sidemenu {
     position: fixed;
     left: 0;
@@ -27,25 +27,25 @@ h1 {
     align-items: left;
     gap: 10px;
     transition: 0.5s;
-    }
+  }
     
-    .sidemenu img {
+.sidemenu img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 0;
     margin-bottom: 0;
-    }
+  }
     
-    ul {
+ul {
     padding: 3px;
-    }
+  }
     
-    ul li {
+ul li {
     list-style: none;
-    }
+  }
     
-    ul li a {
+ul li a {
     color: rgba(255, 255, 255, 0.544);
     font-family: Arial, Helvetica, sans-serif;
     padding: 20px 0;
@@ -53,26 +53,26 @@ h1 {
     text-decoration: none;
     font-size: 14px;
     transition: 0.2s ease-out;
-    }
+  }
     
-    .sidemenu :hover{
+.sidemenu :hover{
     color: #ffffff;
-    }
+  }
     
-    ul li a i {
+ul li a i {
     width: 50px;
     text-align: center;
     padding-right: 10px;
     font-size: 26px;
-    }
+   }
     
-    .logUd li a{
+.logUd li a{
       position: absolute;
       bottom: 40px;
       left: 20px;
-      }
+    }
     
-    button.pil {
+button.pil {
     position: absolute;
     top: 40px;
     left: 220px;
@@ -83,73 +83,74 @@ h1 {
     font-size: 30px;
     cursor: pointer;
     transition: 0.3s ease-in-out;
-    }
+   }
     
-    .sidemenu.lukket {
+.sidemenu.lukket {
     left: -220px; /* Skub siden helt uden for skærmen */
     width: 0;
-    }
+  }
 
-    .tilføjKnapBox {
-        display: flex;
-        justify-content: flex-end; /* skubber indholdet (knappen) helt til højre */
-        margin-right: 317px;
-        margin-bottom: 20px;
+.tilføjKnapBox {
+    display: flex;
+    justify-content: flex-end; /* skubber indholdet (knappen) helt til højre */
+    margin-right: 317px;
+    margin-bottom: 20px;
       }
 
-    .tilføjKnap {
-        background-color: rgb(31, 31, 31);
-        padding: 10px 20px;
-        border-radius: 10px;
-        color: white;
-        font-family: Arial, Helvetica, sans-serif;
-        text-decoration: none;
-        transition: background-color 0.3s;
-        margin-left: 100px
-    }
+.tilføjKnap {
+    background-color: rgb(31, 31, 31);
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    margin-left: 100px
+  }
 
-    .tilføjKnap:hover{
-      background-color: #656363;
-    }
+.tilføjKnap:hover{
+    background-color: #656363;
+   }
 
-    .oversigtBox {
-      background-color: rgb(31, 31, 31);
-      border-radius: 20px;
-      padding: 20px;
-      width: 1000px;
-      margin-left: 350px;
-      height: 600px;
 
+/* CSS til indhold på siden */
+.oversigtBox {
+    background-color: rgb(31, 31, 31);
+    border-radius: 20px;
+    padding: 20px;
+    width: 1000px;
+    margin-left: 350px;
+    height: 600px;
   }
   
-      .listeOverskrifter, .kontoRække {
-        display: grid;
-        grid-template-columns: 180px 180px 180px 180px 180px 180px;
-        padding: 12px 0;
-        padding-bottom: 30px;
-        border-bottom: 1px solid #333;
-        align-items: center;
-        color: rgb(234, 230, 230);
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 17px;
-      }
+.listeOverskrifter, .kontoRække {
+    display: grid;
+    grid-template-columns: 180px 180px 180px 180px 180px 180px;
+    padding: 12px 0;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #333;
+    align-items: center;
+    color: rgb(234, 230, 230);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 17px;
+  }
       
-      .kontoRække {
-        font-size: 15px;
-        border-radius: 5px;
-        padding-bottom: 35px;
-      }
+.kontoRække {
+    font-size: 15px;
+    border-radius: 5px;
+    padding-bottom: 35px;
+  }
       
-      .kontoRække:hover{
-        background-color: #656363;
-        font-size: 16px;
-      }
+.kontoRække:hover{
+    background-color: #656363;
+    font-size: 16px;
+  }
       
-      .kontoRækkeLink{
-        text-decoration: none;
-        color: rgb(213, 209, 209);
-        font-family: Arial, Helvetica, sans-serif;
-      }
+.kontoRækkeLink{
+    text-decoration: none;
+    color: rgb(213, 209, 209);
+    font-family: Arial, Helvetica, sans-serif;
+  }
       
       
       

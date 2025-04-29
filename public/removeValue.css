@@ -5,7 +5,7 @@ body {
     background-position: center;
   }
   
-  .opretRemove h1{
+.opretRemove h1{
     font-size: 45px;
     width: 100%;
     color: whitesmoke;
@@ -13,8 +13,7 @@ body {
     padding-bottom: 50px;
   }
   
-  
-  .opretRemove{
+.opretRemove{
     margin: auto;
     width: 650px;
     border-radius: 25px;
@@ -24,10 +23,9 @@ body {
     background-color: rgba(0, 0, 0, 0.7);
     background-size: cover;
     border: 2px solid black;
-  
   }
   
-  .opretRemove .opretBox{
+.opretRemove .opretBox{
     position: relative;
     width: 90%;
     height: 50px;
@@ -35,10 +33,9 @@ body {
     background-color: transparent;
     border-radius: 100px;
     border: 2px solid rgb(164, 161, 161);
-  
   }
   
-  .opretBox input{
+.opretBox input{
     width: 100%;
     height: 100%;
     background: transparent;
@@ -51,18 +48,18 @@ body {
     font-size: 13px;
   }
   
-  .opretBox input::placeholder{
+.opretBox input::placeholder{
     color: rgb(236, 230, 230);
   }
   
-  .opretBox i{
+.opretBox i{
     position: absolute;
     right: 20px;
     top: 30%;
     color: whitesmoke;
   }
   
-  #sendFormular{
+#sendFormular{
     margin-top: 10px;
     margin-bottom: 20px;
     width: 170px;
@@ -73,10 +70,9 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 15px;
     background-color: transparent;
-   
   }
   
-  #sendFormular:hover{
+#sendFormular:hover{
     background-color: rgba(233, 239, 239, 0.889);
     color: black;
   }

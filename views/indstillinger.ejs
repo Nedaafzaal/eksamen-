@@ -8,18 +8,16 @@
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 </head>
 
-
-
 <body>
   <h1>Profil indstillinger</h1>
   
-  <!-- Sidemenu -->
+  <!--Sidemenu navigation-->
   <div class="sidemenu">
     <div class="WebappLogo">
       <img src="logo.jpeg" alt="WebappLogo">
     </div>
 
-    <button class="pil" onclick="skiftMenu()"> <!-- Når man trykker på pilen, udløser det funktionen under -->
+    <button class="pil" onclick="skiftMenu()"> 
       <i class='bx bxs-chevron-left'></i>
     </button>
 
@@ -33,13 +31,14 @@
     <ul class="logUd">
       <li><a href="/login"><i class='bx bx-log-out'></i>Log ud</a></li>
     </ul>
-    
   </div>
-    <!-- Formular til at ændre adgangskode -->
+
+
+  <!--Formular til at ændre adgangskode-->
     <h2>Skift adgangskode</h2>
     
     <div class="skiftAdgangskodeBox">
-      <form action="/skiftAdgangskode" method="POST">
+      <form action="/skiftAdgangskode" method="POST"> <!--formular der sender POST request til serveren-->
         
         <div class="inputBox">
           <input type="text" placeholder="Brugernavn" name="brugernavn" required>
@@ -53,11 +52,11 @@
           <input type="password" placeholder="Ny adgangskode" name="nyAdgangskode" required>
         </div>
         
-        <button id="submit">Opdater Adgangskode</button>
+        <button id="submit">Opdater Adgangskode</button> 
       </form>
     </div>
         
-    <!-- Script til at åbne/lukke sidemenu -->
+    <!--Script til at åbne/lukke sidemenu-->
     <script>
       const sidemenu = document.querySelector('.sidemenu');
       function skiftMenu() {
@@ -65,9 +64,9 @@
       }
     </script>
 
-    <% if (typeof alert !== "undefined" && alert) { %>
+    <% if (typeof alert !== "undefined" && alert) { %> <!--hvis der er en alert fra serevren. vis en pop-up besked-->
       <script>
-        alert("<%= alert %>");
+        alert("<%= alert %>"); //viser beskeden som en javascript alert
       </script>
     <% } %>
 
