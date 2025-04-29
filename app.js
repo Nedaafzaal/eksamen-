@@ -466,14 +466,14 @@ app.post('/insertValue', async (req, res) => {
       const request2 = new sql.Request(); //laver ny forespørgsel til databasen
       
       const nu = new Date();
-      const tid = nu.toTimeString();
+
      
       await request2
         .input('sælgerkontoID', sql.Int, null) // Ingen sælger ved indsæt, hvorfor den sættes til null.
         .input('modtagerkontoID', sql.Int, kontoID) //ved indsæt er modtagerkontoID bare den givet kontoID
         .input('værditype', sql.VarChar(20), 'Kontant')
         .input('dato', sql.Date, nu) //sætter datoen til den dato det er, når der indsættes værdi
-        .input('tidspunkt', sql.Time, tid) //samme gælder ved tidspunkt
+        .input('tidspunkt', sql.Time, nu) //samme gælder ved tidspunkt
         .input('transaktionstype', sql.VarChar(20), 'Indsæt') //Typen af transaktionen
         .input('pris', sql.Int, beløb) //det beløb som brugeren vil indsætte
         .input('gebyr', sql.Int, 0) //vi har ingen gebyrer ved indsættelse
