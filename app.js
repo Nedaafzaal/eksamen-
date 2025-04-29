@@ -1,7 +1,13 @@
 
 import express from 'express'; //vi kalder på express pakken 
-import sql from 'mssql'
+import sql from 'mssql';
+import fetch from 'node-fetch';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 const app = express(); //appen er lig vores pakke 
+const API_KEY = 'VIF5KCDTH18ZUONC'
 const port = 3001; //definere hvilken port vores server skal køre på 
 app.use(express.static('views'));
 
@@ -161,18 +167,60 @@ app.post("/opretbruger", (req, res) => {
         });
 
 
-app.get("/dashboard", (req, res) => {
-    res.render("dashboard.ejs")
-})
+          // Sæt visningsmotoren til EJS, så vi kan bruge .ejs skabelonfiler
+  app.set('view engine', 'ejs');
+
+  // Definér hvor EJS-skabelonerne ligger (views-mappen)
+  app.set('views', path.join(__dirname, 'views'));
+
+  // Definér en liste over aktiesymboler, som vi vil hente data for
+  const symbols = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA'];
+
+  // Definér en route til dashboardet
+  app.get("/dashboard", async (req, res) => {
+    try {
+      const results = []; // Opret en tom liste til at gemme resultater
+
+      // Gennemgå hvert aktiesymbol i listen
+      for (const symbol of symbols) {
+        // Byg API-URL'en til Alpha Vantage for at hente virksomhedens detaljer
+        const url = `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${symbol}&apikey=${API_KEY}`;
+
+        // Send forespørgsel til Alpha Vantage API
+        const response = await fetch(url);
+        const data = await response.json();
+
+        // Hvis virksomheden har en MarketCapitalization, tilføj den til resultaterne
+        if (data.MarketCapitalization) {
+          results.push({
+            symbol: symbol,
+            name: data.Name,
+            marketCap: Number(data.MarketCapitalization) // Konverter til tal
+          });
+        }
+      }
+
+      // Sorter resultaterne i faldende orden efter markedsværdi og vælg top 5
+      const top5 = results.sort((a, b) => b.marketCap - a.marketCap).slice(0, 5);
+
+      // Render dashboard-siden og send top5-data til EJS-skabelonen
+      res.render('dashboard', { top5: top5 || [] });
+
+    } catch (err) {
+      // Hvis noget går galt, log fejlen og send en fejlstatus tilbage
+      console.error('Fejl ved hentning af data:', err);
+      res.status(500).send('Fejl i hentning af data');
+    }
+  });
+
+        
+
 
 app.post("dashboard/kontiOversigt",(req,res)=>{
     res.status(200).redirect("http://localhost:3001/kontiOversigt") //konti
 })
 
 
-// app.get("/konti",(req,res)=>{
-//     res.render("konti.ejs") //konti
-// })
 
 
 app.post("dashboard/portefoljer",(req,res)=>{
@@ -557,3 +605,6 @@ app.get("/openKonto/:id", async (req, res) => {
     res.status(500).send('Fejl ved åbning af konto.');
   }
 });
+
+
+

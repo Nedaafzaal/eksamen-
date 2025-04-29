@@ -4,25 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard</title>
-  <link href="./dashboard.css" rel="stylesheet">
-  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
+  <link href="/dashboard.css" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
 
-   <!-- Sidemenu -->
-   <div class="sidemenu">
+  <!-- Sidemenu -->
+  <div class="sidemenu">
     <div class="WebappLogo">
-      <img src="logo.jpeg" alt="WebappLogo">
+      <img src="/logo.jpeg" alt="WebappLogo">
     </div>
 
-    <button class="pil" onclick="skiftMenu()"> <!-- Når man trykker på pilen, udløser det funktionen under -->
+    <button class="pil" onclick="skiftMenu()">
       <i class='bx bxs-chevron-left'></i>
     </button>
 
     <ul class="menuValg">
       <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
-      <li><a href="/kontiOversigt"><i class='bx bxs-user-account'></i>Konti</a>
+      <li><a href="/kontiOversigt"><i class='bx bxs-user-account'></i>Konti</a></li>
       <li><a href="/portefoljeOversigt"><i class='bx bx-doughnut-chart'></i>Porteføljer</a></li>
       <li><a href="/indstillinger"><i class='bx bx-cog'></i>Indstillinger</a></li>
     </ul>
@@ -30,7 +31,6 @@
     <ul class="logUd">
       <li><a href="/login"><i class='bx bx-log-out'></i>Log ud</a></li>
     </ul>
-    
   </div>
 
   <!-- Indhold -->
@@ -44,29 +44,77 @@
       <div class="mindreBoks">Total Urealiseret Gevinst</div>
     </div>
 
-    <!-- Grafboks -->
+    <!-- Graf og liste -->
     <div class="grafBoks">
-      <h3>Samlet Værdi</h3>
-      <p>Graf kommer her</p>
+      
     </div>
+    
+    
 
     <!-- Nederste bokse -->
     <div class="nedreBoks">
       <div class="lilleBoks">Top 5 værdipapirer baseret på værdi</div>
+      <h3>Top 5 Værdipapirer (Market Cap)</h3>
+    
+      <ul>
+        <% if (typeof top5 !== 'undefined' && Array.isArray(top5) && top5.length > 0) { %>
+          <% top5.forEach(function(stock) { %>
+            <li><strong><%= stock.symbol %></strong> - <%= stock.name %> - $<%= stock.marketCap.toLocaleString() %></li>
+          <% }); %>
+        <% } else { %>
+          <li>Ingen data tilgængelig</li>
+        <% } %>
+      </ul>
       <div class="lilleBoks">Top 5 værdipapirer baseret på profit</div>
     </div>
   </div>
 
-  <!-- Script til at åbne/lukke sidemenu -->
+  <!-- Script til sidemenu -->
   <script>
     const sidemenu = document.querySelector('.sidemenu');
     function skiftMenu() {
       sidemenu.classList.toggle('lukket');
     }
-    // Når knappen trykkes på, udløser det denne funktion som kalder på sidemenu 'lukket',
-    // hvilket altså gør, at sidemenuen forsvinder.
-
   </script>
+
+<% if (typeof top5 !== 'undefined' && Array.isArray(top5)) { %>
+  <script>
+    var labels = <%= JSON.stringify(top5.map(function(stock) { return stock.symbol; })) %>;
+    var data = <%= JSON.stringify(top5.map(function(stock) { return stock.marketCap; })) %>;
+
+    const ctx = document.getElementById('chart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Market Cap ($)',
+          data: data,
+          backgroundColor: 'rgba(54, 162, 235, 0.5)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return '$' + value.toLocaleString();
+              }
+            }
+          }
+        }
+      }
+    });
+  </script>
+<% } else { %>
+  <p>Ingen data tilgængelig for grafen.</p>
+<% } %>
+  
+
 
 </body>
 </html>
