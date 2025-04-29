@@ -167,9 +167,8 @@ app.post("/opretbruger", (req, res) => {
         });
 
 
-          // Sæt visningsmotoren til EJS, så vi kan bruge .ejs skabelonfiler
+  // Sæt visningsmotoren til EJS, så vi kan bruge .ejs skabelonfiler
   app.set('view engine', 'ejs');
-
   // Definér hvor EJS-skabelonerne ligger (views-mappen)
   app.set('views', path.join(__dirname, 'views'));
 
@@ -220,13 +219,9 @@ app.post("dashboard/kontiOversigt",(req,res)=>{
     res.status(200).redirect("http://localhost:3001/kontiOversigt") //konti
 })
 
-
-
-
 app.post("dashboard/portefoljer",(req,res)=>{
     res.status(200).redirect("http://localhost:3001/portefoljer") //porteføljer
 });
-
 
 app.post("dashboard/indstillinger",(req,res)=>{
     res.status(200).redirect("http://localhost:3001/indstillinger") //indstillinger
