@@ -80,7 +80,7 @@
 .tilføjKnapBox {
   display: flex;
   justify-content: flex-end; /* skubber indholdet (knappen) helt til højre */
-  margin-right: 317px; /* samme som alt andet margin fra venstre */
+  margin-right: 50px; /* samme som alt andet margin fra venstre */
   margin-bottom: 20px;
 }
 

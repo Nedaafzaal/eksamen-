@@ -178,6 +178,7 @@ body {
     flex-direction: column;
     align-items: center;
     margin-top: 30px; 
+
 }
 
 .knap {
@@ -196,6 +197,7 @@ body {
     text-decoration: none; 
     padding-top: 15px;
     padding-bottom: 15px;
+  
 }
 
 

@@ -212,8 +212,6 @@ app.post("/opretbruger", (req, res) => {
     }
   });
 
-        
-
 
 app.post("dashboard/kontiOversigt",(req,res)=>{
     res.status(200).redirect("http://localhost:3001/kontiOversigt") //konti
