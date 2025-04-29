@@ -146,8 +146,10 @@ ul li a {
 }
 
 .logUd li a{
-  margin-top: 450px;
-}
+  position: absolute;
+  bottom: 40px;
+  left: 20px;
+  }
 
 .sidemenu :hover{
   color: white;

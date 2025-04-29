@@ -67,8 +67,10 @@ h1 {
     }
     
     .logUd li a{
-    margin-top: 450px;
-    }
+      position: absolute;
+      bottom: 40px;
+      left: 20px;
+      }
     
     button.pil {
     position: absolute;
