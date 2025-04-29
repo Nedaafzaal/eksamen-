@@ -37,11 +37,13 @@
   <div class="indhold">
     <div class="overskrift">
       <h1><%= portefolje.navn %></h1> <!-- navnet hentes fra valgt portefølje -->
-      <div class="knapper">
-        <a href="/handelshistorik" class="knap">Handels Historik</a>
-        <a href="/registrerhandel" class="knap">Registrer Handel</a>
-        <a href="#" class="knap">Søg værdipapir</a>
+      <div class="søgBox">
+        <form action="/searchPapir" method="GET" class="søgForm">
+          <input type="text" name="query" placeholder="Søg efter navn eller symbol på værdipapir" required>
+          <button type="submit">Søg</button>
+        </form>
       </div>
+      
     </div>
 
     <div class="øverste">

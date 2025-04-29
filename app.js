@@ -599,5 +599,47 @@ app.get("/openKonto/:id", async (req, res) => {
   }
 });
 
+//Ruten som søger på værdipapir
+app.get("/searchPapir", async (req, res) => {
+  const query = req.query.query; //tager fat i det brugeren har søgt på 
+
+  if (!query) { //Hvis brugeren ikke har indtastet hvad de vil søge på, sendes en fejlbesked
+    return res.status(400).send("Indtast venligst det du ønsker at finde.");
+  }
+
+  try {
+    // Hent aktiens navn via SYMBOL_SEARCH
+    const searchUrl = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${query}&apikey=${API_KEY}`; //vi bygger linket til API'en. Her bruger vi SYMBOL_SEARCH for at finde aktier ud fra symbol eller navn.Query er det brugeren søger på og API_key er vores nøgle til API.
+    const searchResponse = await fetch(searchUrl); //Vi sender kaldet til API og venter på svaret
+    const searchData = await searchResponse.json(); //Vi laver svaret om til JSON format således vi kan bruge det til JS.
+    const firstMatch = searchData.bestMatches?.[0]; //vi henter første match fra savret. Hvis be
+
+    if (!firstMatch) { //hvis ikke der findes noget, vises følgende besked.
+      return res.send("Ingen værdipapir fundet.");
+    }
+
+    const symbol = firstMatch["1. symbol"]; //Vi henter symbol og navn fra API. På denne API vi bruger, er det sådan de hedder.
+    const name = firstMatch["2. name"];
+
+    // Hent prisen via GLOBAL_QUOTE
+    const quoteUrl = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${API_KEY}`; //global quote giver live kurs.
+    const quoteResponse = await fetch(quoteUrl); //vi sender kaldet og venter
+    const quoteData = await quoteResponse.json(); //omformaterer til json
+    const price = quoteData["Global Quote"]?.["05. price"] || "Ukendt"; //vi henter selve prisen hvis ikke den kan findes, vises ukendt. 05 kommer af APIENS svar som er meget numerisk. pris har en 5 plads visning. 
+
+    // Send alt til EJS-filen
+    res.render("searchAndBuy", {
+      result: {
+        symbol,
+        name,
+        price
+      }
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Fejl under søgning."); //HVis ikke, viser den fejl kode. 
+  }
+});
 
 

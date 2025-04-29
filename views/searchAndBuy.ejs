@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Søgeresultater</title>
+  <link href="/searchAndBuy.css" rel="stylesheet"> <!-- Hvis du har styling -->
+</head>
+<body>
+
+<h1>Resultat for din søgning</h1>
+
+<div class="indhold">
+    <% if (matches.length > 0) { %>
+      <ul>
+        <% matches.forEach(match => { %>
+          <div class="liste">
+            <li>Navn: <%= match['2. name'] %></li><br>
+            <li>Symbol: <%= match['1. symbol'] %></li><br>
+            <li>Region: <%= match['4. region'] %> </li><br>
+        </div>
+        <% }); %>
+      </ul>
+    <% } else { %>
+      <p>Ingen resultater fundet.</p>
+    <% } %>
+</div>
+</body>
+</html>

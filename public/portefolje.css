@@ -75,34 +75,46 @@ body {
 
 }
 
-
-.knapper {
+.søgBox {
   display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin-left: 100px;
-  margin-right: 290px;
-  border-radius: 10px;
-  padding: 20px;
-  width: 510px; 
-  height: 15px; 
-  gap: 10px;
-}
-
-.knap {
+  justify-content: center; /* Centrer søgeboksen */
+  margin-right: 310px;
+  width: 300px; /* SMALLERE bredde */
   background-color: #2f2f2f;
+  padding: 8px 12px; /* Mindre padding */
+  border-radius: 10px;
+}
+
+.søgForm {
+  display: flex;
+  width: 100%;
+}
+
+.søgForm input {
+  flex: 1;
+  background-color: transparent;
   color: white;
-  padding: 10px 20px;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: 0.3s;
-  
-
+  border: none;
+  font-size: 14px; /* Mindre skriftstørrelse */
+  padding: 6px;
 }
 
-.knap:hover {
-  background-color: #3f3f3f;
+.søgForm button {
+  background-color: #2e8045;
+  color: white;
+  border: none;
+  padding: 6px 10px; /* Mindre knap */
+  margin-left: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px; /* Mindre skriftstørrelse */
 }
+
+.søgForm button:hover {
+  background-color: #1b4e20;
+}
+
+
 
   /* css til side menu */
 .sidemenu {

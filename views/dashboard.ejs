@@ -45,49 +45,41 @@
     </div>
 
     <!-- Graf og liste -->
-    <div class="grafBoks"></div>
-    
+    <div class="grafBoks">
+      <canvas id="chart" width="400" height="200"></canvas> <!-- TILFØJET canvas -->
+    </div>
 
     <!-- Nederste bokse -->
     <div class="nedreBoks">
       <div class="lilleBoks">
-      <h3>Top 5 Værdipapirer baseret på værdi</h3> <!--taget fra market cap-->
-      <div class="top5-header">
-        <div class="kolonne">Name</div>
-        <div class="kolonne">Portfolio</div>
-        <div class="kolonne">24h Change</div>
-        <div class="kolonne">Value</div>
-      </div>
-    
-    <!-- Data-rækker-->
-  <% top5.forEach(function(stock) { %>
-    <div class="top5-row">
-      <div class="kolonne">
-        <strong><%= stock.name %></strong><br>
-        <small><%= stock.symbol %></small>
-      </div>
+        <h3>Top 5 Værdipapirer baseret på værdi</h3>
+        <div class="top5-header">
+          <div class="kolonne">Name</div>
+          <div class="kolonne">Portfolio</div>
+          <div class="kolonne">Value</div>
+        </div>
 
-      <div class="kolonne">Growth Tech</div> <!-- Hardcoded eksempel -->
-
-      <div class="kolonne <%= parseFloat(stock.changePercent) < 0 ? 'negativ' : 'positiv' %>">
-        <%= stock.changePercent %>
+        <!-- Data-rækker -->
+        <% top5.forEach(function(stock) { %>
+          <div class="top5-row">
+            <div class="kolonne">
+              <strong><%= stock.name %></strong><br>
+              <small><%= stock.symbol %></small>
+            </div>
+            <div class="kolonne">Growth Tech</div> <!-- Hardcoded Portfolio navn -->
+            <div class="kolonne"><%= stock.marketCap.toLocaleString() %> DKK</div>
+          </div>
+        <% }); %>
       </div>
-
-      <div class="kolonne"><%= stock.marketCap.toLocaleString() %> DKK</div>
-    </div>
-  <% }); %>
-</div>
 
       <div class="lilleBoks">
-        <h3>Top 5 Værdipapirer baseret på profit</h3> <!--taget fra market cap-->
-      <div class="top5-header">
-        <div class="kolonne">Name</div>
-        <div class="kolonne">Portfolio</div>
-        <div class="kolonne">24h Change</div>
-        <div class="kolonne">Value</div>
-      </div>
-
-      
+        <h3>Top 5 Værdipapirer baseret på profit</h3>
+        <div class="top5-header">
+          <div class="kolonne">Name</div>
+          <div class="kolonne">Portfolio</div>
+          <div class="kolonne">Value</div>
+        </div>
+        <!-- Indhold til profit liste kan laves senere -->
       </div>
     </div>
   </div>
@@ -99,45 +91,5 @@
       sidemenu.classList.toggle('lukket');
     }
   </script>
-
-<% if (typeof top5 !== 'undefined' && Array.isArray(top5)) { %>
-  <script>
-    var labels = <%= JSON.stringify(top5.map(function(stock) { return stock.symbol; })) %>;
-    var data = <%= JSON.stringify(top5.map(function(stock) { return stock.marketCap; })) %>;
-
-    const ctx = document.getElementById('chart').getContext('2d');
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Market Cap ($)',
-          data: data,
-          backgroundColor: 'rgba(54, 162, 235, 0.5)',
-          borderColor: 'rgba(54, 162, 235, 1)',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: {
-              callback: function(value) {
-                return '$' + value.toLocaleString();
-              }
-            }
-          }
-        }
-      }
-    });
-  </script>
-<% } else { %>
-  <p>Ingen data tilgængelig for grafen.</p>
-<% } %>
-  
-
-
 </body>
 </html>

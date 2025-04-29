@@ -1,0 +1,40 @@
+body {
+    background: url(baggrund2.jpeg);
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 20px;
+  }
+  
+  h1 {
+    text-align: center;
+    color: #f1f6f2;
+    margin-bottom: 30px;
+  }
+  
+  .indhold {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  ul {
+    list-style: none;
+
+  }
+  
+  .liste {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 15px 20px;
+    border-radius: 3px;
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    width: 500px;
+    height: 400px;
+    text-align: center;
+  }
+  
+
+  li {
+    margin-top: 40px;
+  }
+  
