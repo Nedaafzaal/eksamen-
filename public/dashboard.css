@@ -51,7 +51,7 @@ h1 {
   margin-bottom: 20px; 
   margin-left: 250px;
   width: 1020px;  
-  height: 300px;
+  height: 450px;
 }
 
 .lilleBoks {
@@ -59,7 +59,7 @@ h1 {
   border-radius: 10px;
   padding: 20px;
   flex: 1;          /* fylder halvdelen automatisk */
-  height: 300px;
+  height: 450px;
 }
 
 
