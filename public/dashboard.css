@@ -138,3 +138,33 @@ left: -220px; /* Skub siden helt uden for skærmen */
 width: 0;
 }
 
+/*css til boks med top 5 værdipapirer baseret på værdi*/
+
+.top5-header, .top5-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #333;
+}
+
+.top5-header {
+  font-weight: bold;
+  color: #bbb;
+}
+
+.top5-row:last-child {
+  border-bottom: none;
+}
+
+.kolonne {
+  flex: 1;
+  text-align: left;
+}
+
+.positiv {
+  color: #4caf50; /* grøn */
+}
+
+.negativ {
+  color: #f44336; /* rød */
+}

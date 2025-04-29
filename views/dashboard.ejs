@@ -45,26 +45,40 @@
     </div>
 
     <!-- Graf og liste -->
-    <div class="grafBoks">
-      
-    </div>
-    
+    <div class="grafBoks"></div>
     
 
     <!-- Nederste bokse -->
     <div class="nedreBoks">
-      <div class="lilleBoks">Top 5 værdipapirer baseret på værdi</div>
-      <h3>Top 5 Værdipapirer (Market Cap)</h3>
+      <div class="lilleBoks">
+      <h3>Top 5 Værdipapirer baseret på værdi</h3> <!--taget fra market cap-->
+      <div class="top5-header">
+        <div class="kolonne">Name</div>
+        <div class="kolonne">Portfolio</div>
+        <div class="kolonne">24h Change</div>
+        <div class="kolonne">Value</div>
+      </div>
     
-      <ul>
-        <% if (typeof top5 !== 'undefined' && Array.isArray(top5) && top5.length > 0) { %>
-          <% top5.forEach(function(stock) { %>
-            <li><strong><%= stock.symbol %></strong> - <%= stock.name %> - $<%= stock.marketCap.toLocaleString() %></li>
-          <% }); %>
-        <% } else { %>
-          <li>Ingen data tilgængelig</li>
-        <% } %>
-      </ul>
+    <!-- Data-rækker-->
+  <% top5.forEach(function(stock) { %>
+    <div class="top5-row">
+      <div class="kolonne">
+        <strong><%= stock.name %></strong><br>
+        <small><%= stock.symbol %></small>
+      </div>
+
+      <div class="kolonne">Growth Tech</div> <!-- Hardcoded eksempel -->
+
+      <div class="kolonne <%= parseFloat(stock.changePercent) < 0 ? 'negativ' : 'positiv' %>">
+        <%= stock.changePercent %>
+      </div>
+
+      <div class="kolonne"><%= stock.marketCap.toLocaleString() %> DKK</div>
+    </div>
+  <% }); %>
+</div>
+
+
       <div class="lilleBoks">Top 5 værdipapirer baseret på profit</div>
     </div>
   </div>
