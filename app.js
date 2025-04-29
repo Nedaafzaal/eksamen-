@@ -612,7 +612,7 @@ app.get("/searchPapir", async (req, res) => {
     const searchUrl = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${query}&apikey=${API_KEY}`; //vi bygger linket til API'en. Her bruger vi SYMBOL_SEARCH for at finde aktier ud fra symbol eller navn.Query er det brugeren søger på og API_key er vores nøgle til API.
     const searchResponse = await fetch(searchUrl); //Vi sender kaldet til API og venter på svaret
     const searchData = await searchResponse.json(); //Vi laver svaret om til JSON format således vi kan bruge det til JS.
-    const firstMatch = searchData.bestMatches?.[0]; //vi henter første match fra savret. Hvis be
+    const firstMatch = searchData.bestMatches?.[0]; //vi henter første match fra savret. 
 
     if (!firstMatch) { //hvis ikke der findes noget, vises følgende besked.
       return res.send("Ingen værdipapir fundet.");

@@ -51,7 +51,7 @@
       <!--boks der viser porteføljens samlede værdi-->
       <div class="grafboks">
         <h3>Samlet værdi</h3>
-        <p><%= portefolje.forventetVærdi %> DKK</p> <!--viser forvnetet værdi for den valgte portefølje-->
+        <p><%= portefolje.forventetVærdi.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' }) %></p> <!--viser forvnetet værdi for den valgte portefølje-->
       </div>
 
     <!--højre side med diagram og oprettelsesdato-->
