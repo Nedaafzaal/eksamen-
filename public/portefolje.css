@@ -125,7 +125,7 @@ body {
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin-left: 730px;
+  margin-left: 710px;
 }
 
 .tilføjKnap button:hover {
@@ -220,7 +220,7 @@ button.pil {
 
 .listeOverskrifter, .aktieRække {
   display: grid;
-  grid-template-columns: 280px 280px 280px 280px; 
+  grid-template-columns: 140px 140px 140px 140px 140px 140px 140px; 
   padding: 12px 0;
   padding-bottom: 25px;
   border-bottom: 1px solid #333;

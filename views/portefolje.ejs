@@ -85,9 +85,14 @@
       <h3>Værdipapirer i portefølje</h3>
       <div class="listeOverskrifter">
         <span>Navn</span>
+        <span>Type</span>
+        <span>Symbol</span>
         <span>Antal</span>
         <span>Pris</span>
         <span>Værdi</span>
+        <span>GAK</span>
+
+
       </div>
 
       <% if (værdipapirer.length > 0) { %>
@@ -97,6 +102,7 @@
             <div><%= p.antal %></div> 
             <div><%= p.pris.toFixed(2) %> DKK</div>
             <div><%= p.forventetVærdi.toFixed(2) %> DKK</div> 
+            <div><%= p.GAK %></div> 
           </div>
         <% }) %>
       <% } else { %>
