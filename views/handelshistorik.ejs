@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link href="/handelshistorik.css" rel="stylesheet">
+</head>
+
+<body> 
+<!--Midtboks transaktionsoversigt-->
+<div class="midtBoks">
+    <h3>Transaktionsoversigt</h3> 
+    
+    <!--Overskrifter for hver kolonne i listen-->
+    <div class="listeOverskrifter">
+      <span>Transaktionstype</span> 
+      <span>Værdi type</span>
+      <span>Kurs</span> 
+      <span>Antal</span>
+      <span>Dato</span> 
+      <span>Tidspunkt</span> 
+      <span>Gebyr</span> 
+     
+    </div>
+  
+  <!--starter ejs if sætning, tjekker om der findes transaktioner-->
+    <% if (transaktioner.length > 0) { %> 
+  
+    <!--løber igennem alle transaktioner-->
+      <% transaktioner.forEach(t => { %> 
+        
+        <!--En række for hver transaktion-->
+        <div class="transaktionRække">
+            <div><%= t.transaktionstype %></div>
+            <div><%= t.værditype %></div>
+            <div><%= new Intl.NumberFormat('da-DK').format(t.pris) %> kr</div> <!--pris med KR-->
+            <div><%= new Date(t.dato).toLocaleDateString('da-DK') %></div>
+            <div><%= new Date('1970-01-01T' + t.tidspunkt).toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' }) %></div>
+            <div><%= t.gebyr %> kr</div>
+        </div> 
+      <% }); %> <!--Slut på forEach-->
+  
+    <% } else { %>
+      <p>Ingen transaktioner fundet endnu.</p> <!--Hvis der ingen transaktioner findes-->
+    <% } %> 
+  </div> 
+
+
+</body> 
+

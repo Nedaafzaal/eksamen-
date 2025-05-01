@@ -6,6 +6,7 @@ router.get("/", async (req, res) => {
   try {
     const top5 = await dashboardModel.hentTopAktier();
     const top5Profit = await dashboardModel.hentTopUrealiseretGevinst();
+    
 
     // Beregn totaler fra urealiseret gevinst-data
     const totalUrealiseret = top5Profit.reduce((sum, aktie) => sum + aktie.gevinst, 0);

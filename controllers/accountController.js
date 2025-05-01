@@ -143,5 +143,7 @@ exports.visIndstillinger = (req, res) => {
       brugernavn: "", // eller fx req.session.brugernavn, hvis du bruger sessions
       alert: null
     });
-  };
+};
+
+
   

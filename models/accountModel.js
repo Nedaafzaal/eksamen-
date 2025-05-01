@@ -27,11 +27,12 @@ async function hentKontoMedID(kontoID) {
 async function hentTransaktionerForKonto(kontoID) {
   const db = await sql.connect(sqlConfig);
   const result = await db.request()
-    .input("id", sql.Int, kontoID)
-    .query(`
-      SELECT * FROM eksamenSQL.transaktioner 
-      WHERE sælgerKontoID = @id OR modtagerKontoID = @id
-    `);
+  .input("id", sql.Int, kontoID)
+  .query(`
+    SELECT * FROM eksamenSQL.transaktioner 
+    WHERE (sælgerKontoID = @id OR modtagerKontoID = @id)
+      AND transaktionstype IN ('hæv', 'indsæt')
+  `);
 
   return result.recordset;
 }

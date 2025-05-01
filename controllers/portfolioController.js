@@ -12,7 +12,8 @@ exports.visPortefoljeOversigt = async (req, res) => {
   }
 };
 
-// Viser én bestemt portefølje og dens værdipapirer
+
+// Viser én bestemt portefølje og dens aktier
 exports.visEnPortefolje = async (req, res) => {
   const portefoljeID = parseInt(req.params.id, 10);
 
@@ -64,3 +65,64 @@ exports.opretPortefolje = async (req, res) => {
     res.status(500).send("Kunne ikke oprette portefølje.");
   }
 };
+
+// Viser køb/salg transaktioner for en portefølje
+exports.hentTransaktionerForPortefølje = async (req, res) => {
+    const porteføljeID = parseInt(req.params.id, 10);
+  
+    if (isNaN(porteføljeID)) {
+      return res.status(400).send("Ugyldigt portefølje-ID");
+    }
+  
+    try {
+      const transaktioner = await portfolioModel.hentTransaktionerForPortefølje(porteføljeID);
+      res.render("handelshistorik", { transaktioner, porteføljeID });
+    } catch (err) {
+      console.error("Fejl ved hentning af handelshistorik:", err);
+      res.status(500).send("Kunne ikke hente handelshistorik.");
+    }
+  };
+  
+  exports.søgEfterPapir = async (req, res) => {
+    const søgning = req.query.query; // Det brugeren skriver i søgefeltet
+    const porteføljeID = req.params.id; // ID på den portefølje vi søger til
+  
+    // Hvis brugeren ikke har skrevet noget
+    if (!søgning) {
+      return res.status(400).send("Skriv venligst noget du vil søge efter.");
+    }
+  
+    try {
+      // Først: Søg efter værdipapiret (navn og symbol)
+      const søgeLink = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${søgning}&apikey=${process.env.API_KEY}`;
+      const svar = await fetch(søgeLink); // Send forespørgslen
+      const data = await svar.json(); // Lav om til JSON
+      const fundet = data.bestMatches?.[0]; // Tag det første match
+  
+      // Hvis intet blev fundet
+      if (!fundet) {
+        return res.send("Ingen værdipapir fundet.");
+      }
+  
+      // Hent symbol og navn fra det fundne papir
+      const symbol = fundet["1. symbol"];
+      const navn = fundet["2. name"];
+  
+      // Så: Hent prisen for det papir
+      const prisLink = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${process.env.API_KEY}`;
+      const prisSvar = await fetch(prisLink);
+      const prisData = await prisSvar.json();
+      const pris = prisData["Global Quote"]?.["05. price"] || "Ukendt";
+  
+      // Send information videre til en EJS-side
+      res.render("searchAndBuy", {
+        result: { symbol, navn, pris },
+        porteføljeID
+      });
+  
+    } catch (fejl) {
+      console.error(fejl);
+      res.status(500).send("Noget gik galt under søgningen.");
+    }
+  };
+  

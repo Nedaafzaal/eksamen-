@@ -4,34 +4,40 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Søgeresultater</title>
-  <link href="/searchAndBuy.css" rel="stylesheet"> <!-- Hvis du har styling -->
+  <link href="/searchAndBuy.css" rel="stylesheet">
 </head>
 <body>
 
 <h1>Resultat for din søgning</h1>
 
-<!--container til søgeresultater-->
 <div class="indhold">
-    <% if (result) { %>
-      <ul>
-          <div class="liste">
-            <li>Navn: <%= result.name %></li><br>
-            <li>Symbol: <%= result.symbol %></li><br>
-            <li>Aktiekurs: <%= (result.price * 6.95).toLocaleString("da-DK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %> DKK</li>
-        </div>
-      </ul>
-    <% } else { %>
-      <p>Ingen resultater fundet.</p>
-    <% } %>
+  <% if (result) { %>
+    <ul>
+      <div class="liste">
+        <li>Navn: <%= result.navn %></li><br>
+        <li>Symbol: <%= result.symbol %></li><br>
+        <li>
+          Aktiekurs: 
+          <% let prisDKK = parseFloat(result.pris) * 6.95; %>
+          <%= isNaN(prisDKK) ? "Ukendt" : prisDKK.toLocaleString("da-DK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %> DKK
+        </li>
+      </div>
+    </ul>
+  <% } else { %>
+    <p>Ingen resultater fundet.</p>
+  <% } %>
 </div>
 
 <div class="køb">
-    <a href="/registrerHandel/<%= result.symbol %>">Køb aktie</a> <!--Tager fat i den aktie man er inde på -->
+    <form action="/portefolje/<%= portefølje.porteføljeID %>/searchPapir" method="GET">
+    <input type="hidden" name="symbol" value="<%= result.symbol %>">
+    <input type="hidden" name="navn" value="<%= result.navn %>">
+    <input type="hidden" name="pris" value="<%= result.pris %>">
+    <label for="antal">Antal:</label>
+    <input type="number" name="antal" min="1" required>
+    <button type="submit">Tilføj til portefølje</button>
+  </form>
 </div>
-
 
 </body>
 </html>
-
-
-

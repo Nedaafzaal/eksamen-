@@ -64,10 +64,43 @@ async function opretNyPortefolje(data) {
     `);
 }
 
-module.exports = {
-  hentAllePortefoljer,
-  hentPortefoljeMedID,
-  hentVærdipapirerTilPortefølje,
-  hentSamletVærdiForAllePorteføljer,
-  opretNyPortefolje
-};
+// Hent alle transaktioner for et portefølje
+async function hentTransaktionerForPortefølje(porteføljeID) {
+    const db = await sql.connect(sqlConfig);
+    const result = await db.request()
+      .input("id", sql.Int, porteføljeID)
+      .query(`
+        SELECT * FROM eksamenSQL.transaktioner 
+        WHERE porteføljeID = @id
+          AND transaktionstype IN ('køb', 'salg')
+      `);
+  
+    return result.recordset;
+  }
+
+  async function tilføjVærdipapirTilPortefølje(data) {
+    const db = await sql.connect(sqlConfig);
+    await db.request()
+      .input("porteføljeID", sql.Int, data.porteføljeID)
+      .input("navn", sql.NVarChar, data.navn)
+      .input("tickerSymbol", sql.NVarChar, data.symbol)
+      .input("pris", sql.Decimal(18, 2), data.pris)
+      .input("antal", sql.Int, data.antal)
+      .query(`
+        INSERT INTO eksamenSQL.værdipapir (porteføljeID, navn, tickerSymbol, pris, antal)
+        VALUES (@porteføljeID, @navn, @tickerSymbol, @pris, @antal)
+      `);
+  }
+  
+  
+
+  module.exports = {
+    hentAllePortefoljer,
+    hentPortefoljeMedID,
+    hentVærdipapirerTilPortefølje,
+    hentSamletVærdiForAllePorteføljer,
+    opretNyPortefolje,
+    hentTransaktionerForPortefølje,
+    tilføjVærdipapirTilPortefølje // ← ny funktion
+  };
+  

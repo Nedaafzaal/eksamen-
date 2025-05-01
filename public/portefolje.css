@@ -111,6 +111,27 @@ body {
   background-color: #1b4e20;
 }
 
+.tilføjKnapBox form {
+  all: unset; /* fjerner alle standardformater fra browser */
+}
+
+.tilføjKnap button {
+  background-color: rgb(31, 31, 31);
+  padding: 10px 20px;
+  border-radius: 20px;
+  color: white;
+  border: none;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-left: 730px;
+}
+
+.tilføjKnap button:hover {
+  background-color: #656363;
+}
+
 
 /* CSS til side menu */
 .sidemenu {

@@ -38,13 +38,21 @@
       <h1><%= portefolje.navn %></h1> <!--navnet hentes fra valgt portefølje-->
 
       <!--søgefelt til at finde værdipapirer-->
-      <div class="søgBox">
-        <form action="/searchPapir" method="GET" class="søgForm">
-          <input type="text" name="query" placeholder="Søg efter navn på værdipapir" required> 
-          <button type="submit">Søg</button>
-        </form>
-      </div>
+      
+      <form action="/portefolje/<%= portefolje.porteføljeID %>/searchPapir" method="GET" class="søgForm">
+        <input type="text" name="query" placeholder="Søg efter navn på værdipapir" required>
+        <button type="submit">Søg</button>
+      </form>
+      
+    <!--Tilføj portefølje-knap-->
+    <div class="tilføjKnapBox">
+      <form action="/portefolje/<%= portefolje.porteføljeID %>/handelshistorik" method="GET" class="tilføjKnap">
+        <button type="submit">Handelshistorik</button>
+      </form>
     </div>
+  </div>
+    
+
 
     <!--øverste sektion med samlet værdi og oplysninger-->
     <div class="øverste">

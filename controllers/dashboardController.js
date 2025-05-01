@@ -16,12 +16,13 @@ exports.visDashboard = async (req, res) => {
       // Vi sender forespørgsel og venter på svar
       const response = await fetch(url);
       const data = await response.json();
+      console.log(data);
 
       // Hvis vi fik et svar med markedsværdi (MarketCapitalization), så gemmer vi den
       if (data.MarketCapitalization) {
         resultater.push({
-          symbol: symbol,           // fx "AAPL"
-          name: data.Name,          // fx "Apple Inc."
+          symbol: symbol,           
+          name: data.Name,         
           marketCap: Number(data.MarketCapitalization) // Laves om til tal
         });
       }

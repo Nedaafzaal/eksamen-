@@ -1,6 +1,6 @@
 const fetch = require("node-fetch");
 
-const API_KEY = "3BBC7E4FR1TRUMDR";
+const API_KEY = "BPTFGHT70NR9DLX9";
 
 // Liste over aktier vi kigger på (kan ændres senere)
 const symbols = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA'];
@@ -62,6 +62,7 @@ const hentTopUrealiseretGevinst = async () => {
       const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${aktie.symbol}&apikey=${API_KEY}`;
       const response = await fetch(url);
       const data = await response.json();
+
 
       const quote = data["Global Quote"];
       if (!quote || !quote["05. price"]) continue;
