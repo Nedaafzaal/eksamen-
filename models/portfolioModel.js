@@ -8,7 +8,7 @@ async function hentAllePortefoljer() {
     SELECT * FROM eksamenSQL.porteføljer
   `);
 
-  return result.recordset; // Vi returnerer listen af porteføljer
+  return result.recordset;
 }
 
 // Hent én portefølje baseret på ID
@@ -21,53 +21,53 @@ async function hentPortefoljeMedID(id) {
       WHERE porteføljeID = @id
     `);
 
-  return result.recordset[0]; // Vi returnerer den ene portefølje vi fandt
+  return result.recordset[0];
 }
 
-// Hent alle aktier, der tilhører en bestemt portefølje
-async function hentAktierTilPortefolje(portefoljeID) {
-    const db = await sql.connect(sqlConfig);
-    const result = await db.request()
-    .input("porteføljeID", sql.Int, portefoljeID)
+// Hent alle værdipapirer, der tilhører en bestemt portefølje
+async function hentVærdipapirerTilPortefølje(porteføljeID) {
+  const db = await sql.connect(sqlConfig);
+  const result = await db.request()
+    .input("porteføljeID", sql.Int, porteføljeID)
     .query(`
-        SELECT aktieNavn, antal, nuværendeVærdi
-        FROM eksamenSQL.aktier
-        WHERE porteføljeID = @porteføljeID
+      SELECT navn, tickerSymbol, type, antal, pris, forventetVærdi, GAK, urealiseretPorteføljeGevinstTab
+      FROM eksamenSQL.værdipapir
+      WHERE porteføljeID = @porteføljeID
     `);
-    
-    return result.recordset;
+
+  return result.recordset;
 }
 
-//Henter samlet værdi for alle porteføljer
+// Hent samlet værdi for alle porteføljer ud fra værdipapirer
 async function hentSamletVærdiForAllePorteføljer() {
-    const db = await sql.connect(sqlConfig);
-    const result = await db.request().query(`
-      SELECT porteføljeID, SUM(antal * nuværendeVærdi) AS samletVærdi
-      FROM eksamenSQL.aktier
-      GROUP BY porteføljeID
-    `);
-    return result.recordset; // array med { porteføljeID, samletVærdi }
-  }
-  
+  const db = await sql.connect(sqlConfig);
+  const result = await db.request().query(`
+    SELECT porteføljeID, SUM(forventetVærdi) AS samletVærdi
+    FROM eksamenSQL.værdipapir
+    GROUP BY porteføljeID
+  `);
+  return result.recordset;
+}
 
 // Opret en ny portefølje i databasen
 async function opretNyPortefolje(data) {
   const db = await sql.connect(sqlConfig);
   await db.request()
-  .input("navn", sql.NVarChar, data.navn)
-  .input("kontotilknytning", sql.NVarChar, data.kontotilknytning)
-  .input("forventetVærdi", sql.Decimal(18, 2), data.forventetVærdi)
-  .input("værdipapirNavn", sql.NVarChar, "Ingen endnu")
-  .query(`
-    INSERT INTO eksamenSQL.porteføljer
-    (navn, kontotilknytning, forventetVærdi, værdipapirNavn)
-    VALUES (@navn, @kontotilknytning, @forventetVærdi, @værdipapirNavn)
-  `);
+    .input("navn", sql.NVarChar, data.navn)
+    .input("kontotilknytning", sql.NVarChar, data.kontotilknytning)
+    .input("forventetVærdi", sql.Decimal(18, 2), data.forventetVærdi)
+    .input("værdipapirNavn", sql.NVarChar, "Ingen endnu")
+    .query(`
+      INSERT INTO eksamenSQL.porteføljer
+      (navn, kontotilknytning, forventetVærdi, værdipapirNavn)
+      VALUES (@navn, @kontotilknytning, @forventetVærdi, @værdipapirNavn)
+    `);
 }
 
 module.exports = {
   hentAllePortefoljer,
   hentPortefoljeMedID,
-  hentAktierTilPortefolje,
+  hentVærdipapirerTilPortefølje,
+  hentSamletVærdiForAllePorteføljer,
   opretNyPortefolje
 };

@@ -21,7 +21,7 @@
 
     <ul class="menuValg">
       <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
-      <li><a href="/konto/oversigt"><i class='bx bxs-user-account'></i>Konti</a>
+      <li><a href="/konto/oversigt"><i class='bx bxs-user-account'></i>Konti</a></li>
       <li><a href="/portefolje/oversigt"><i class='bx bx-doughnut-chart'></i>Porteføljer</a></li>
       <li><a href="/indstillinger"><i class='bx bx-cog'></i>Indstillinger</a></li>
     </ul>
@@ -39,7 +39,7 @@
 
       <!--søgefelt til at finde værdipapirer-->
       <div class="søgBox">
-        <form action="/searchPapir" method="GET" class="søgForm"> <!--sender GET request-->
+        <form action="/searchPapir" method="GET" class="søgForm">
           <input type="text" name="query" placeholder="Søg efter navn på værdipapir" required> 
           <button type="submit">Søg</button>
         </form>
@@ -51,15 +51,14 @@
       <!--boks der viser porteføljens samlede værdi-->
       <div class="grafboks">
         <h3>Samlet værdi</h3>
-        <% if (aktier.length > 0) { %>
+        <% if (værdipapirer.length > 0) { %>
           <p><%= samletVærdi.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' }) %></p>
         <% } else { %>
-          <p><em>Ingen aktier i porteføljen endnu</em></p>
+          <p><em>Ingen værdipapirer i porteføljen endnu</em></p>
         <% } %>
       </div>
-      
 
-    <!--højre side med diagram og oprettelsesdato-->
+      <!--højre side med diagram og oprettelsesdato-->
       <div class="højresideboks">
         <div class="diagramBoks">
           <h3>Fordeling af værdi</h3>
@@ -68,43 +67,42 @@
 
         <div class="højrenedreboks">
           <h3>Dato oprettet</h3>
-          <p><%= new Date(portefolje.dato).toLocaleDateString('da-DK') %></p> <!--oprettelsesdato hentes fra valgt portefølje-->
+          <p><%= new Date(portefolje.dato).toLocaleDateString('da-DK') %></p>
         </div>
       </div>
     </div>
 
-
-<!--Oversigt over aktier i portefølje-->
-<div class="oversigtBox">
-  <h3>Aktier i portefølje</h3>
-  <div class="listeOverskrifter">
-    <span>Aktie Navn</span>
-    <span>Antal</span>
-    <span>Pris</span>
-    <span>Value</span>
-  </div>
-
-  <% if (aktier.length > 0) { %>  <!--hvis der findes aktier så vis dem-->
-    <% aktier.forEach(a => { %> 
-    
-      <div class="aktieRække"> 
-        <div><%= a.aktieNavn %></div> 
-        <div><%= a.antal %></div> 
-        <div><%= a.købspris.toFixed(2) %> DKK</div>
-        <div><%= a.nuværendeVærdi.toFixed(2) %> DKK</div> 
+    <!--Oversigt over værdipapirer i portefølje-->
+    <div class="oversigtBox">
+      <h3>Værdipapirer i portefølje</h3>
+      <div class="listeOverskrifter">
+        <span>Navn</span>
+        <span>Antal</span>
+        <span>Pris</span>
+        <span>Værdi</span>
       </div>
-    <% }); %>
-  <% } else { %>
-    <p>Ingen aktier fundet endnu.</p> <!--hvis ingen aktier findes-->
-  <% } %>
-</div> 
 
-  <script> //script til åben og lukke side menu
-    const sidemenu = document.querySelector('.sidemenu');
-    function skiftMenu() {
-      sidemenu.classList.toggle('lukket');
-    }
-  </script>
+      <% if (værdipapirer.length > 0) { %>
+        <% værdipapirer.forEach(p => { %> 
+          <div class="aktieRække"> 
+            <div><%= p.navn %></div> 
+            <div><%= p.antal %></div> 
+            <div><%= p.pris.toFixed(2) %> DKK</div>
+            <div><%= p.forventetVærdi.toFixed(2) %> DKK</div> 
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p><em>Ingen værdipapirer fundet endnu.</em></p>
+      <% } %>
+    </div> 
 
+    <script>
+      const sidemenu = document.querySelector('.sidemenu');
+      function skiftMenu() {
+        sidemenu.classList.toggle('lukket');
+      }
+    </script>
+
+  </div>
 </body>
 </html>

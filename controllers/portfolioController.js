@@ -12,8 +12,7 @@ exports.visPortefoljeOversigt = async (req, res) => {
   }
 };
 
-
-// Viser én bestemt portefølje og dens aktier
+// Viser én bestemt portefølje og dens værdipapirer
 exports.visEnPortefolje = async (req, res) => {
   const portefoljeID = parseInt(req.params.id, 10);
 
@@ -28,15 +27,14 @@ exports.visEnPortefolje = async (req, res) => {
       return res.status(404).send("Portefølje ikke fundet.");
     }
 
-    const aktier = await portfolioModel.hentAktierTilPortefolje(portefoljeID);
+    const værdipapirer = await portfolioModel.hentVærdipapirerTilPortefølje(portefoljeID);
 
     let samletVærdi = 0;
-    
-    for (let i = 0; i < aktier.length; i++) {
-      samletVærdi += aktier[i].antal * aktier[i].nuværendeVærdi;
+    for (let i = 0; i < værdipapirer.length; i++) {
+      samletVærdi += værdipapirer[i].antal * værdipapirer[i].pris;
     }
 
-    res.render("portefolje", { portefolje, aktier, samletVærdi});
+    res.render("portefolje", { portefolje, værdipapirer, samletVærdi });
 
   } catch (err) {
     console.error("Fejl ved visning af portefølje:", err);
