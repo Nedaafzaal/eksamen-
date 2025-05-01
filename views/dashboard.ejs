@@ -41,10 +41,20 @@
 
     <!-- Øverste boksrække med nøgletal -->
     <div class="øvreBoks">
-      <div class="mindreBoks">Total værdi</div>
-      <div class="mindreBoks">Total Realiseret Gevinst</div>
-      <div class="mindreBoks">Total Urealiseret Gevinst</div>
+      <div class="mindreBoks">
+        <h4>Total værdi</h4>
+        <p><%= totalVærdi.toLocaleString("da-DK", { style: "currency", currency: "DKK" }) %></p>
+      </div>
+      <div class="mindreBoks">
+        <h4>Total Realiseret Gevinst</h4>
+        <p><%= totalRealiseret.toLocaleString("da-DK", { style: "currency", currency: "DKK" }) %></p>
+      </div>
+      <div class="mindreBoks">
+        <h4>Total Urealiseret Gevinst</h4>
+        <p><%= totalUrealiseret.toLocaleString("da-DK", { style: "currency", currency: "DKK" }) %></p>
+      </div>
     </div>
+    
 
     <!-- Boks med graf -->
     <div class="grafBoks">
@@ -83,6 +93,17 @@
           <div class="kolonne">Portfolio</div>
           <div class="kolonne">Value</div>
         </div>
+
+        <% top5Profit.forEach(function(stock) { %>
+          <div class="top5-row">
+            <div class="kolonne">
+              <strong><%= stock.symbol %></strong><br>
+              <small>Gevinst: <%= stock.gevinst.toFixed(2) %> DKK</small>
+            </div>
+            <div class="kolonne"><%= stock.portefølje %></div>
+            <div class="kolonne"><%= stock.samletVærdi.toLocaleString() %> DKK</div>
+          </div>
+        <% }); %>
 
         <!-- Indhold til profit liste tilføjes senere -->
       </div>
