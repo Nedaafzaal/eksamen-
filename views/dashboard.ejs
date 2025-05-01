@@ -84,6 +84,17 @@
           <div class="kolonne">Value</div>
         </div>
 
+        <% top5Profit.forEach(function(stock) { %>
+          <div class="top5-row">
+            <div class="kolonne">
+              <strong><%= stock.symbol %></strong><br>
+              <small>Gevinst: <%= stock.gevinst.toFixed(2) %> DKK</small>
+            </div>
+            <div class="kolonne"><%= stock.portefølje %></div>
+            <div class="kolonne"><%= stock.samletVærdi.toLocaleString() %> DKK</div>
+          </div>
+        <% }); %>
+
         <!-- Indhold til profit liste tilføjes senere -->
       </div>
     </div>

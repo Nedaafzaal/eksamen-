@@ -12,7 +12,6 @@ exports.visPortefoljeOversigt = async (req, res) => {
   }
 };
 
-
 // Viser én bestemt portefølje og dens aktier
 exports.visEnPortefolje = async (req, res) => {
   const portefoljeID = parseInt(req.params.id, 10);

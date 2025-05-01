@@ -8,7 +8,6 @@ const accountRoute = require("./routes/accountRoute");
 const portfolioRoutes = require("./routes/portfolioRoute");
 
 
-
 const app = express();
 
 // Gør det muligt at læse form-data og serve CSS mv.
