@@ -85,7 +85,6 @@ const hentTopUrealiseretGevinst = async () => {
     .slice(0, 5);
 };
 
-
 module.exports = {
   hentTopAktier,
   hentTopUrealiseretGevinst
