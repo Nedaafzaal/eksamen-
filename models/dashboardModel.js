@@ -1,8 +1,9 @@
 const fetch = require("node-fetch");
+const sql = require("mssql");
+const sqlConfig = require("../sqlConfig/sqlConfig");
+const API_KEY = "V32NSLB2RZ1VQ5QJ";
 
-const API_KEY = "BPTFGHT70NR9DLX9";
-
-// Liste over aktier vi kigger på (kan ændres senere)
+// Aktier vi bruger til top 5 markedsværdi
 const symbols = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA'];
 
 async function hentTopAktier() {
@@ -10,17 +11,15 @@ async function hentTopAktier() {
 
   for (const symbol of symbols) {
     const url = `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${symbol}&apikey=${API_KEY}`;
-
     try {
-      const response = await fetch(url); // Vi sender forespørgsel til API
-      const data = await response.json(); // Vi læser svaret som JSON
+      const response = await fetch(url);
+      const data = await response.json();
 
-      // Hvis vi får markedsværdi, gemmer vi den
       if (data.MarketCapitalization) {
         resultater.push({
           symbol: symbol,
           name: data.Name,
-          marketCap: Number(data.MarketCapitalization)
+          marketCap: Number(data.MarketCapitalization),
         });
       }
     } catch (err) {
@@ -28,65 +27,48 @@ async function hentTopAktier() {
     }
   }
 
-  // Sorter og vælg de 5 største aktier
   return resultater.sort((a, b) => b.marketCap - a.marketCap).slice(0, 5);
 }
 
-
-
-const porteføljer = [
-  {
-    navn: "Growth Tech",
-    aktier: [
-      { symbol: "AAPL", købspris: 150, antal: 10 },
-      { symbol: "MSFT", købspris: 280, antal: 5 },
-      { symbol: "AMZN", købspris: 105, antal: 6 },
-    ],
-  },
-  {
-    navn: "Value Invest",
-    aktier: [
-      { symbol: "GOOGL", købspris: 120, antal: 8 },
-      { symbol: "NVDA", købspris: 200, antal: 4 },
-      { symbol: "META", købspris: 180, antal: 3 },
-     
-    ],
-  },
-];
+async function hentPorteføljerMedAktier() {
+  const db = await sql.connect(sqlConfig);
+  const result = await db.request().query(`
+    SELECT p.navn, v.tickerSymbol, v.pris, v.antal
+    FROM eksamenSQL.porteføljer p
+    JOIN eksamenSQL.værdipapir v ON p.porteføljeID = v.porteføljeID
+  `);
+  return result.recordset;
+}
 
 const hentTopUrealiseretGevinst = async () => {
+  const data = await hentPorteføljerMedAktier();
   const resultater = [];
 
-  for (const portefølje of porteføljer) {
-    for (const aktie of portefølje.aktier) {
-      const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${aktie.symbol}&apikey=${API_KEY}`;
-      const response = await fetch(url);
-      const data = await response.json();
+  for (const aktie of data) {
+    const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${aktie.symbol}&apikey=${API_KEY}`;
+    const response = await fetch(url);
+    const json = await response.json();
 
+    const quote = json["Global Quote"];
+    if (!quote || !quote["05. price"]) continue;
 
-      const quote = data["Global Quote"];
-      if (!quote || !quote["05. price"]) continue;
+    const aktuelPris = parseFloat(quote["05. price"]);
+    const gevinst = (aktuelPris - aktie.købspris) * aktie.antal;
+    const samletVærdi = aktuelPris * aktie.antal;
 
-      const aktuelPris = parseFloat(quote["05. price"]);
-      const gevinst = (aktuelPris - aktie.købspris) * aktie.antal;
-      const samletVærdi = aktuelPris * aktie.antal;
-
-      resultater.push({
-        symbol: aktie.symbol,
-        portefølje: portefølje.navn,
-        gevinst,
-        samletVærdi,
-      });
-    }
+    resultater.push({
+      symbol: aktie.symbol,
+      portefølje: aktie.navn,
+      gevinst,
+      samletVærdi,
+    });
   }
 
-  // Vis de 5 største uanset om de er positive eller negative
-  return resultater
-    .sort((a, b) => Math.abs(b.gevinst) - Math.abs(a.gevinst))
-    .slice(0, 5);
+  return resultater.sort((a, b) => Math.abs(b.gevinst) - Math.abs(a.gevinst)).slice(0, 5);
 };
 
 module.exports = {
   hentTopAktier,
-  hentTopUrealiseretGevinst
+  hentTopUrealiseretGevinst,
+  hentPorteføljerMedAktier,
 };
