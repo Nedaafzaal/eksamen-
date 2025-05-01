@@ -72,28 +72,24 @@ body {
   color: rgb(166, 164, 164);
 }
 
-.søgBox {
-  display: flex;
-  justify-content: center; 
-  margin-right: 310px;
-  width: 300px; 
-  background-color: #2f2f2f;
-  padding: 8px 12px;
-  border-radius: 10px;
-}
 
 .søgForm {
   display: flex;
-  width: 100%;
+  margin-left: 400 px;
+  width: 500px; 
+  background-color: #2f2f2f;
+  padding: 8px 12px;
+  border-radius: 10px;
+  margin-right: 0px;
 }
 
 .søgForm input {
   flex: 1;
-  background-color: transparent;
+  background-color:#2f2f2f;
   color: white;
   border: none;
   font-size: 14px; 
-  padding: 6px;
+  width: 210px;
 }
 
 .søgForm button {
@@ -101,7 +97,7 @@ body {
   color: white;
   border: none;
   padding: 6px 10px; 
-  margin-left: 8px;
+  margin-left: 20px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px; 
@@ -111,21 +107,17 @@ body {
   background-color: #1b4e20;
 }
 
-.tilføjKnapBox form {
-  all: unset; /* fjerner alle standardformater fra browser */
-}
-
 .tilføjKnap button {
-  background-color: rgb(31, 31, 31);
+  background-color: #2f2f2f;
   padding: 10px 20px;
-  border-radius: 20px;
-  color: white;
+  border-radius: 10px;
+  color: rgb(195, 192, 192);
   border: none;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s;
-  margin-left: 710px;
+  margin-left: 0px;
+  margin-right: 300px;
 }
 
 .tilføjKnap button:hover {

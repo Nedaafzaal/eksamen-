@@ -1,4 +1,6 @@
 const portfolioModel = require("../models/portfolioModel");
+const { registrerHandel } = require("../models/portfolioModel");
+
 
 // Viser alle porteføljer i en liste
 exports.visPortefoljeOversigt = async (req, res) => {
@@ -43,10 +45,12 @@ exports.visEnPortefolje = async (req, res) => {
   }
 };
 
+
 // Viser formularen til at oprette ny portefølje
 exports.visOpretPortefoljeFormular = (req, res) => {
   res.render("opretPortefolje");
 };
+
 
 // Når brugeren sender formularen og vil oprette ny portefølje
 exports.opretPortefolje = async (req, res) => {
@@ -66,6 +70,7 @@ exports.opretPortefolje = async (req, res) => {
   }
 };
 
+
 // Viser køb/salg transaktioner for en portefølje
 exports.hentTransaktionerForPortefølje = async (req, res) => {
     const porteføljeID = parseInt(req.params.id, 10);
@@ -82,6 +87,7 @@ exports.hentTransaktionerForPortefølje = async (req, res) => {
       res.status(500).send("Kunne ikke hente handelshistorik.");
     }
   };
+  
   
   exports.søgEfterPapir = async (req, res) => {
     const søgning = req.query.query; // Det brugeren skriver i søgefeltet
@@ -115,7 +121,7 @@ exports.hentTransaktionerForPortefølje = async (req, res) => {
       const pris = prisData["Global Quote"]?.["05. price"] || "Ukendt";
   
       // Send information videre til en EJS-side
-      res.render("searchAndBuy", {
+      res.render("searchPapir", {
         result: { symbol, navn, pris },
         porteføljeID
       });
@@ -125,4 +131,77 @@ exports.hentTransaktionerForPortefølje = async (req, res) => {
       res.status(500).send("Noget gik galt under søgningen.");
     }
   };
+  
+  
+//   exports.visFakePapir = (req, res) => {
+//     const result = {
+//       symbol: "GOOG",
+//       navn: "Alphabet Inc.",
+//       pris: "2850.33"
+//     };
+//     const portefoljeID = 1;
+//     res.render("searchPapir", { result, portefoljeID });
+//   };
+  
+
+// Denne funktion bliver kaldt når brugeren køber eller sælger fra en formular
+exports.købEllerSælg = async function (req, res) {
+    try {
+      // Vi henter informationen fra formularen (HTML)
+      const data = {
+        porteføljeID: parseInt(req.body.porteføljeID),
+        kontoID: parseInt(req.body.kontoID),
+        værditype: req.body.værditype,
+        type: req.body.transaktionstype, // 'køb' eller 'salg'
+        pris: parseFloat(req.body.pris),
+        gebyr: parseFloat(req.body.gebyr) || 0,
+        dato: new Date(),
+        tidspunkt: new Date(),
+        antal: parseInt(req.body.antal),
+        navn: req.body.navn,
+        tickerSymbol: req.body.tickerSymbol
+      };
+
+      console.log("Modtaget kontoID:", req.body.kontoID);
+
+  
+      // Vi beder modellen om at lave handlen
+      await registrerHandel(data);
+  
+      // Vi sender brugeren tilbage til forsiden eller en bekræftelse
+      res.redirect("/portfolio/succes");
+  
+    } catch (err) {
+      console.error("Fejl under handel:", err.message);
+      res.status(400).send("Noget gik galt: " + err.message);
+    }
+  }
+
+  exports.visBuyPapirForm = async (req, res) => {
+    const { symbol, navn, pris } = req.query;
+    const portefoljeID = parseInt(req.params.id);
+  
+    try {
+      const konti = await hentKontiForBruger(req.session.brugerID); // du skal implementere denne funktion
+      const kontoID = konti[0].konto_id;
+  
+      res.render("buyPapir", {
+        tickerSymbol: symbol,
+        navn,
+        pris,
+        portefoljeID,
+        kontoID
+      });
+
+    } catch (err) {
+      console.error("Fejl ved hentning af konto:", err);
+      res.status(500).send("Kunne ikke hente konto til køb.");
+    }
+  };
+  
+
+
+ 
+  
+  
   

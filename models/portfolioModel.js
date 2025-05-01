@@ -92,8 +92,75 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
       `);
   }
   
+  // Tilføj ny handel til transaktioner
+ // Denne funktion bruges til at købe eller sælge værdipapirer
+async function registrerHandel(data) {
+    const db = await sql.connect(sqlConfig);
   
-
+    // 1. Find ud af hvor mange penge der er på kontoen
+    const result = await db.request()
+      .input("kontoID", sql.Int, data.kontoID)
+      .query("SELECT saldo FROM eksamenSQL.konto WHERE kontoID = @kontoID");
+  
+    const pengePåKonto = result.recordset[0]?.saldo;
+  
+    if (pengePåKonto == null) {
+      throw new Error("Kontoen blev ikke fundet.");
+    }
+  
+    const prisMedGeby = data.pris + (data.gebyr || 0);
+  
+    // 2. Tjek om vi har penge nok til at købe
+    if (data.type === "køb" && pengePåKonto < prisMedGeby) {
+      throw new Error("Du har ikke nok penge til at købe.");
+    }
+  
+    // 3. Regn ud hvor mange penge der er tilbage
+    const nySaldo = data.type === "køb"
+      ? pengePåKonto - prisMedGeby
+      : pengePåKonto + prisMedGeby;
+  
+    // 4. Gem den nye saldo
+    await db.request()
+      .input("kontoID", sql.Int, data.kontoID)
+      .input("saldo", sql.Decimal(18, 2), nySaldo)
+      .query("UPDATE eksamenSQL.konto SET saldo = @saldo WHERE kontoID = @kontoID");
+  
+    // 5. Gem handlen i transaktionstabellen
+    await db.request()
+      .input("porteføljeID", sql.Int, data.porteføljeID)
+      .input("kontoID", sql.Int, data.kontoID)
+      .input("type", sql.NVarChar, data.type)
+      .input("pris", sql.Decimal(18, 2), data.pris)
+      .input("gebyr", sql.Decimal(18, 2), data.gebyr || 0)
+      .input("dato", sql.Date, new Date())
+      .input("tid", sql.DateTime, new Date())
+      .input("antal", sql.Int, data.antal)
+      .query(`
+        INSERT INTO eksamenSQL.transaktioner
+        (porteføljeID, kontoID, transaktionstype, pris, gebyr, dato, tidspunkt, antal, sælgerKontoID, modtagerKontoID)
+        VALUES (@porteføljeID, @kontoID, @type, @pris, @gebyr, @dato, @tid, @antal, NULL, NULL)
+      `);
+  
+    // 6. Hvis det er et køb, så læg værdipapiret ind i porteføljen
+    if (data.type === "køb") {
+      await db.request()
+        .input("porteføljeID", sql.Int, data.porteføljeID)
+        .input("navn", sql.NVarChar, data.navn)
+        .input("symbol", sql.NVarChar, data.tickerSymbol)
+        .input("pris", sql.Decimal(18, 2), data.pris)
+        .input("antal", sql.Int, data.antal)
+        .input("type", sql.NVarChar, data.værditype)
+        .input("dato", sql.Date, new Date())
+        .query(`
+          INSERT INTO eksamenSQL.værdipapir
+          (porteføljeID, navn, tickerSymbol, pris, antal, type, datoKøbt)
+          VALUES (@porteføljeID, @navn, @symbol, @pris, @antal, @type, @dato)
+        `);
+    }
+  }
+  
+  
   module.exports = {
     hentAllePortefoljer,
     hentPortefoljeMedID,
@@ -101,6 +168,7 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
     hentSamletVærdiForAllePorteføljer,
     opretNyPortefolje,
     hentTransaktionerForPortefølje,
-    tilføjVærdipapirTilPortefølje // ← ny funktion
+    tilføjVærdipapirTilPortefølje,
+    registrerHandel,
   };
   

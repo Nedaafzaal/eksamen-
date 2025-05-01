@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Opret bruger</title>
+      <link href="/buyPapir.css" rel="stylesheet">
+
+   </head>
+   <body>
+      <!--container til tilføj konto-->
+      <div class="købVærdipapir">
+            <h1>Køb værdipapir</h1>
+            <form action="/portefolje/<%= portefoljeID %>/buyPapir" method="POST">
+                <div class="opretBox">
+                   <input type="text" placeholder="Konto navn" name="navn" required>
+                </div>
+             
+   
+                <div class="opretBox">
+                   <input type="number" step="0.01" placeholder="Antal" name="antal" required>
+                </div>
+             
+
+                <div class="opretBox">
+                   <input type="text" placeholder="Valuta" name="valuta" required>
+                </div>
+             
+
+                <div class="opretBox">
+                   <input type="text" placeholder="Bankreference" name="bankreference" required>
+                </div>
+             
+
+                <input type="hidden" name="tickerSymbol" value="<%= tickerSymbol %>">
+                <input type="hidden" name="navn" value="<%= navn %>">
+                <input type="hidden" name="pris" value="<%= pris %>">
+                <input type="hidden" name="porteføljeID" value="<%= portefoljeID %>">
+                <input type="hidden" name="kontoID" value="<%= kontoID %>">
+                <input type="hidden" name="tidspunkt" value="<%= new Date().toISOString() %>">
+
+             
+                <button id="sendFormular" type="submit">Køb</button>
+
+             </form>
+         </div>
+      </div>
+   </body>
+</html>
+
+
+ 

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Søgeresultater</title>
+  <link href="/searchPapir.css" rel="stylesheet">
+</head>
+<body>
+
+<h1>Resultat for din søgning</h1>
+
+<div class="indhold">
+  <% if (result) { %>
+    <ul>
+      <div class="liste">
+        <li>Navn: <%= result.navn %></li><br>
+        <li>Symbol: <%= result.symbol %></li><br>
+        <li>
+          Aktiekurs: 
+          <% let prisDKK = parseFloat(result.pris) * 6.95; %>
+          <%= isNaN(prisDKK) ? "Ukendt" : prisDKK.toLocaleString("da-DK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %> DKK
+        </li>
+      </div>
+    </ul>
+  <% } else { %>
+    <p>Ingen resultater fundet.</p>
+  <% } %>
+</div>
+
+<!--<form onsubmit="event.preventDefault(); alert('Testformular sendt');">
+    <input type="hidden" name="symbol" value="<%= //result.symbol %>">
+    <input type="hidden" name="navn" value="<%= //result.navn %>">
+    <input type="hidden" name="pris" value="<%= //result.pris %>">
+    <button class="købKnap">Køb værdipapir</button>
+  </form> -->
+  
+
+  <div class="køb">
+    <form action="/portefolje/<%= porteføljeID %>/buyPapir" method="GET">
+      <input type="hidden" name="symbol" value="<%= result.symbol %>">
+      <input type="hidden" name="navn" value="<%= result.navn %>">
+      <input type="hidden" name="pris" value="<%= result.pris %>">
+      <button class="købKnap">Køb og tilføj til portefølje</button>
+    </form>
+  </div>
+  
+
+
+</body>
+</html>
