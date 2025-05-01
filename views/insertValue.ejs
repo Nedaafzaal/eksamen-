@@ -11,7 +11,7 @@
   <div class="opretInsert">
     <h1>Indsæt værdi på <br> <%=konto.kontonavn %> </h1> <!--overskrift der viser hvilken konto man indsætter værdi på-->
 
-    <form action="/insertValue" method="POST"> <!--definere ruten formularen skal sendes til-->
+    <form action="/konto/insert" method="POST"> <!--definere ruten formularen skal sendes til-->
   
     <input type="hidden" name="kontoID" value="<%= konto.kontoID %>"> <!--Skjult inputfelt, sender konto ID med så serveren ved hvilken konto der skal opdateres-->
 

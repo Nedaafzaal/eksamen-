@@ -125,7 +125,7 @@ button.pil {
   
 .listeOverskrifter, .kontoRække {
     display: grid;
-    grid-template-columns: 180px 180px 180px 180px 180px 180px;
+    grid-template-columns: 200px 200px 200px 200px 200px;
     padding: 12px 0;
     padding-bottom: 30px;
     border-bottom: 1px solid #333;

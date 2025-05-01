@@ -12,7 +12,7 @@
   <div class="opretRemove">
     <h1>Hæv værdi på <br> <%=konto.kontonavn %> </h1> <!--overskrift der viser hvilken konto der hæves fra-->
 
-    <form action="/removeValue" method="POST">
+    <form action="/konto/withdraw" method="POST">
 
     <input type="hidden" name="kontoID" value="<%= konto.kontoID %>"> <!--skjult input felt, sender konto ID så serevren ved hvilken konto beløbet skal indsættes på-->
 

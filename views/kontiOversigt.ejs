@@ -22,8 +22,8 @@
 
     <ul class="menuValg">
       <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
-      <li><a href="/kontiOversigt"><i class='bx bxs-user-account'></i>Konti</a></li>
-      <li><a href="/portefoljeOversigt"><i class='bx bx-doughnut-chart'></i>Porteføljer</a></li>
+      <li><a href="/konto/oversigt"><i class='bx bxs-user-account'></i>Konti</a></li>
+      <li><a href="/portefolje/oversigt"><i class='bx bx-doughnut-chart'></i>Porteføljer</a></li>
       <li><a href="/indstillinger"><i class='bx bx-cog'></i>Indstillinger</a></li>
     </ul>
 
@@ -39,7 +39,7 @@
 
     <!--knap til oprette en ny konto-->
     <div class="tilføjKnapBox">
-      <a href="/tilfojKonto" class="tilføjKnap">Opret ny konto</a>
+      <a href="/konto/opret" class="tilføjKnap">Opret ny konto</a>
     </div> 
 
     <!--boks der indholder en oversigt over eksisterende konti-->
@@ -52,14 +52,13 @@
         <span>Valuta</span>
         <span>Dato Oprettelse</span>
         <span>Bankreference</span>
-        <span>Aktiv/deaktiv</span>
       </div>
 
       
       <!--Det array der er lavet i app.js, gennemgår den nu. Der er tale om et array, hvorfor vi kan lave .length på den-->
       <% if (konti.length > 0) { %> <!--tjekker om konti arrayet har nogle konti-->
         <% konti.forEach(k => { %> <!--løber igennem hver konto i arrayet, k står for hvert objekt-->
-          <a href="/konti/<%= k.kontoID %>" class="kontoRækkeLink"> <!--hver konti bliver et klikbart link til kontoens detaljer-->
+          <a href="/konto/<%= k.kontoID %>" class="kontoRækkeLink"> <!--hver konti bliver et klikbart link til kontoens detaljer-->
             
             <div class="kontoRække"> <!--visning af kontoens data-->
               <div><%= k.kontonavn %></div> 
@@ -67,7 +66,6 @@
               <div><%= k.valuta %></div>
               <div><%= new Date(k.oprettelsesdato).toLocaleDateString('da-DK')%></div> 
               <div><%= k.bankreference %></div> 
-              <div><%=k.aktiv %></div>
             </div>
           </a>
         <% }); %>

@@ -23,8 +23,8 @@
 
     <ul class="menuValg">
       <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
-      <li><a href="/kontiOversigt"><i class='bx bxs-user-account'></i>Konti</a>
-      <li><a href="/portefoljeOversigt"><i class='bx bx-doughnut-chart'></i>Porteføljer</a></li>
+      <li><a href="/konto/oversigt"><i class='bx bxs-user-account'></i>Konti</a>
+      <li><a href="/portefolje/oversigt"><i class='bx bx-doughnut-chart'></i>Porteføljer</a></li>
       <li><a href="/indstillinger"><i class='bx bx-cog'></i>Indstillinger</a></li>
     </ul>
 
@@ -38,7 +38,7 @@
     <h2>Skift adgangskode</h2>
     
     <div class="skiftAdgangskodeBox">
-      <form action="/skiftAdgangskode" method="POST"> <!--formular der sender POST request til serveren-->
+      <form action="/indstillinger" method="POST"> <!--formular der sender POST request til serveren-->
         
         <div class="inputBox">
           <input type="text" placeholder="Brugernavn" name="brugernavn" required>

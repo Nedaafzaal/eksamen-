@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Porteføljeoversigt</title>
-  <link href="./portefoljeOversigt.css" rel="stylesheet" />
+  <link href="/portefoljeOversigt.css" rel="stylesheet" />
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 </head>
 
@@ -12,7 +12,7 @@
   <!-- Sidemenu -->
   <div class="sidemenu">
     <div class="WebappLogo">
-      <img src="logo.jpeg" alt="WebappLogo">
+      <img src="/logo.jpeg" alt="WebappLogo">
     </div>
 
     <button class="pil" onclick="skiftMenu()">
@@ -21,8 +21,8 @@
 
     <ul class="menuValg">
       <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
-      <li><a href="/kontiOversigt"><i class='bx bxs-user-account'></i>Konti</a></li>
-      <li><a href="/portefoljeOversigt"><i class='bx bx-doughnut-chart'></i>Porteføljer</a></li>
+      <li><a href="/konto/oversigt"><i class='bx bxs-user-account'></i>Konti</a></li>
+      <li><a href="/portefolje/oversigt"><i class='bx bx-doughnut-chart'></i>Porteføljer</a></li>
       <li><a href="/indstillinger"><i class='bx bx-cog'></i>Indstillinger</a></li>
     </ul>
 
@@ -38,7 +38,7 @@
 
     <!--Tilføj portefølje-knap-->
     <div class="tilføjKnapBox">
-      <a href="/opretPortefolje" class="tilføjKnap">Opret ny portefølje</a>
+      <a href="/portefolje/opret" class="tilføjKnap">Opret ny portefølje</a>
     </div>      
 
     <!--øverste sektion med samlede indhold-->
@@ -80,7 +80,14 @@
             <div class="porteføljeRække"> 
               <div><%= p.navn %></div> 
               <div><%= p.kontotilknytning %></div> 
-              <div><%= new Date(p.dato).toLocaleDateString("da-DK") %></div>
+              <div>
+                <% if (p.sidsteHandelsDato) { %>
+                  <%= new Date(p.sidsteHandelsDato).toLocaleDateString("da-DK") %>
+                <% } else { %>
+                  <em>Ingen handler endnu</em>
+                <% } %>
+              </div>
+              
               <div><%= new Intl.NumberFormat('da-DK', { style: 'currency', currency: 'DKK' }).format(p.forventetVærdi) %></div>
             </div>
           </a>

@@ -21,8 +21,8 @@
 
     <ul class="menuValg">
       <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
-      <li><a href="/kontiOversigt"><i class='bx bxs-user-account'></i>Konti</a>
-      <li><a href="/portefoljeOversigt"><i class='bx bx-doughnut-chart'></i>Porteføljer</a></li>
+      <li><a href="/konto/oversigt"><i class='bx bxs-user-account'></i>Konti</a>
+      <li><a href="/portefolje/oversigt"><i class='bx bx-doughnut-chart'></i>Porteføljer</a></li>
       <li><a href="/indstillinger"><i class='bx bx-cog'></i>Indstillinger</a></li>
     </ul>
 
@@ -51,8 +51,13 @@
       <!--boks der viser porteføljens samlede værdi-->
       <div class="grafboks">
         <h3>Samlet værdi</h3>
-        <p><%= portefolje.forventetVærdi.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' }) %></p> <!--viser forvnetet værdi for den valgte portefølje-->
+        <% if (aktier.length > 0) { %>
+          <p><%= samletVærdi.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' }) %></p>
+        <% } else { %>
+          <p><em>Ingen aktier i porteføljen endnu</em></p>
+        <% } %>
       </div>
+      
 
     <!--højre side med diagram og oprettelsesdato-->
       <div class="højresideboks">

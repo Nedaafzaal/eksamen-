@@ -21,8 +21,8 @@
 
     <ul class="menuValg">
       <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
-      <li><a href="/kontiOversigt"><i class='bx bxs-user-account'></i>Konti</a></li>
-      <li><a href="/portefoljeOversigt"><i class='bx bx-doughnut-chart'></i>Porteføljer</a></li>
+      <li><a href="/konto/oversigt"><i class='bx bxs-user-account'></i>Konti</a></li>
+      <li><a href="/portefolje/oversigt"><i class='bx bx-doughnut-chart'></i>Porteføljer</a></li>
       <li><a href="/indstillinger"><i class='bx bx-cog'></i>Indstillinger</a></li>
     </ul>
 
@@ -105,9 +105,9 @@
       <div class="venstreBoks">
         <h2>Hæv eller indsæt værdi</h2>
         <div class="knapBoks">
-            <a href="/insertValue/<%= konto.kontoID %>" class="knap">Indsæt værdi</a> <!--Den tager fat i det kontoID man er inde på-->
+            <a href="/konto/insert/<%= konto.kontoID %>" class="knap">Indsæt værdi</a> <!--Den tager fat i det kontoID man er inde på-->
           <br><br>
-          <a href="/removeValue/<%=konto.kontoID %>" class="knap">Hæv værdi</a> <!--link til at hæve værdi fra den aktuelle konto-->
+          <a href="/konto/withdraw/<%=konto.kontoID %>" class="knap">Hæv værdi</a> <!--link til at hæve værdi fra den aktuelle konto-->
         </div>
       </div>
 
@@ -117,13 +117,13 @@
           <h2>Ønsker du at lukke din konto?</h2>
           <p>Vær opmærksom på, at transaktioner ikke kan foretages, når konto er lukket.</p>
           <div class="knapBoks">
-            <a href="/lukKonto/<%= konto.kontoID %>" class="knap2">Luk konto</a> <!--link til at lukke kontoen-->
+            <a href="/konto/close/<%= konto.kontoID %>" class="knap2">Luk konto</a> <!--link til at lukke kontoen-->
           </div>
         <% } else { %> <!--hvis kontoen er lukket-->
           <h2>Ønsker du at åbne din konto?</h2>
           <p>Når kontoen genåbnes, er der igen mulighed for handel.</p>
           <div class="knapBoks">
-            <a href="/openKonto/<%= konto.kontoID %>" class="knap3">Åbn konto</a> <!--link til at åbne kontoen-->
+            <a href="/konto/open/<%= konto.kontoID %>" class="knap3">Åbn konto</a> <!--link til at åbne kontoen-->
           </div>
         <% } %>
       </div> 

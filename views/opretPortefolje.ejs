@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Opret nyt portefølje</title>
-    <link href="./opretPortefolje.css" rel="stylesheet" />
+    <link href="/opretPortefolje.css" rel="stylesheet" />
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 </head>
 
@@ -12,14 +12,14 @@
    <!--container til opret portefølje formular-->
     <div class="opretPortefølje">
         <h1>Opret ny portefølje</h1>
-        <form action="/opretPortefolje" method="POST"> 
+        <form action="/portefolje/opret" method="POST"> 
            
            <div class="opretBox">
               <input type="text" placeholder="Portefølje navn" name="navn" required>
            </div>
            
            <div class="opretBox">
-              <input type="text" placeholder="Kontotilknytning" name="kontoTilknytning" required>
+              <input type="text" placeholder="Kontotilknytning" name="kontotilknytning" required>
               <box-icon type='solid' name='bank'></box-icon>
            </div>
      

@@ -12,20 +12,26 @@
 
 <!--container til søgeresultater-->
 <div class="indhold">
-    <% if (matches.length > 0) { %> <!--tjekker om arrayet indeholder resultater-->
-      <ul> <!--starter en liste over resultater-->
-        <% matches.forEach(match => { %> <!--gennemløber hver match i arrayet-->
-         
-          <div class="liste"> <!--en liste for hvert fundet værdipapir-->
-            <li>Navn: <%= match['2. name'] %></li><br> <!--viser navnet-->
-            <li>Symbol: <%= match['1. symbol'] %></li><br> <!--viser symbolet-->
-            <li>Region: <%= match['4. region'] %> </li><br> <!--viser regionen aktien tilhører-->
+    <% if (result) { %>
+      <ul>
+          <div class="liste">
+            <li>Navn: <%= result.name %></li><br>
+            <li>Symbol: <%= result.symbol %></li><br>
+            <li>Aktiekurs: <%= (result.price * 6.95).toLocaleString("da-DK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %> DKK</li>
         </div>
-        <% }); %>
       </ul>
     <% } else { %>
-      <p>Ingen resultater fundet.</p> <!--hvis ingen matches findes-->
+      <p>Ingen resultater fundet.</p>
     <% } %>
 </div>
+
+<div class="køb">
+    <a href="/registrerHandel/<%= result.symbol %>">Køb aktie</a> <!--Tager fat i den aktie man er inde på -->
+</div>
+
+
 </body>
 </html>
+
+
+
