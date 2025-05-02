@@ -128,17 +128,7 @@ exports.hentTransaktionerForPortefølje = async (req, res) => {
       res.status(500).send("Noget gik galt under søgningen.");
     }
   };
-  
-  
-//   exports.visFakePapir = (req, res) => {
-//     const result = {
-//       symbol: "GOOG",
-//       navn: "Alphabet Inc.",
-//       pris: "2850.33"
-//     };
-//     const portefoljeID = 1;
-//     res.render("searchPapir", { result, portefoljeID });
-//   };
+
   
 
 // Denne funktion bliver kaldt når brugeren køber eller sælger fra en formular
