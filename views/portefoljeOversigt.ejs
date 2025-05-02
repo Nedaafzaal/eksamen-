@@ -55,7 +55,7 @@
 
       <div class="højreØvreBoks">
         <h3>Fordeling af værdi i porteføljer</h3>
-        <p>Diagram kommer</p>
+   <div id="pieChart" style="max-width: 380px; margin: auto;"></div>
       </div>
     </div>
 
@@ -113,5 +113,31 @@
       menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
     }
   </script>
+  <!-- ApexCharts script -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+  // Fake data til portefølje-fordeling
+  var options = {
+    chart: {
+      type: 'pie',
+    },
+    labels: ['Growth Tech', 'Tech Leaders', 'ETF +', 'Space & Defence', 'E-Com'],
+    series: [35000, 12000, 24000, 14000, 15000], // værdierne skal matche labels
+    responsive: [{
+      breakpoint: 480,
+      options: {
+        chart: {
+          width: 320
+        },
+        legend: {
+          position: 'bottom'
+        }
+      }
+    }]
+  };
+
+  var chart = new ApexCharts(document.querySelector("#pieChart"), options);
+  chart.render();
+</script>
 </body>
 </html>
