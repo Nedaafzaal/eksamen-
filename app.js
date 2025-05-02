@@ -7,8 +7,26 @@ const dashboardRoute = require("./routes/dashboardRoute");
 const accountRoute = require("./routes/accountRoute");
 const portfolioRoutes = require("./routes/portfolioRoute");
 
+const session = require('express-session');
+
 
 const app = express();
+
+//test
+app.use(session({
+  secret: 'hemmeligKode', // udskift med noget stærkere i produktion
+  resave: false,
+  saveUninitialized: false
+}));
+
+//test
+app.use((req, res, next) => {
+  if (!req.session.brugerID) {
+    req.session.brugerID = 8; 
+  }
+  next();
+});
+
 
 // Gør det muligt at læse form-data og serve CSS mv.
 app.use(bodyParser.urlencoded({ extended: true }));

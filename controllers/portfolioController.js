@@ -128,7 +128,17 @@ exports.hentTransaktionerForPortefølje = async (req, res) => {
       res.status(500).send("Noget gik galt under søgningen.");
     }
   };
-
+  
+  
+//   exports.visFakePapir = (req, res) => {
+//     const result = {
+//       symbol: "GOOG",
+//       navn: "Alphabet Inc.",
+//       pris: "2850.33"
+//     };
+//     const portefoljeID = 1;
+//     res.render("searchPapir", { result, portefoljeID });
+//   };
   
 
 // Denne funktion bliver kaldt når brugeren køber eller sælger fra en formular
@@ -149,14 +159,19 @@ exports.købEllerSælg = async function (req, res) {
         tickerSymbol: req.body.tickerSymbol
       };
 
-      console.log("Modtaget kontoID:", req.body.kontoID);
+      //ren test
+    //   console.log("Modtaget kontoID:", req.body.kontoID);
+    //   console.log("TickerSymbol:", data.tickerSymbol);
+    //     console.log("Kontoer:", konti);
+    //     console.log("Valgt kontoID:", kontoID);
+
 
   
       // Vi beder modellen om at lave handlen
       await registrerHandel(data);
   
       // Vi sender brugeren tilbage til forsiden eller en bekræftelse
-      res.redirect("/portfolio/succes");
+      res.redirect("/portefolje/oversigt");
   
     } catch (err) {
       console.error("Fejl under handel:", err.message);
@@ -164,22 +179,7 @@ exports.købEllerSælg = async function (req, res) {
     }
   }
 
-  exports.visBuyPapirForm = async (req, res) => {
-    const { symbol, navn, pris } = req.query;
-    const portefoljeID = parseInt(req.params.id);
 
-    const konti = await hentKontiForBruger(req.session.brugerID); // lav denne funktion i model
-    const kontoID = konti[0].konto_id; // eller lad brugeren vælge
-
-  
-    res.render("buyPapir", {
-      tickerSymbol: symbol,
-      navn,
-      pris,
-      portefoljeID,
-      kontoID
-    });
-  };
 
 
 

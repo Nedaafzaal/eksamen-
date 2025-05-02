@@ -13,7 +13,9 @@ exports.visAlleKonti = async (req, res) => {
 
 // Vis én konto og dens transaktioner
 exports.visEnKonto = async (req, res) => {
-  const kontoID = req.params.id;
+    
+const kontoID = req.params.id;
+
   const konto = await accountModel.hentKontoMedID(kontoID);
   if (!konto) {
     return res.status(404).send("Konto med ID " + kontoID + " blev ikke fundet.");
