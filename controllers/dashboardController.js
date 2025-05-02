@@ -1,9 +1,8 @@
 const fetch = require("node-fetch");
 const dashboardModel = require("../models/dashboardModel");
-const API_KEY = "OKH4D18S9F8SQCQR";
+const API_KEY = "d0ad5fpr01qm3l9kmfg0d0ad5fpr01qm3l9kmfgg";
 const symbols = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA'];
 
-// Sæt pause mellem API-kald (for at undgå rate-limits)
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 exports.visDashboard = async (req, res) => {
@@ -16,11 +15,10 @@ exports.visDashboard = async (req, res) => {
     let totalUrealiseret = 0;
 
     for (const aktie of porteføljer) {
-      const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${aktie.tickerSymbol}&apikey=${API_KEY}`;
+      const url = `https://finnhub.io/api/v1/quote?symbol=${aktie.tickerSymbol}&token=${API_KEY}`;
       const response = await fetch(url);
       const data = await response.json();
-      const quote = data["Global Quote"];
-      const aktuelPris = parseFloat(quote?.["05. price"]);
+      const aktuelPris = parseFloat(data.c);
 
       if (!isNaN(aktuelPris)) {
         const værdi = aktuelPris * aktie.antal;
@@ -34,7 +32,7 @@ exports.visDashboard = async (req, res) => {
       top5Profit,
       totalVærdi,
       totalUrealiseret,
-      totalRealiseret: 0 // Placeholder
+      totalRealiseret: 0
     });
 
   } catch (err) {
@@ -47,15 +45,15 @@ async function hentTopAktier() {
   const resultater = [];
 
   for (const symbol of symbols) {
-    const url = `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${symbol}&apikey=${API_KEY}`;
+    const url = `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${API_KEY}`;
     const response = await fetch(url);
     const data = await response.json();
 
-    if (data.MarketCapitalization) {
+    if (data.marketCapitalization) {
       resultater.push({
         symbol: symbol,
-        name: data.Name,
-        marketCap: Number(data.MarketCapitalization),
+        name: data.name,
+        marketCap: Number(data.marketCapitalization),
       });
     }
   }
@@ -67,17 +65,14 @@ async function hentTopUrealiseretGevinst(porteføljer) {
   const resultater = [];
 
   for (const aktie of porteføljer) {
-    const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${aktie.tickerSymbol}&apikey=${API_KEY}`;
-    await sleep(15000); // Vent 15 sekunder
+    const url = `https://finnhub.io/api/v1/quote?symbol=${aktie.tickerSymbol}&token=${API_KEY}`;
+    await sleep(1100); // 60 calls/min limit = 1 call per 1.1s
 
     try {
       const response = await fetch(url);
-      const json = await response.json();
-      const quote = json["Global Quote"];
+      const data = await response.json();
+      const aktuelPris = parseFloat(data.c);
 
-      if (!quote || !quote["05. price"]) continue;
-
-      const aktuelPris = parseFloat(quote["05. price"]);
       if (isNaN(aktuelPris)) continue;
 
       const gevinst = (aktuelPris - aktie.pris) * aktie.antal;
@@ -94,22 +89,8 @@ async function hentTopUrealiseretGevinst(porteføljer) {
     }
   }
 
-  async (req, res) => {
-    const brugerID = req.cookies.brugerID;
-  
-    if (!brugerID) {
-      return res.redirect("/login"); // bruger ikke logget ind
-    }
-  
-    // resten af dashboardkode...
-    res.render("dashboard", { brugerID }); // evt. send ID videre
-  };
-  
-
   return resultater
     .filter(r => !isNaN(r.gevinst))
     .sort((a, b) => b.gevinst - a.gevinst)
     .slice(0, 5);
 }
-
-
