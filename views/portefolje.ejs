@@ -101,7 +101,9 @@
             <div><%= p.navn %></div> 
             <div><%= p.antal %></div> 
             <div><%= p.pris.toFixed(2) %> DKK</div>
-            <div><%= p.forventetVærdi.toFixed(2) %> DKK</div> 
+            <div>
+              <%= p.forventetVærdi != null ? p.forventetVærdi.toFixed(2) + ' DKK' : 'Ukendt værdi' %>
+            </div>
             <div><%= p.GAK %></div> 
           </div>
         <% }) %>

@@ -1,6 +1,6 @@
 const fetch = require("node-fetch");
 const dashboardModel = require("../models/dashboardModel");
-const API_KEY = "GY0SQMNEUKYK1G4N";
+const API_KEY = "OKH4D18S9F8SQCQR";
 const symbols = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA'];
 
 // Sæt pause mellem API-kald (for at undgå rate-limits)

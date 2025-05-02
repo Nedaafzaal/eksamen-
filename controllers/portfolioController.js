@@ -132,7 +132,13 @@ exports.hentTransaktionerForPortefølje = async (req, res) => {
   //funktion som henter køb formular
   exports.visBuyPapirForm = async (req, res) => {
     console.log("visBuyPapirForm kaldt med query:", req.query)
+
     const { symbol, navn, pris } = req.query;
+
+    if (!symbol || !navn || !pris) {
+        return res.redirect(`/dashboard?fejl=missing_data`);
+      }
+      
     const portefoljeID = parseInt(req.params.id);
   
     const konti = await portfolioModel.hentKontiForBruger(req.session.brugerID);
@@ -150,6 +156,8 @@ exports.hentTransaktionerForPortefølje = async (req, res) => {
       portefoljeID,
       konti
     });
+
+      
   };
   
 
