@@ -7,20 +7,18 @@ exports.visLoginSide = (req, res) => {
 
 // Når brugeren prøver at logge ind
 exports.login = async (req, res) => {
-  const { brugernavn, adgangskode } = req.body; // vi henter det, brugeren skrev i formularen
-
-  const bruger = await brugerData.hentBruger(brugernavn); // vi kigger i databasen
+  const { brugernavn, adgangskode } = req.body;
+  const bruger = await brugerData.hentBruger(brugernavn);
 
   if (!bruger) {
-    // hvis vi ikke fandt brugeren
     return res.render("login", { fejl: "Forkert brugernavn" });
   }
 
   if (adgangskode === bruger.adgangskode) {
-    // adgangskoden passer
+    // ✅ Sæt cookie med brugerID (gemmes i browseren)
+    res.cookie("brugerID", bruger.brugerID, { httpOnly: true });
     return res.redirect("/dashboard");
   } else {
-    // adgangskoden passer ikke
     return res.render("login", { fejl: "Forkert adgangskode" });
   }
 };

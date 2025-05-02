@@ -94,6 +94,18 @@ async function hentTopUrealiseretGevinst(porteføljer) {
     }
   }
 
+  async (req, res) => {
+    const brugerID = req.cookies.brugerID;
+  
+    if (!brugerID) {
+      return res.redirect("/login"); // bruger ikke logget ind
+    }
+  
+    // resten af dashboardkode...
+    res.render("dashboard", { brugerID }); // evt. send ID videre
+  };
+  
+
   return resultater
     .filter(r => !isNaN(r.gevinst))
     .sort((a, b) => b.gevinst - a.gevinst)
