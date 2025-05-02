@@ -9,7 +9,7 @@
 </head>
 
 <body>
-<!--Sidemenu navigation-->
+  <!--Sidemenu navigation-->
   <div class="sidemenu">
     <div class="WebappLogo">
       <img src="/logo.jpeg" alt="WebappLogo">
@@ -35,28 +35,24 @@
   <div class="indhold">
 
     <div class="overskrift">
-      <h1><%= portefolje.navn %></h1> <!--navnet hentes fra valgt portefølje-->
+      <h1><%= portefolje.navn %></h1>
 
-      <!--søgefelt til at finde værdipapirer-->
-      
+      <!--søgefelt-->
       <form action="/portefolje/<%= portefolje.porteføljeID %>/searchPapir" method="GET" class="søgForm">
         <input type="text" name="query" placeholder="Søg efter navn på værdipapir" required>
         <button type="submit">Søg</button>
       </form>
-      
-    <!--Tilføj portefølje-knap-->
-    <div class="tilføjKnapBox">
-      <form action="/portefolje/<%= portefolje.porteføljeID %>/handelshistorik" method="GET" class="tilføjKnap">
-        <button type="submit">Handelshistorik</button>
-      </form>
+
+      <!--Handelshistorik-knap-->
+      <div class="tilføjKnapBox">
+        <form action="/portefolje/<%= portefolje.porteføljeID %>/handelshistorik" method="GET" class="tilføjKnap">
+          <button type="submit">Handelshistorik</button>
+        </form>
+      </div>
     </div>
-  </div>
-    
 
-
-    <!--øverste sektion med samlet værdi og oplysninger-->
+    <!-- Øverste sektion -->
     <div class="øverste">
-      <!--boks der viser porteføljens samlede værdi-->
       <div class="grafboks">
         <h3>Samlet værdi</h3>
         <% if (værdipapirer.length > 0) { %>
@@ -66,13 +62,11 @@
         <% } %>
       </div>
 
-      <!--højre side med diagram og oprettelsesdato-->
       <div class="højresideboks">
         <div class="diagramBoks">
           <h3>Fordeling af værdi</h3>
-      <div id="pieChart" style="width: 100%; max-width: 900px; height: 900px; margin: auto;"></div>
+          <div id="pieChart" style="width: 100%; max-width: 900px; height: 900px; margin: auto;"></div>
         </div>
-
         <div class="højrenedreboks">
           <h3>Dato oprettet</h3>
           <p><%= new Date(portefolje.dato).toLocaleDateString('da-DK') %></p>
@@ -80,7 +74,7 @@
       </div>
     </div>
 
-    <!--Oversigt over værdipapirer i portefølje-->
+    <!-- Oversigt over værdipapirer -->
     <div class="oversigtBox">
       <h3>Værdipapirer i portefølje</h3>
       <div class="listeOverskrifter">
@@ -91,20 +85,20 @@
         <span>Pris</span>
         <span>Værdi</span>
         <span>GAK</span>
-
-
       </div>
 
       <% if (værdipapirer.length > 0) { %>
         <% værdipapirer.forEach(p => { %> 
           <div class="aktieRække"> 
-            <div><%= p.navn %></div> 
-            <div><%= p.antal %></div> 
-            <div><%= p.pris.toFixed(2) %> DKK</div>
+            <div><%= p.navn || 'Ukendt' %></div> 
+            <div><%= p.type || 'Ukendt' %></div> 
+            <div><%= p.tickerSymbol || 'Ukendt' %></div>
+            <div><%= !isNaN(p.antal) ? p.antal : 'Ukendt' %></div>
+            <div><%= !isNaN(p.pris) ? parseFloat(p.pris).toFixed(2) + ' DKK' : 'Ukendt' %></div>
             <div>
-              <%= p.forventetVærdi != null ? p.forventetVærdi.toFixed(2) + ' DKK' : 'Ukendt værdi' %>
+              <%= !isNaN(p.forventetVærdi) ? parseFloat(p.forventetVærdi).toFixed(2) + ' DKK' : 'Ukendt værdi' %>
             </div>
-            <div><%= p.GAK %></div> 
+            <div><%= p.GAK || 'Ukendt' %></div>
           </div>
         <% }) %>
       <% } else { %>
@@ -119,52 +113,54 @@
       }
     </script>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script>
+    const værdipapirer = <%- JSON.stringify(værdipapirer) %>;
 
-<script>
-  const værdipapirer = <%- JSON.stringify(værdipapirer) %>;
+    const labels = værdipapirer.map(p => p.navn || 'Ukendt');
+    const series = værdipapirer.map(p =>
+      !isNaN(p.pris) && !isNaN(p.antal) ? p.antal * p.pris : 0
+    );
 
-  const labels = værdipapirer.map(p => p.navn);
-  const series = værdipapirer.map(p => p.antal * p.pris);
-
-  const options = {
-    chart: {
-      type: 'pie',
-      height: 1000, // højden øget her
-    },
-    series: series,
-    labels: labels,
-    title: {
-      text: 'Fordeling af porteføljens værdi',
-      align: 'center'
-    },
-    legend: {
-      position: 'right',
-      fontSize: '14px'
-    },
-    tooltip: {
-      y: {
-        formatter: function (val) {
-          return val.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' });
+    const options = {
+      chart: {
+        type: 'pie',
+        height: 1000,
+      },
+      series: series,
+      labels: labels,
+      title: {
+        text: 'Fordeling af porteføljens værdi',
+        align: 'center'
+      },
+      legend: {
+        position: 'right',
+        fontSize: '14px'
+      },
+      tooltip: {
+        y: {
+          formatter: function (val) {
+            return val.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' });
+          }
         }
-      }
-    },
-    responsive: [{
-      breakpoint: 768,
-      options: {
-        chart: {
-          width: 320,
-          height: 300
-        },
-        legend: {
-          position: 'bottom'
+      },
+      responsive: [{
+        breakpoint: 768,
+        options: {
+          chart: {
+            width: 320,
+            height: 300
+          },
+          legend: {
+            position: 'bottom'
+          }
         }
-      }
-    }]
-  };
+      }]
+    };
 
-  const chart = new ApexCharts(document.querySelector("#pieChart"), options);
-  chart.render();
-</script>
+    const chart = new ApexCharts(document.querySelector("#pieChart"), options);
+    chart.render();
+  </script>
 </body>
 </html>

@@ -18,7 +18,7 @@ exports.visPortefoljeOversigt = async (req, res) => {
 // Viser én bestemt portefølje og dens aktier
 exports.visEnPortefolje = async (req, res) => {
   const portefoljeID = parseInt(req.params.id, 10);
-  console.log("hej");
+
 
   if (isNaN(portefoljeID)) {
     return res.status(400).send("Ugyldigt portefølje-ID");
