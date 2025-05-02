@@ -105,20 +105,20 @@ async function registrerHandel(data) {
     const pengePåKonto = result.recordset[0]?.saldo;
   
     if (pengePåKonto == null) {
-      throw new Error("Kontoen blev ikke fundet.");
+      throw new Error("Der er ikke nok penge på konto.");
     }
   
-    const prisMedGeby = data.pris + (data.gebyr || 0);
+    const prisMedGebyr = data.pris + (data.gebyr || 0);
   
     // 2. Tjek om vi har penge nok til at købe
-    if (data.type === "køb" && pengePåKonto < prisMedGeby) {
+    if (data.type === "køb" && pengePåKonto < prisMedGebyr) {
       throw new Error("Du har ikke nok penge til at købe.");
     }
   
     // 3. Regn ud hvor mange penge der er tilbage
     const nySaldo = data.type === "køb"
-      ? pengePåKonto - prisMedGeby
-      : pengePåKonto + prisMedGeby;
+      ? pengePåKonto - prisMedGebyr
+      : pengePåKonto + prisMedGebyr;
   
     // 4. Gem den nye saldo
     await db.request()

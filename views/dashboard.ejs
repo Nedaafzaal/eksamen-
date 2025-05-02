@@ -94,16 +94,20 @@
           <div class="kolonne">Value</div>
         </div>
 
-        <% top5Profit.forEach(function(stock) { %>
-          <div class="top5-row">
-            <div class="kolonne">
-              <strong><%= stock.symbol %></strong><br>
-              <small>Gevinst: <%= stock.gevinst.toFixed(2) %> DKK</small>
+        <% if (top5Profit && top5Profit.length > 0) { %>
+          <% top5Profit.forEach(function(stock) { %>
+            <div class="top5-row">
+              <div class="kolonne">
+                <strong><%= stock.symbol %></strong><br>
+                <small>Gevinst: <%= stock.gevinst.toLocaleString("da-DK", { style: "currency", currency: "DKK" }) %></small>
+              </div>
+              <div class="kolonne"><%= stock.portefølje %></div>
+              <div class="kolonne"><%= stock.samletVærdi.toLocaleString("da-DK", { style: "currency", currency: "DKK" }) %></div>
             </div>
-            <div class="kolonne"><%= stock.portefølje %></div>
-            <div class="kolonne"><%= stock.samletVærdi.toLocaleString() %> DKK</div>
-          </div>
-        <% }); %>
+          <% }); %>
+        <% } else { %>
+          <p style="padding: 1rem;">Ingen gevinstdata tilgængelig.</p>
+        <% } %>
 
         <!-- Indhold til profit liste tilføjes senere -->
       </div>

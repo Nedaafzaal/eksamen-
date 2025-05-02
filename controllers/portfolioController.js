@@ -45,12 +45,10 @@ exports.visEnPortefolje = async (req, res) => {
   }
 };
 
-
 // Viser formularen til at oprette ny portefølje
 exports.visOpretPortefoljeFormular = (req, res) => {
   res.render("opretPortefolje");
 };
-
 
 // Når brugeren sender formularen og vil oprette ny portefølje
 exports.opretPortefolje = async (req, res) => {
@@ -69,7 +67,6 @@ exports.opretPortefolje = async (req, res) => {
     res.status(500).send("Kunne ikke oprette portefølje.");
   }
 };
-
 
 // Viser køb/salg transaktioner for en portefølje
 exports.hentTransaktionerForPortefølje = async (req, res) => {
@@ -180,25 +177,20 @@ exports.købEllerSælg = async function (req, res) {
   exports.visBuyPapirForm = async (req, res) => {
     const { symbol, navn, pris } = req.query;
     const portefoljeID = parseInt(req.params.id);
-  
-    try {
-      const konti = await hentKontiForBruger(req.session.brugerID); // du skal implementere denne funktion
-      const kontoID = konti[0].konto_id;
-  
-      res.render("buyPapir", {
-        tickerSymbol: symbol,
-        navn,
-        pris,
-        portefoljeID,
-        kontoID
-      });
 
-    } catch (err) {
-      console.error("Fejl ved hentning af konto:", err);
-      res.status(500).send("Kunne ikke hente konto til køb.");
-    }
-  };
+    const konti = await hentKontiForBruger(req.session.brugerID); // lav denne funktion i model
+    const kontoID = konti[0].konto_id; // eller lad brugeren vælge
+
   
+    res.render("buyPapir", {
+      tickerSymbol: symbol,
+      navn,
+      pris,
+      portefoljeID,
+      kontoID
+    });
+  };
+
 
 
  
