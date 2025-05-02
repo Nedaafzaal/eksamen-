@@ -5,6 +5,17 @@ const symbols = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA'];
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+// Simpel in-memory cache med TTL (time to live)
+const cache = {};
+function setCache(key, data, ttlMs) {
+  cache[key] = { data, expires: Date.now() + ttlMs };
+}
+function getCache(key) {
+  const entry = cache[key];
+  if (entry && Date.now() < entry.expires) return entry.data;
+  return null;
+}
+
 exports.visDashboard = async (req, res) => {
   try {
     const top5 = await hentTopAktier();
@@ -15,9 +26,13 @@ exports.visDashboard = async (req, res) => {
     let totalUrealiseret = 0;
 
     for (const aktie of porteføljer) {
-      const url = `https://finnhub.io/api/v1/quote?symbol=${aktie.tickerSymbol}&token=${API_KEY}`;
-      const response = await fetch(url);
-      const data = await response.json();
+      const quoteUrl = `https://finnhub.io/api/v1/quote?symbol=${aktie.tickerSymbol}&token=${API_KEY}`;
+      let data = getCache(quoteUrl);
+      if (!data) {
+        const response = await fetch(quoteUrl);
+        data = await response.json();
+        setCache(quoteUrl, data, 5 * 60 * 1000); // cache i 5 minutter
+      }
       const aktuelPris = parseFloat(data.c);
 
       if (!isNaN(aktuelPris)) {
@@ -45,9 +60,13 @@ async function hentTopAktier() {
   const resultater = [];
 
   for (const symbol of symbols) {
-    const url = `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${API_KEY}`;
-    const response = await fetch(url);
-    const data = await response.json();
+    const profileUrl = `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${API_KEY}`;
+    let data = getCache(profileUrl);
+    if (!data) {
+      const response = await fetch(profileUrl);
+      data = await response.json();
+      setCache(profileUrl, data, 60 * 60 * 1000); // cache i 1 time
+    }
 
     if (data.marketCapitalization) {
       resultater.push({
@@ -65,28 +84,28 @@ async function hentTopUrealiseretGevinst(porteføljer) {
   const resultater = [];
 
   for (const aktie of porteføljer) {
-    const url = `https://finnhub.io/api/v1/quote?symbol=${aktie.tickerSymbol}&token=${API_KEY}`;
-    await sleep(1100); // 60 calls/min limit = 1 call per 1.1s
+    const quoteUrl = `https://finnhub.io/api/v1/quote?symbol=${aktie.tickerSymbol}&token=${API_KEY}`;
+    await sleep(1100); // rate-limit
 
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      const aktuelPris = parseFloat(data.c);
-
-      if (isNaN(aktuelPris)) continue;
-
-      const gevinst = (aktuelPris - aktie.pris) * aktie.antal;
-      const samletVærdi = aktuelPris * aktie.antal;
-
-      resultater.push({
-        symbol: aktie.tickerSymbol,
-        portefølje: aktie.navn,
-        gevinst,
-        samletVærdi,
-      });
-    } catch (err) {
-      console.error("Fejl ved hentning af aktiekurs:", aktie.tickerSymbol, err);
+    let data = getCache(quoteUrl);
+    if (!data) {
+      const response = await fetch(quoteUrl);
+      data = await response.json();
+      setCache(quoteUrl, data, 5 * 60 * 1000); // cache i 5 minutter
     }
+
+    const aktuelPris = parseFloat(data.c);
+    if (isNaN(aktuelPris)) continue;
+
+    const gevinst = (aktuelPris - aktie.pris) * aktie.antal;
+    const samletVærdi = aktuelPris * aktie.antal;
+
+    resultater.push({
+      symbol: aktie.tickerSymbol,
+      portefølje: aktie.navn,
+      gevinst,
+      samletVærdi,
+    });
   }
 
   return resultater
