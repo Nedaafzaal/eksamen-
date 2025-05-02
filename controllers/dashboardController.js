@@ -1,7 +1,10 @@
 const fetch = require("node-fetch");
 const dashboardModel = require("../models/dashboardModel");
-const API_KEY = "O0BF870MTVK71KVQ";
+const API_KEY = "GY0SQMNEUKYK1G4N";
 const symbols = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA'];
+
+// Sæt pause mellem API-kald (for at undgå rate-limits)
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 exports.visDashboard = async (req, res) => {
   try {
@@ -65,22 +68,36 @@ async function hentTopUrealiseretGevinst(porteføljer) {
 
   for (const aktie of porteføljer) {
     const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${aktie.tickerSymbol}&apikey=${API_KEY}`;
-    const response = await fetch(url);
-    const json = await response.json();
-    const quote = json["Global Quote"];
-    if (!quote || !quote["05. price"]) continue;
+    await sleep(15000); // Vent 15 sekunder
 
-    const aktuelPris = parseFloat(quote["05. price"]);
-    const gevinst = (aktuelPris - aktie.pris) * aktie.antal;
-    const samletVærdi = aktuelPris * aktie.antal;
+    try {
+      const response = await fetch(url);
+      const json = await response.json();
+      const quote = json["Global Quote"];
 
-    resultater.push({
-      symbol: aktie.tickerSymbol,
-      portefølje: aktie.navn,
-      gevinst,
-      samletVærdi,
-    });
+      if (!quote || !quote["05. price"]) continue;
+
+      const aktuelPris = parseFloat(quote["05. price"]);
+      if (isNaN(aktuelPris)) continue;
+
+      const gevinst = (aktuelPris - aktie.pris) * aktie.antal;
+      const samletVærdi = aktuelPris * aktie.antal;
+
+      resultater.push({
+        symbol: aktie.tickerSymbol,
+        portefølje: aktie.navn,
+        gevinst,
+        samletVærdi,
+      });
+    } catch (err) {
+      console.error("Fejl ved hentning af aktiekurs:", aktie.tickerSymbol, err);
+    }
   }
 
-  return resultater.sort((a, b) => Math.abs(b.gevinst) - Math.abs(a.gevinst)).slice(0, 5);
+  return resultater
+    .filter(r => !isNaN(r.gevinst))
+    .sort((a, b) => b.gevinst - a.gevinst)
+    .slice(0, 5);
 }
+
+

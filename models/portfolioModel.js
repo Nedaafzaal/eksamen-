@@ -96,6 +96,8 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
  // Denne funktion bruges til at købe eller sælge værdipapirer
 async function registrerHandel(data) {
     const db = await sql.connect(sqlConfig);
+
+    console.log(data);
   
     // 1. Find ud af hvor mange penge der er på kontoen
     const result = await db.request()
@@ -103,6 +105,8 @@ async function registrerHandel(data) {
       .query("SELECT saldo FROM eksamenSQL.konto WHERE kontoID = @kontoID");
   
     const pengePåKonto = result.recordset[0]?.saldo;
+    console.log("Saldo:", pengePåKonto);
+
   
     if (pengePåKonto == null) {
       throw new Error("Der er ikke nok penge på konto.");
@@ -111,7 +115,7 @@ async function registrerHandel(data) {
     const prisMedGebyr = data.pris + (data.gebyr || 0);
   
     // 2. Tjek om vi har penge nok til at købe
-    if (data.type === "køb" && pengePåKonto < prisMedGebyr) {
+    if (pengePåKonto < prisMedGebyr) {
       throw new Error("Du har ikke nok penge til at købe.");
     }
   
@@ -160,6 +164,18 @@ async function registrerHandel(data) {
     }
   }
   
+  // Hent alle konti for en bestemt bruger
+async function hentKontiForBruger(brugerID) {
+    const db = await sql.connect(sqlConfig);
+    const result = await db.request()
+      .input("brugerID", sql.Int, brugerID)
+      .query(`
+        SELECT * FROM eksamenSQL.konto WHERE brugerID = @brugerID
+      `);
+  
+    return result.recordset;
+  }
+  
   
   module.exports = {
     hentAllePortefoljer,
@@ -170,5 +186,6 @@ async function registrerHandel(data) {
     hentTransaktionerForPortefølje,
     tilføjVærdipapirTilPortefølje,
     registrerHandel,
+    hentKontiForBruger
   };
   
