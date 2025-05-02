@@ -1,35 +1,32 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const path = require("path");
-const cookieParser = require("cookie-parser");
+const express = require("express"); //importere express som bruges til at bygge web-serevren 
+const bodyParser = require("body-parser"); //importeres til at læse data fra formulare (req.body)
+const path = require("path"); //importere node.js indbyggede modul til at arbejde med filstier 
+const cookieParser = require("cookie-parser"); //bruges til at læse cookies fra brugeren 
 
-const userRoutes = require("./routes/userRoute"); // samlet rute til login, opret, indstillinger
-const dashboardRoute = require("./routes/dashboardRoute");
-const accountRoute = require("./routes/accountRoute");
-const portfolioRoutes = require("./routes/portfolioRoute");
+//importerer ruterne 
+const userRoutes = require("./routes/userRoute"); 
+const dashboardRoute = require("./routes/dashboardRoute"); 
+const accountRoute = require("./routes/accountRoute"); 
+const portfolioRoutes = require("./routes/portfolioRoute"); 
 
-const app = express();
+const app = express(); //opretter express applikation
 
-// Gør det muligt at læse form-data og serve CSS mv.
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
-app.use(cookieParser()); // 🟢 nødvendigt for at læse cookies
 
-// Brug EJS som template engine
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+app.use(bodyParser.urlencoded({ extended: true })); //gør det muligt at læse data fra formularer
+app.use(express.static(path.join(__dirname, "public"))); //gør det muligt at vise statiske filer fra public mappen
+app.use(cookieParser()); //gør det muligt at læse cookies 
 
-// Brug ruter
+
+app.set("view engine", "ejs"); //fortæller at vi bruger ejs til at vise html sider
+app.set("views", path.join(__dirname, "views")); //fortæller at ejs ligger i views 
+
+//brug de forskellige ruter 
 app.use("/", userRoutes);
 app.use("/dashboard", dashboardRoute);
 app.use("/konto", accountRoute);
 app.use("/portefolje", portfolioRoutes);
 
-
-
-// app.use("/portefolje", portefoljeRoute);
-
-// Start server
+//start serveren 
 app.listen(3000, () => {
   console.log("http://localhost:3000");
 });
