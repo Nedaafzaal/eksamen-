@@ -28,17 +28,26 @@ async function hentPortefoljeMedID(ID) {
 
 // Hent alle værdipapirer, der tilhører en bestemt portefølje
 async function hentVærdipapirerTilPortefølje(porteføljeID) {
-  const db = await sql.connect(sqlConfig);
-  const result = await db.request()
-    .input("porteføljeID", sql.Int, porteføljeID)
-    .query(`
-      SELECT navn, tickerSymbol, type, antal, pris, forventetVærdi, GAK, urealiseretPorteføljeGevinstTab
-      FROM eksamenSQL.værdipapir
-      WHERE porteføljeID = @porteføljeID
-    `);
-
-  return result.recordset;
-}
+    const db = await sql.connect(sqlConfig);
+    const result = await db.request()
+      .input("porteføljeID", sql.Int, porteføljeID)
+      .query(`
+        SELECT 
+          værdipapirID AS id, 
+          navn, 
+          tickerSymbol, 
+          type, 
+          antal, 
+          pris, 
+          forventetVærdi, 
+          GAK, 
+          urealiseretPorteføljeGevinstTab
+        FROM eksamenSQL.værdipapir
+        WHERE porteføljeID = @porteføljeID
+      `);
+  
+    return result.recordset;
+  }  
 
 // Hent samlet værdi for alle porteføljer ud fra værdipapirer
 async function hentSamletVærdiForAllePorteføljer() {
@@ -207,6 +216,24 @@ async function hentKontiForBruger(brugerID) {
     return gak;
   }
   
+  async function hentVærdipapirMedID(id) {
+    const db = await sql.connect(sqlConfig);
+    const result = await db.request()
+      .input("id", sql.Int, id)
+      .query(`SELECT 
+        værdipapirID,
+        porteføljeID, 
+        navn, 
+        tickerSymbol, 
+        type, antal, 
+        pris, 
+        GAK 
+        FROM eksamenSQL.værdipapir
+        WHERE værdipapirID = @id`);
+  
+    return result.recordset[0];
+  }
+  
   
   module.exports = {
     hentAllePortefoljer,
@@ -218,6 +245,7 @@ async function hentKontiForBruger(brugerID) {
     tilføjVærdipapirTilPortefølje,
     registrerHandel,
     hentKontiForBruger,
-    hentGAK
+    hentGAK,
+    hentVærdipapirMedID
   };
   

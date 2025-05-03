@@ -197,15 +197,31 @@ exports.hentTransaktionerForPortefølje = async (req, res) => {
     }
   };
   
+  exports.visVærdipapirDetaljer = async (req, res) => {
+    const værdipapirID = parseInt(req.params.id, 10);
+    
+    console.log("param:", req.params.værdipapirID);
+
+    if (isNaN(værdipapirID)) {
+      return res.status(400).send("Ugyldigt værdipapir-ID");
+    }
   
-
-      //ren test
-    //   console.log("Modtaget kontoID:", req.body.kontoID);
-    //   console.log("TickerSymbol:", data.tickerSymbol);
-    //     console.log("Kontoer:", konti);
-    //     console.log("Valgt kontoID:", kontoID);
-
-
+    try {
+      const værdipapir = await portfolioModel.hentVærdipapirMedID(værdipapirID);
+      if (!værdipapir) {
+        return res.status(404).send("Værdipapir ikke fundet.");
+      }
+  
+      res.render("valueInfo", { værdipapir }); 
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Fejl ved visning af værdipapir.");
+    }
+  };
+  
+  
+  
+  
 
 
 

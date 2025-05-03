@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= værdipapir.navn %> - Detaljer</title>
+  <link href="/valueInfo.css" rel="stylesheet">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
+</head>
+
+<body>
+  <!-- Sidemenu -->
+  <div class="sidemenu">
+    <div class="WebappLogo">
+      <img src="/logo.jpeg" alt="WebappLogo">
+    </div>
+
+    <button class="pil" onclick="skiftMenu()"> 
+      <i class='bx bxs-chevron-left'></i>
+    </button>
+
+    <ul class="menuValg">
+      <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
+      <li><a href="/konto/oversigt"><i class='bx bxs-user-account'></i>Konti</a></li>
+      <li><a href="/portefolje/oversigt"><i class='bx bx-doughnut-chart'></i>Porteføljer</a></li>
+      <li><a href="/indstillinger"><i class='bx bx-cog'></i>Indstillinger</a></li>
+    </ul>
+
+    <ul class="logUd">
+      <li><a href="/login"><i class='bx bx-log-out'></i>Log ud</a></li>
+    </ul>
+  </div>
+
+  <!-- Indhold -->
+  <div class="indhold">
+    <div class="overskrift">
+      <h1>Detaljer for <%= værdipapir.navn %></h1>
+    </div>
+
+    <div class="oversigtBox">
+      <div class="listeOverskrifter">
+        <span>Navn</span>
+        <span>Type</span>
+        <span>Symbol</span>
+        <span>Antal</span>
+        <span>Pris</span>
+        <span>Værdi</span>
+        <span>GAK</span>
+      </div>
+
+      <div class="aktieRække">
+        <div><%= værdipapir.navn || 'Ukendt' %></div>
+        <div><%= værdipapir.type || 'Ukendt' %></div>
+        <div><%= værdipapir.tickerSymbol || 'Ukendt' %></div>
+        <div><%= !isNaN(værdipapir.antal) ? værdipapir.antal : 'Ukendt' %></div>
+        <div><%= !isNaN(værdipapir.pris) ? parseFloat(værdipapir.pris).toFixed(2) + ' DKK' : 'Ukendt' %></div>
+
+        <% 
+          const antal = parseFloat(værdipapir.antal);
+          const pris = parseFloat(værdipapir.pris);
+          const værdi = !isNaN(antal) && !isNaN(pris) ? (antal * pris).toFixed(2) : null;
+        %>
+        <div><%= værdi ? værdi + ' DKK' : 'Ukendt værdi' %></div>
+        <div><%= !isNaN(værdipapir.GAK) ? parseFloat(værdipapir.GAK).toFixed(2) + ' DKK' : 'Ukendt' %></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sidemenu = document.querySelector('.sidemenu');
+    function skiftMenu() {
+      sidemenu.classList.toggle('lukket');
+    }
+  </script>
+</body>
+</html>

@@ -79,37 +79,22 @@
       <h3>Værdipapirer i portefølje</h3>
       <div class="listeOverskrifter">
         <span>Navn</span>
-        <span>Type</span>
         <span>Symbol</span>
-        <span>Antal</span>
-        <span>Pris</span>
-        <span>Værdi</span>
-        <span>GAK</span>
       </div>
 
       <% if (værdipapirer.length > 0) { %>
-        <% værdipapirer.forEach(p => { %> 
-          <div class="aktieRække"> 
-            <div><%= p.navn || 'Ukendt' %></div> 
-            <div><%= p.type || 'Ukendt' %></div> 
-            <div><%= p.tickerSymbol || 'Ukendt' %></div>
-            <div><%= !isNaN(p.antal) ? p.antal : 'Ukendt' %></div>
-            <div><%= !isNaN(p.pris) ? parseFloat(p.pris).toFixed(2) + ' DKK' : 'Ukendt' %></div>
-            <%
-            const antal = parseFloat(p.antal);
-            const pris = parseFloat(p.pris);
-            const værdi = !isNaN(antal) && !isNaN(pris) ? (antal * pris).toFixed(2) : null;
-            %>
-          <div><%= værdi ? værdi + ' DKK' : 'Ukendt værdi' %></div>
-
-          <%= !isNaN(p.GAK) ? parseFloat(p.GAK).toFixed(2) + ' DKK' : 'Ukendt' %>
-
-          </div>
+        <% værdipapirer.forEach(v => { %> 
+          <a href="/portefolje/vaerdipapir/<%= v.id %>" class="aktieLink">
+            <div class="aktieRække"> 
+              <div><%= v.navn || 'Ukendt' %></div> 
+              <div><%= v.tickerSymbol || 'Ukendt' %></div>
+            </div>
+            </a>          
         <% }) %>
       <% } else { %>
         <p><em>Ingen værdipapirer fundet endnu.</em></p>
       <% } %>
-    </div> 
+      
 
     <script>
       const sidemenu = document.querySelector('.sidemenu');
