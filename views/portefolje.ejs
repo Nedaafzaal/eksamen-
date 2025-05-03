@@ -95,9 +95,13 @@
             <div><%= p.tickerSymbol || 'Ukendt' %></div>
             <div><%= !isNaN(p.antal) ? p.antal : 'Ukendt' %></div>
             <div><%= !isNaN(p.pris) ? parseFloat(p.pris).toFixed(2) + ' DKK' : 'Ukendt' %></div>
-            <div>
-              <%= !isNaN(p.forventetVærdi) ? parseFloat(p.forventetVærdi).toFixed(2) + ' DKK' : 'Ukendt værdi' %>
-            </div>
+            <%
+            const antal = parseFloat(p.antal);
+            const pris = parseFloat(p.pris);
+            const værdi = !isNaN(antal) && !isNaN(pris) ? (antal * pris).toFixed(2) : null;
+            %>
+<div><%= værdi ? værdi + ' DKK' : 'Ukendt værdi' %></div>
+
             <div><%= p.GAK || 'Ukendt' %></div>
           </div>
         <% }) %>

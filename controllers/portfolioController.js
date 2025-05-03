@@ -164,12 +164,16 @@ exports.hentTransaktionerForPortefølje = async (req, res) => {
   
   exports.købEllerSælg = async (req, res) => {
     try {
+      const dollarKurs = 7.0;
+      const prisIUSD = parseFloat(req.body.pris);
+      const prisIDKK = prisIUSD * dollarKurs;
       const data = {
+   
         porteføljeID: parseInt(req.body.porteføljeID),
         kontoID: parseInt(req.body.kontoID),
         værditype: req.body.værditype,
         type: req.body.transaktionstype,
-        pris: parseFloat(req.body.pris),
+        pris: prisIDKK,
         gebyr: parseFloat(req.body.gebyr) || 0,
         dato: new Date(),
         tidspunkt: new Date(),
