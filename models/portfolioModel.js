@@ -12,14 +12,16 @@ async function hentAllePortefoljer() {
 }
 
 // Hent én portefølje baseret på ID
-async function hentPortefoljeMedID(id) {
+async function hentPortefoljeMedID(ID) {
   const db = await sql.connect(sqlConfig);
   const result = await db.request()
-    .input("id", sql.Int, id)
+    .input("porteføljeID", sql.Int, ID)
     .query(`
-      SELECT * FROM eksamenSQL.porteføljer
-      WHERE porteføljeID = @id
+        SELECT porteføljeID, navn, oprettelsesDato 
+        FROM eksamenSQL.porteføljer 
+        WHERE porteføljeID = @porteføljeID
     `);
+      
 
   return result.recordset[0];
 }
