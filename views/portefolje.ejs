@@ -62,11 +62,13 @@
         <% } %>
       </div>
 
-      <div class="højresideboks">
-        <div class="diagramBoks">
-          <h3>Fordeling af værdi</h3>
-          <div id="pieChart" style="width: 100%; max-width: 900px; height: 900px; margin: auto;"></div>
-        </div>
+       <div class="højresideboks">
+                <div class="diagramBoks">
+                  <h3>Fordeling af værdi</h3>
+                  <div id="pieChart"></div>
+                </div>
+
+
         <div class="højrenedreboks">
           <h3>Dato oprettet</h3>
           <p><%= new Date(portefolje.dato).toLocaleDateString('da-DK') %></p>
@@ -102,7 +104,7 @@
             %>
           <div><%= værdi ? værdi + ' DKK' : 'Ukendt værdi' %></div>
 
-          <div> <%= !isNaN(p.GAK) ? parseFloat(p.GAK).toFixed(2) + ' DKK' : 'Ukendt' %> </div>
+          <div> <%= !isNaN(p.GAK) ? parseFloat(p.GAK).toFixed(2) + ' DKK' : 'Ukendt' %></div>
 
           </div>
         <% }) %>
@@ -120,52 +122,49 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-  <script>
-    const værdipapirer = <%- JSON.stringify(værdipapirer) %>;
+  <script>
+    const værdipapirer = <%- JSON.stringify(værdipapirer) %>;
 
-    const labels = værdipapirer.map(p => p.navn || 'Ukendt');
-    const series = værdipapirer.map(p =>
-      !isNaN(p.pris) && !isNaN(p.antal) ? p.antal * p.pris : 0
-    );
+    const labels = værdipapirer.map(p => p.navn || 'Ukendt');
+    const series = værdipapirer.map(p =>
+      !isNaN(p.pris) && !isNaN(p.antal) ? p.antal * p.pris : 0
+    );
 
-    const options = {
-      chart: {
-        type: 'pie',
-        height: 1000,
-      },
-      series: series,
-      labels: labels,
-      title: {
-        text: 'Fordeling af porteføljens værdi',
-        align: 'center'
-      },
-      legend: {
-        position: 'right',
-        fontSize: '14px'
-      },
-      tooltip: {
-        y: {
-          formatter: function (val) {
-            return val.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' });
-          }
-        }
-      },
-      responsive: [{
-        breakpoint: 768,
-        options: {
-          chart: {
-            width: 320,
-            height: 300
-          },
-          legend: {
-            position: 'bottom'
-          }
-        }
-      }]
-    };
+    const options = {
+  chart: {
+    type: 'pie',
+  height: 240,
+  width: 240
+  },
+  series: series,
+  labels: labels,
+  legend: {
+    position: 'bottom',  // flyt under
+    fontSize: '9px'
+  },
+      tooltip: {
+        y: {
+          formatter: function (val) {
+            return val.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' });
+          }
+        }
+      },
+      responsive: [{
+        breakpoint: 768,
+        options: {
+          chart: {
+            width: 320,
+            height: 300
+          },
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }]
+    };
 
-    const chart = new ApexCharts(document.querySelector("#pieChart"), options);
-    chart.render();
-  </script>
+    const chart = new ApexCharts(document.querySelector("#pieChart"), options);
+    chart.render();
+  </script>
 </body>
 </html>

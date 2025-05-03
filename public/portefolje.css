@@ -33,7 +33,7 @@ body {
   border-radius: 10px;
   padding: 20px;
   width: 620px;
-  height: 340px;
+  height: 400px;
   margin-left: 140px;
   color: rgb(223, 219, 219);
   font-size: 16px;
@@ -50,15 +50,23 @@ body {
   border-radius: 10px;
   padding: 20px;
   width: 300px;
-  height: 200px;
+  height: 280px;
+  position: relative;
 }
+
+#pieChart {
+  width: 240px;  /* ca. 80% af boksen */
+  height: 240px;
+  margin: 0 auto;
+}
+
 
 .højrenedreboks {
   background-color: rgb(31, 31, 31);
   border-radius: 10px;
   padding: 20px;
   width: 300px;
-  height: 80px;
+  height: 50px;
 }
 
 .nedersteboks {
@@ -236,4 +244,3 @@ button.pil {
   color: rgb(213, 209, 209);
   font-family: Arial, Helvetica, sans-serif;
 }
-
