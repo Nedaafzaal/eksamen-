@@ -1,56 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Opret bruger</title>
-      <link href="/buyPapir.css" rel="stylesheet">
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Køb værdipapir</title>
+  <link href="/buyPapir.css" rel="stylesheet">
+</head>
+<body>
+  <div class="købVærdipapir">
+    <h1>Køb værdipapir</h1>
+    <form action="/portefolje/<%= portefoljeID %>/buyPapir" method="POST">
 
-   </head>
-   <body>
-      <!--container til tilføj konto-->
-      <div class="købVærdipapir">
-            <h1>Køb værdipapir</h1>
-            <form action="/portefolje/<%= portefoljeID %>/buyPapir" method="POST">
-                
-                <div class="opretBox">
-                    <label for="kontoID">Vælg konto</label>
-                    <select name="kontoID" id="kontoID" required>
-                      <% konti.forEach(konto => { %>
-                        <option value="<%= konto.kontoID %>"><%= konto.kontonavn %> (Saldo: <%= konto.saldo %>)</option>
-                      <% }); %>
-                    </select>
-                  </div>
-                
-                <div class="opretBox">
-                  <input type="number" step="0.01" placeholder="Antal" name="antal" required>
-                </div>
-              
-                <div class="opretBox">
-                  <input type="text" placeholder="Valuta" name="valuta" required>
-                </div>
-              
-                <div class="opretBox">
-                  <input type="text" placeholder="Bankreference" name="bankreference" required>
-                </div>
-              
-                <!-- SKJULTE FELTER -->
-                <input type="hidden" name="tickerSymbol" value="<%= tickerSymbol %>">
-                <input type="hidden" name="navn" value="<%= navn %>">
-                <input type="hidden" name="pris" value="<%= pris %>">
-                <input type="hidden" name="porteføljeID" value="<%= portefoljeID %>">
-                <input type="hidden" name="transaktionstype" value="køb">
-                <input type="hidden" name="værditype" value="Aktie">
-                <input type="hidden" name="gebyr" value="0">
-                <input type="hidden" name="tidspunkt" value="<%= new Date().toISOString() %>">
-              
-                <button id="sendFormular" type="submit">Køb</button>
-              </form>
-              
-         </div>
+      <div class="opretBox">
+        <label for="kontoID">Vælg konto</label>
+        <select name="kontoID" id="kontoID" required>
+          <% konti.forEach(konto => { %>
+            <option value="<%= konto.kontoID %>">
+              <%= konto.kontonavn %> (Saldo: <%= konto.saldo %>)
+            </option>
+          <% }); %>
+        </select>
       </div>
-   </body>
+
+      <div class="opretBox">
+        <input type="number" step="0.01" placeholder="Antal" name="antal" required>
+      </div>
+
+      <div class="opretBox">
+        <input type="text" placeholder="Valuta" name="valuta" required>
+      </div>
+
+      <div class="opretBox">
+        <input type="text" placeholder="Bankreference" name="bankreference" required>
+      </div>
+
+      <!-- Skjulte felter -->
+      <input type="hidden" name="tickerSymbol" value="<%= tickerSymbol %>">
+      <input type="hidden" name="navn" value="<%= navn %>">
+      <input type="hidden" name="pris" value="<%= pris %>">
+      <input type="hidden" name="transaktionstype" value="<%= transaktionstype %>">
+      <input type="hidden" name="værditype" value="<%= værditype %>">
+      <input type="hidden" name="gebyr" value="<%= gebyr %>">
+      <input type="hidden" name="porteføljeID" value="<%= portefoljeID %>">
+      <input type="hidden" name="tidspunkt" value="<%= tidspunkt %>">
+
+      <button id="sendFormular" type="submit">Køb</button>
+    </form>
+  </div>
+</body>
 </html>
-
-
- 

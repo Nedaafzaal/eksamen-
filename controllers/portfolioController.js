@@ -117,11 +117,19 @@ exports.hentTransaktionerForPortefølje = async (req, res) => {
       const prisSvar = await fetch(prisLink);
       const prisData = await prisSvar.json();
       const pris = prisData["Global Quote"]?.["05. price"] || "Ukendt";
+
+      const brugerID = req.cookies.brugerID;
+
+      const konti = await portfolioModel.hentKontiForBruger(brugerID);
+      
+      const kontoID = konti?.[0]?.kontoID || null;
+
   
       // Send information videre til en EJS-side
       res.render("searchPapir", {
         result: { symbol, navn, pris },
-        porteføljeID
+        porteføljeID,
+        kontoID
       });
   
     } catch (fejl) {
@@ -132,53 +140,55 @@ exports.hentTransaktionerForPortefølje = async (req, res) => {
   
   //funktion som henter køb formular
   exports.visBuyPapirForm = async (req, res) => {
-    console.log("visBuyPapirForm kaldt med query:", req.query)
-
     const { symbol, navn, pris } = req.query;
-
+  
     if (!symbol || !navn || !pris) {
-        return res.redirect(`/dashboard?fejl=missing_data`);
-      }
-
+      return res.redirect(`/dashboard?fejl=missing_data`);
+    }
+  
     const portefoljeID = parseInt(req.params.id);
-  
-    const konti = await portfolioModel.hentKontiForBruger(req.session.brugerID);
-    // lav denne funktion i model
-    const kontoID = konti?.[0]?.konto_id || null; // eller lad brugeren vælge
-  
-    // console.log("kontoID i controller:", kontoID);
-    // console.log("session.brugerID:", req.session.brugerID);
-
+    const konti = await portfolioModel.hentKontiForBruger(req.cookies.brugerID);
   
     res.render("buyPapir", {
       tickerSymbol: symbol,
       navn,
       pris,
       portefoljeID,
-      konti
+      konti,
+      transaktionstype: "køb",
+      værditype: "Aktie",
+      gebyr: 0,
+      tidspunkt: new Date().toISOString()
     });
-
-      
   };
   
-
-// // Denne funktion bliver kaldt når brugeren køber eller sælger fra en formular
-exports.købEllerSælg = async function (req, res) {
+  exports.købEllerSælg = async (req, res) => {
     try {
-      // Vi henter informationen fra formularen (HTML)
       const data = {
         porteføljeID: parseInt(req.body.porteføljeID),
         kontoID: parseInt(req.body.kontoID),
         værditype: req.body.værditype,
-        type: req.body.transaktionstype, // 'køb' eller 'salg'
+        type: req.body.transaktionstype,
         pris: parseFloat(req.body.pris),
         gebyr: parseFloat(req.body.gebyr) || 0,
         dato: new Date(),
         tidspunkt: new Date(),
-        antal: parseInt(req.body.antal),
+        antal: parseFloat(req.body.antal),
         navn: req.body.navn,
-        tickerSymbol: req.body.tickerSymbol
+        tickerSymbol: Array.isArray(req.body.tickerSymbol)
+          ? req.body.tickerSymbol[0]
+          : req.body.tickerSymbol
       };
+  
+      await registrerHandel(data);
+      res.redirect(`/portefolje/${data.porteføljeID}`);
+    } catch (err) {
+      console.error("Fejl under handel:", err.message);
+      res.status(400).send("Noget gik galt: " + err.message);
+    }
+  };
+  
+  
 
       //ren test
     //   console.log("Modtaget kontoID:", req.body.kontoID);
@@ -187,18 +197,7 @@ exports.købEllerSælg = async function (req, res) {
     //     console.log("Valgt kontoID:", kontoID);
 
 
-  
-      // Vi beder modellen om at lave handlen
-      await registrerHandel(data);
-  
-      // Vi sender brugeren tilbage til forsiden eller en bekræftelse
-      res.redirect("/portefolje/oversigt");
-  
-    } catch (err) {
-      console.error("Fejl under handel:", err.message);
-      res.status(400).send("Noget gik galt: " + err.message);
-    }
-  }
+
 
 
 
