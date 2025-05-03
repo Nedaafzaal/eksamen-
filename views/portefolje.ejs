@@ -100,9 +100,10 @@
             const pris = parseFloat(p.pris);
             const værdi = !isNaN(antal) && !isNaN(pris) ? (antal * pris).toFixed(2) : null;
             %>
-<div><%= værdi ? værdi + ' DKK' : 'Ukendt værdi' %></div>
+          <div><%= værdi ? værdi + ' DKK' : 'Ukendt værdi' %></div>
 
-            <div><%= p.GAK || 'Ukendt' %></div>
+          <div> <%= !isNaN(p.GAK) ? parseFloat(p.GAK).toFixed(2) + ' DKK' : 'Ukendt' %> </div>
+
           </div>
         <% }) %>
       <% } else { %>

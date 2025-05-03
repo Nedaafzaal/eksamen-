@@ -38,6 +38,11 @@ exports.visEnPortefolje = async (req, res) => {
       samletVærdi += værdipapirer[i].antal * værdipapirer[i].pris;
     }
 
+    for (let i = 0; i < værdipapirer.length; i++) {
+      const symbol = værdipapirer[i].tickerSymbol;
+      værdipapirer[i].GAK = await portfolioModel.hentGAK(portefoljeID, symbol);
+    }
+    
     res.render("portefolje", { portefolje, værdipapirer, samletVærdi });
 
   } catch (err) {

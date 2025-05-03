@@ -140,10 +140,11 @@ async function registrerHandel(data) {
       .input("dato", sql.Date, new Date())
       .input("tid", sql.DateTime, new Date())
       .input("antal", sql.Int, data.antal)
+      .input("tickerSymbol", sql.NVarChar, data.tickerSymbol)
       .query(`
         INSERT INTO eksamenSQL.transaktioner
-        (porteføljeID, kontoID, transaktionstype, pris, gebyr, dato, tidspunkt, antal, sælgerKontoID, modtagerKontoID)
-        VALUES (@porteføljeID, @kontoID, @type, @pris, @gebyr, @dato, @tid, @antal, NULL, NULL)
+        (porteføljeID, kontoID, transaktionstype, pris, gebyr, dato, tidspunkt, antal, tickerSymbol, sælgerKontoID, modtagerKontoID)
+        VALUES (@porteføljeID, @kontoID, @type, @pris, @gebyr, @dato, @tid, @antal,@tickerSymbol, NULL, NULL)
       `);
   
     // 6. Hvis det er et køb, så læg værdipapiret ind i porteføljen
@@ -176,6 +177,34 @@ async function hentKontiForBruger(brugerID) {
     return result.recordset;
   }
   
+  //henter GAK
+  async function hentGAK(porteføljeID, symbol) {
+    const db = await sql.connect(sqlConfig);
+    const result = await db.request()
+      .input("id", sql.Int, porteføljeID)
+      .input("symbol", sql.NVarChar, symbol)
+      .query(`
+        SELECT pris, antal
+        FROM eksamenSQL.transaktioner
+        WHERE porteføljeID = @id
+          AND transaktionstype = 'køb'
+          AND tickerSymbol = @symbol
+      `);
+  
+    const handler = result.recordset;
+  
+    let totalPris = 0;
+    let totalAntal = 0;
+  
+    handler.forEach(h => {
+      totalPris += h.pris * h.antal;
+      totalAntal += h.antal;
+    });
+  
+    const gak = totalAntal > 0 ? (totalPris / totalAntal) : null;
+    return gak;
+  }
+  
   
   module.exports = {
     hentAllePortefoljer,
@@ -186,6 +215,7 @@ async function hentKontiForBruger(brugerID) {
     hentTransaktionerForPortefølje,
     tilføjVærdipapirTilPortefølje,
     registrerHandel,
-    hentKontiForBruger
+    hentKontiForBruger,
+    hentGAK
   };
   
