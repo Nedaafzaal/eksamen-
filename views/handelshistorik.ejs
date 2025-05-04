@@ -64,7 +64,7 @@
             <div><%= new Intl.NumberFormat('da-DK').format(t.pris) %> kr</div> <!--pris med KR-->
             <div><%= t.antal %></div>
             <div><%= new Date(t.dato).toLocaleDateString('da-DK') %></div>
-            <div><%= new Date('1970-01-01T' + t.tidspunkt).toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' }) %></div>
+            <%= new Date(t.tidspunkt).toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' }) %>
             <div><%= t.gebyr %> kr</div>
             <div><%= t.tickerSymbol %></div>
         </div> 

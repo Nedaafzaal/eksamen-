@@ -152,10 +152,11 @@ async function registrerHandel(data) {
       .input("tid", sql.DateTime, new Date())
       .input("antal", sql.Int, data.antal)
       .input("ticker", sql.NVarChar, data.tickerSymbol)
+      .input("værditype", sql.NVarChar, data.værditype)
       .query(`
         INSERT INTO eksamenSQL.transaktioner
-        (porteføljeID, kontoID, transaktionstype, pris, gebyr, dato, tidspunkt, antal, sælgerKontoID, modtagerKontoID, tickerSymbol)
-        VALUES (@porteføljeID, @kontoID, @type, @pris, @gebyr, @dato, @tid, @antal, NULL, NULL, @ticker)
+        (porteføljeID, kontoID, transaktionstype, pris, gebyr, dato, tidspunkt, antal, sælgerKontoID, modtagerKontoID, tickerSymbol, værditype)
+        VALUES (@porteføljeID, @kontoID, @type, @pris, @gebyr, @dato, @tid, @antal, NULL, NULL, @ticker, @værditype)
       `);
   
     // 6. Hvis det er et køb, så læg værdipapiret ind i porteføljen
