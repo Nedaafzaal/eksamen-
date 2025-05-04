@@ -45,7 +45,10 @@
     <div class="øversteIndhold">
       <!--venstre side med total værdi og ændringer-->
       <div class="venstreSide">
-        <div class="venstreØvreBoks">Total værdi i DKK</div>
+        <div class="venstreØvreBoks">
+          Total værdi i DKK:
+          <%= new Intl.NumberFormat('da-DK', { style: 'currency', currency: 'DKK' }).format(totalVærdi || 0) %>
+        </div>
         <div class="ændringer">
           <span>Ændring i 24 timer:</span>
           <span>Ændring i 7 dage:</span>

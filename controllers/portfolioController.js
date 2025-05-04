@@ -5,9 +5,19 @@ const { registrerHandel } = require("../models/portfolioModel");
 // Viser alle porteføljer i en liste
 exports.visPortefoljeOversigt = async (req, res) => {
   try {
-    const portefoljer = await portfolioModel.hentAllePortefoljer();
+    const portefoljer = await portfolioModel.hentAllePortefoljer(); 
+
+// Hent alle værdipapirer for alle porteføljer og læg deres værdier sammen
+let totalVærdi = 0;
+
+for (const p of portefoljer) {
+  const papirer = await portfolioModel.hentVærdipapirerTilPortefølje(p.porteføljeID);
+  const samlet = papirer.reduce((sum, papir) => sum + (papir.pris * papir.antal), 0);
+  totalVærdi += samlet;
+}
+   
     
-    res.render("portefoljeOversigt", { portefoljer });
+    res.render("portefoljeOversigt", { portefoljer, totalVærdi});
   } catch (err) {
     console.error("Fejl ved hentning af porteføljer:", err);
     res.status(500).send("Noget gik galt ved visning af porteføljeoversigten.");
