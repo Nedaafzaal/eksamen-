@@ -225,6 +225,33 @@ async function registrerHandel(data) {
             SET GAK = @GAK
             WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
           `);
+
+          // 8. Beregn og opdater urealiseret gevinst/tab
+      const aktuelPris = data.pris;
+      const result2 = await db.request()
+        .input("porteføljeID", sql.Int, data.porteføljeID)
+        .input("ticker", sql.NVarChar, data.tickerSymbol)
+        .query(`
+          SELECT antal, GAK FROM eksamenSQL.værdipapir
+          WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
+        `);
+
+      const { antal, GAK } = result2.recordset[0] || {};
+
+      if (!isNaN(antal) && !isNaN(GAK)) {
+        const gevinst = (antal * aktuelPris) - (antal * GAK);
+
+        await db.request()
+          .input("gevinst", sql.Decimal(18, 2), gevinst)
+          .input("porteføljeID", sql.Int, data.porteføljeID)
+          .input("ticker", sql.NVarChar, data.tickerSymbol)
+          .query(`
+            UPDATE eksamenSQL.værdipapir
+            SET urealiseretPorteføljeGevinstTab = @gevinst
+            WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
+          `);
+        }
+
       }
     }
     
@@ -254,7 +281,8 @@ async function hentKontiForBruger(brugerID) {
         tickerSymbol, 
         type, antal, 
         pris, 
-        GAK 
+        GAK, 
+        urealiseretPorteføljeGevinstTab
         FROM eksamenSQL.værdipapir
         WHERE værdipapirID = @id`);
   

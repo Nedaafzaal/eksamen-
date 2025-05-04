@@ -64,8 +64,13 @@
         <div><%= værdi ? værdi + ' DKK' : 'Ukendt værdi' %></div>
         <%
         const gak = parseFloat(værdipapir.GAK);
-      %>
+        %>
       <div><%= !isNaN(gak) ? gak.toFixed(2) + ' DKK' : 'Ukendt' %></div>
+      <%
+      const gevinst = parseFloat(værdipapir.urealiseretPorteføljeGevinstTab);
+      %>
+      <div><%= !isNaN(gevinst) ? gevinst.toFixed(2) + ' DKK' : 'Ukendt' %></div>
+
       
       </div>
     </div>
