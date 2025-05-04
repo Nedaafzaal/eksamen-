@@ -63,18 +63,21 @@ async function opretPortefolje(req, res) {
 
 // Viser køb/salg transaktioner for en portefølje
 async function hentTransaktionerForPortefølje(req, res) {
-  const porteføljeID = parseInt(req.params.id, 10);
-  if (isNaN(porteføljeID)) {
-    return res.status(400).send("Ugyldigt portefølje-ID");
+    const porteføljeID = parseInt(req.params.id, 10);
+    if (isNaN(porteføljeID)) {
+      return res.status(400).send("Ugyldigt portefølje-ID");
+    }
+  
+    try {
+      const transaktioner = await portfolioModel.hentTransaktionerForPortefølje(porteføljeID);
+      const portefølje = await portfolioModel.hentPortefoljeMedID(porteføljeID); // <- her bruger du din eksisterende funktion
+  
+      res.render("handelshistorik", { transaktioner, portefølje });
+    } catch (err) {
+      console.error("Fejl ved hentning af handelshistorik:", err);
+      res.status(500).send("Kunne ikke hente handelshistorik.");
+    }
   }
-  try {
-    const transaktioner = await portfolioModel.hentTransaktionerForPortefølje(porteføljeID);
-    res.render("handelshistorik", { transaktioner, porteføljeID });
-  } catch (err) {
-    console.error("Fejl ved hentning af handelshistorik:", err);
-    res.status(500).send("Kunne ikke hente handelshistorik.");
-  }
-}
 
 // Søger efter værdipapir med API og viser søgeresultat
 async function søgEfterPapir(req, res) {

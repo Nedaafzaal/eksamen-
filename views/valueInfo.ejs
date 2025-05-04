@@ -62,19 +62,20 @@
           const værdi = !isNaN(antal) && !isNaN(pris) ? (antal * pris).toFixed(2) : null;
         %>
         <div><%= værdi ? værdi + ' DKK' : 'Ukendt værdi' %></div>
-        <%
-        const gak = parseFloat(værdipapir.GAK);
-        %>
-      <div><%= !isNaN(gak) ? gak.toFixed(2) + ' DKK' : 'Ukendt' %></div>
-      <%
-      const gevinst = parseFloat(værdipapir.urealiseretPorteføljeGevinstTab);
-      %>
-      <div><%= !isNaN(gevinst) ? gevinst.toFixed(2) + ' DKK' : 'Ukendt' %></div>
 
-      
-      </div>
+        <% const gak = parseFloat(værdipapir.GAK); %>
+        <div><%= !isNaN(gak) ? gak.toFixed(2) + ' DKK' : 'Ukendt' %></div>
+
+        <% const gevinst = parseFloat(værdipapir.urealiseretPorteføljeGevinstTab); %>
+        <div><%= !isNaN(gevinst) ? gevinst.toFixed(2) + ' DKK' : 'Ukendt' %></div>
+      </div> <!-- Slut på aktieRække -->
+    </div> <!-- Slut på oversigtBox -->
+
+    <div class="diagramBoks">
+      <h2>Oversigt over udvikling af værdi</h2>
+      <!-- Her kan du indsætte diagram senere -->
     </div>
-  </div>
+  </div> <!-- Slut på indhold -->
 
   <script>
     const sidemenu = document.querySelector('.sidemenu');
