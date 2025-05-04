@@ -100,14 +100,14 @@ body {
     background-color: rgb(31, 31, 31);
     border-radius: 10px;
     padding: 20px;
-    width: 980px; 
+    width: 1000px; 
     height: 350px; 
     margin-left: 142px;
   }
   
   .listeOverskrifter, .aktieRække {
     display: grid;
-    grid-template-columns: 140px 140px 140px 140px 140px 140px 140px; 
+    grid-template-columns: 130px 130px 130px 130px 130px 130px 130px 130px; 
     padding: 12px 0;
     padding-bottom: 25px;
     border-bottom: 1px solid #333;

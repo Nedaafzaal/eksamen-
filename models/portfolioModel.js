@@ -160,21 +160,76 @@ async function registrerHandel(data) {
   
     // 6. Hvis det er et køb, så læg værdipapiret ind i porteføljen
     if (data.type === "køb") {
-      await db.request()
+      // Tjek om værdipapiret allerede findes
+      const eksisterendePapir = await db.request()
         .input("porteføljeID", sql.Int, data.porteføljeID)
-        .input("navn", sql.NVarChar, data.navn)
-        .input("symbol", sql.NVarChar, data.tickerSymbol)
-        .input("pris", sql.Decimal(18, 2), data.pris)
-        .input("antal", sql.Int, data.antal)
-        .input("type", sql.NVarChar, data.værditype)
-        .input("dato", sql.Date, new Date())
+        .input("ticker", sql.NVarChar, data.tickerSymbol)
         .query(`
-          INSERT INTO eksamenSQL.værdipapir
-          (porteføljeID, navn, tickerSymbol, pris, antal, type, datoKøbt)
-          VALUES (@porteføljeID, @navn, @symbol, @pris, @antal, @type, @dato)
+          SELECT værdipapirID FROM eksamenSQL.værdipapir
+          WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
         `);
+    
+      if (eksisterendePapir.recordset.length === 0) {
+        // Papiret findes ikke – indsæt nyt
+        await db.request()
+          .input("porteføljeID", sql.Int, data.porteføljeID)
+          .input("navn", sql.NVarChar, data.navn)
+          .input("symbol", sql.NVarChar, data.tickerSymbol)
+          .input("pris", sql.Decimal(18, 2), data.pris)
+          .input("antal", sql.Int, data.antal)
+          .input("type", sql.NVarChar, data.værditype)
+          .input("dato", sql.Date, new Date())
+          .query(`
+            INSERT INTO eksamenSQL.værdipapir
+            (porteføljeID, navn, tickerSymbol, pris, antal, type, datoKøbt)
+            VALUES (@porteføljeID, @navn, @symbol, @pris, @antal, @type, @dato)
+          `);
+      } else {
+        // Papiret findes – opdater antal og pris
+        await db.request()
+          .input("porteføljeID", sql.Int, data.porteføljeID)
+          .input("ticker", sql.NVarChar, data.tickerSymbol)
+          .input("antal", sql.Int, data.antal)
+          .input("pris", sql.Decimal(18, 2), data.pris)
+          .input("dato", sql.Date, new Date())
+          .query(`
+            UPDATE eksamenSQL.værdipapir
+            SET antal = antal + @antal,
+                pris = @pris,
+                datoKøbt = @dato
+            WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
+          `);
+      }
+    
+      // 7. Beregn og opdater GAK i værdipapir-tabellen
+      const result = await db.request()
+        .input("porteføljeID", sql.Int, data.porteføljeID)
+        .input("ticker", sql.NVarChar, data.tickerSymbol)
+        .query(`
+          SELECT AVG(pris) AS GAK
+          FROM eksamenSQL.transaktioner
+          WHERE porteføljeID = @porteføljeID
+            AND tickerSymbol = @ticker
+            AND transaktionstype = 'køb'
+        `);
+    
+      const nyGAK = result.recordset[0]?.GAK;
+    
+      if (nyGAK !== null && nyGAK !== undefined) {
+        await db.request()
+          .input("GAK", sql.Decimal(18, 2), nyGAK)
+          .input("porteføljeID", sql.Int, data.porteføljeID)
+          .input("ticker", sql.NVarChar, data.tickerSymbol)
+          .query(`
+            UPDATE eksamenSQL.værdipapir
+            SET GAK = @GAK
+            WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
+          `);
+      }
     }
-  }
+    
+    }
+  
   
   // Hent alle konti for en bestemt bruger
 async function hentKontiForBruger(brugerID) {
@@ -186,34 +241,6 @@ async function hentKontiForBruger(brugerID) {
       `);
   
     return result.recordset;
-  }
-  
-  //henter GAK
-  async function hentGAK(porteføljeID, symbol) {
-    const db = await sql.connect(sqlConfig);
-    const result = await db.request()
-      .input("id", sql.Int, porteføljeID)
-      .input("symbol", sql.NVarChar, symbol)
-      .query(`
-        SELECT pris, antal
-        FROM eksamenSQL.transaktioner
-        WHERE porteføljeID = @id
-          AND transaktionstype = 'køb'
-          AND tickerSymbol = @symbol
-      `);
-  
-    const handler = result.recordset;
-  
-    let totalPris = 0;
-    let totalAntal = 0;
-  
-    handler.forEach(h => {
-      totalPris += h.pris * h.antal;
-      totalAntal += h.antal;
-    });
-  
-    const gak = totalAntal > 0 ? (totalPris / totalAntal) : null;
-    return gak;
   }
   
   async function hentVærdipapirMedID(id) {
@@ -245,7 +272,6 @@ async function hentKontiForBruger(brugerID) {
     tilføjVærdipapirTilPortefølje,
     registrerHandel,
     hentKontiForBruger,
-    hentGAK,
     hentVærdipapirMedID
   };
   

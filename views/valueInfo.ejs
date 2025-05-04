@@ -46,6 +46,7 @@
         <span>Pris</span>
         <span>Værdi</span>
         <span>GAK</span>
+        <span>Urealiseret gevinst</span>
       </div>
 
       <div class="aktieRække">
@@ -61,7 +62,11 @@
           const værdi = !isNaN(antal) && !isNaN(pris) ? (antal * pris).toFixed(2) : null;
         %>
         <div><%= værdi ? værdi + ' DKK' : 'Ukendt værdi' %></div>
-        <div><%= !isNaN(værdipapir.GAK) ? parseFloat(værdipapir.GAK).toFixed(2) + ' DKK' : 'Ukendt' %></div>
+        <%
+        const gak = parseFloat(værdipapir.GAK);
+      %>
+      <div><%= !isNaN(gak) ? gak.toFixed(2) + ' DKK' : 'Ukendt' %></div>
+      
       </div>
     </div>
   </div>
