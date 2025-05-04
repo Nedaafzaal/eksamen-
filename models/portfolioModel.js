@@ -290,6 +290,25 @@ async function hentKontiForBruger(brugerID) {
     return result.recordset[0];
   }
   
+
+  async function hentVærdiHistorik(porteføljeID) {
+    const db = await sql.connect(sqlConfig);
+    const result = await db.request()
+      .input("porteføljeID", sql.Int, porteføljeID)
+      .query(`
+        SELECT 
+          CONVERT(date, datoKøbt) as dato,
+          SUM(urealiseretPorteføljeGevinstTab) as værdi
+        FROM eksamenSQL.værdipapir
+        WHERE porteføljeID = @porteføljeID
+        GROUP BY CONVERT(date, datoKøbt)
+        ORDER BY dato
+      `);
+    return result.recordset;
+  }
+  
+
+
   
   module.exports = {
     hentAllePortefoljer,
@@ -301,6 +320,7 @@ async function hentKontiForBruger(brugerID) {
     tilføjVærdipapirTilPortefølje,
     registrerHandel,
     hentKontiForBruger,
-    hentVærdipapirMedID
+    hentVærdipapirMedID,
+    hentVærdiHistorik
   };
   

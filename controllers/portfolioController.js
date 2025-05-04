@@ -32,11 +32,12 @@ async function visEnPortefolje(req, res) {
       return res.status(404).send("Portefølje ikke fundet.");
     }
     const værdipapirer = await portfolioModel.hentVærdipapirerTilPortefølje(portefoljeID);
+    const historik = await portfolioModel.hentVærdiHistorik(portefoljeID);
     let samletVærdi = 0;
     for (let i = 0; i < værdipapirer.length; i++) {
       samletVærdi += værdipapirer[i].antal * værdipapirer[i].pris;
     }
-    res.render("portefolje", { portefolje, værdipapirer, samletVærdi });
+    res.render("portefolje", { portefolje, værdipapirer, samletVærdi,historik });
   } catch (err) {
     console.error("Fejl ved visning af portefølje:", err);
     res.status(500).send("Noget gik galt ved visning af portefølje.");
@@ -180,6 +181,7 @@ async function visVærdipapirDetaljer(req, res) {
     res.status(500).send("Fejl ved visning af værdipapir.");
   }
 }
+
 
 module.exports = {
   visPortefoljeOversigt,

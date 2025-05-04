@@ -60,6 +60,8 @@
         <% } else { %>
           <p><em>Ingen værdipapirer i porteføljen endnu</em></p>
         <% } %>
+     <!-- Line chart placeholder -->
+       <div id="lineChart" style="width: 100%; max-width: 900px; height: 400px;"></div>
       </div>
 
       <div class="højresideboks">
@@ -152,5 +154,50 @@
     const chart = new ApexCharts(document.querySelector("#pieChart"), options);
     chart.render();
   </script>
+  <script>
+  const historik = <%- JSON.stringify(historik) %>;
+
+const datoer = historik.map(h => h.dato);
+const værdier = historik.map(h => h.værdi);
+
+const lineOptions = {
+  chart: {
+    type: 'line',
+    height: 280,
+    toolbar: {
+      show: false 
+    }
+  },
+  series: [{
+    name: 'Urealiseret værdi',
+    data: værdier
+  }],
+  xaxis: {
+    categories: datoer,
+    title: { text: 'Dato' }
+  },
+  yaxis: {
+    title: {
+      text: 'Værdi i DKK'
+    },
+    labels: {
+      formatter: function (val) {
+        return val.toFixed(2) + ' kr.';
+      }
+    }
+  },
+  tooltip: {
+    y: {
+      formatter: function (val) {
+        return val.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' });
+      }
+    }
+  }
+};
+
+const lineChart = new ApexCharts(document.querySelector("#lineChart"), lineOptions);
+lineChart.render();
+
+  </script>  
 </body>
 </html>
