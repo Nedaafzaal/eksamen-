@@ -1,9 +1,8 @@
 const fetch = require("node-fetch");
 const dashboardModel = require("../models/dashboardModel");
+
 const API_KEY = "d0ad5fpr01qm3l9kmfg0d0ad5fpr01qm3l9kmfgg";
 const symbols = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA'];
-
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Simpel in-memory cache med TTL (time to live)
 const cache = {};
@@ -16,7 +15,10 @@ function getCache(key) {
   return null;
 }
 
-exports.visDashboard = async (req, res) => {
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+// Viser dashboard med top 5 aktier og samlet porteføljeværdi
+async function visDashboard(req, res) {
   try {
     const top5 = await hentTopAktier();
     const porteføljer = await dashboardModel.hentPorteføljerMedAktier();
@@ -33,8 +35,8 @@ exports.visDashboard = async (req, res) => {
         data = await response.json();
         setCache(quoteUrl, data, 5 * 60 * 1000); // cache i 5 minutter
       }
-      const aktuelPris = parseFloat(data.c);
 
+      const aktuelPris = parseFloat(data.c);
       if (!isNaN(aktuelPris)) {
         const værdi = aktuelPris * aktie.antal;
         totalVærdi += værdi;
@@ -47,15 +49,16 @@ exports.visDashboard = async (req, res) => {
       top5Profit,
       totalVærdi,
       totalUrealiseret,
-      totalRealiseret: 0
+      totalRealiseret: 0 // evt. placeholder
     });
 
   } catch (err) {
     console.error("Fejl ved hentning af dashboard:", err);
     res.status(500).send("Noget gik galt med dashboardet.");
   }
-};
+}
 
+// Henter top 5 aktier ud fra markedsværdi
 async function hentTopAktier() {
   const resultater = [];
 
@@ -80,12 +83,13 @@ async function hentTopAktier() {
   return resultater.sort((a, b) => b.marketCap - a.marketCap).slice(0, 5);
 }
 
+// Henter top 5 aktier med højest urealiseret gevinst
 async function hentTopUrealiseretGevinst(porteføljer) {
   const resultater = [];
 
   for (const aktie of porteføljer) {
     const quoteUrl = `https://finnhub.io/api/v1/quote?symbol=${aktie.tickerSymbol}&token=${API_KEY}`;
-    await sleep(1100); // rate-limit
+    await sleep(1100); // undgå rate-limit
 
     let data = getCache(quoteUrl);
     if (!data) {
@@ -113,3 +117,10 @@ async function hentTopUrealiseretGevinst(porteføljer) {
     .sort((a, b) => b.gevinst - a.gevinst)
     .slice(0, 5);
 }
+
+// Eksportér funktioner
+module.exports = {
+  visDashboard,
+  hentTopAktier,
+  hentTopUrealiseretGevinst
+};

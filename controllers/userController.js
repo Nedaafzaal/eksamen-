@@ -1,12 +1,12 @@
 const brugerData = require("../models/userModel");
 
 // Viser login-siden
-exports.visLoginSide = (req, res) => {
+function visLoginSide(req, res) {
   res.render("login", { fejl: null }); // fejl er tom i starten
-};
+}
 
 // Når brugeren prøver at logge ind
-exports.login = async (req, res) => {
+async function login(req, res) {
   const { brugernavn, adgangskode } = req.body;
   const bruger = await brugerData.hentBruger(brugernavn);
 
@@ -21,15 +21,15 @@ exports.login = async (req, res) => {
   } else {
     return res.render("login", { fejl: "Forkert adgangskode" });
   }
-};
+}
 
 // Viser siden hvor man kan oprette en ny bruger
-exports.visOpretBrugerSide = (req, res) => {
+function visOpretBrugerSide(req, res) {
   res.render("opretbruger"); // ingen ekstra info behøves
-};
+}
 
 // Når brugeren udfylder og sender formularen for at blive oprettet
-exports.opretBruger = async (req, res) => {
+async function opretBruger(req, res) {
   try {
     await brugerData.opretBruger(req.body); // vi gemmer det brugeren skrev i databasen
     res.redirect("/dashboard"); // send brugeren videre
@@ -37,10 +37,10 @@ exports.opretBruger = async (req, res) => {
     console.error("Noget gik galt:", err);
     res.status(500).send("Der skete en fejl, prøv igen senere");
   }
-};
+}
 
 // Når brugeren vil skifte adgangskode
-exports.skiftAdgangskode = async (req, res) => {
+async function skiftAdgangskode(req, res) {
   const { brugernavn, gammelAdgangskode, nyAdgangskode } = req.body;
 
   const adgangskodePasser = await brugerData.tjekAdgangskode(brugernavn, gammelAdgangskode);
@@ -63,12 +63,22 @@ exports.skiftAdgangskode = async (req, res) => {
     console.error("Fejl:", err);
     res.status(500).send("Noget gik galt med opdatering af kode");
   }
-};
+}
 
 // Viser indstillinger-siden
-exports.visIndstillinger = (req, res) => {
+function visIndstillinger(req, res) {
   res.render("indstillinger", {
     brugernavn: "", // tom til at starte med
     alert: null
   });
+}
+
+// Eksporter alle funktioner samlet i bunden
+module.exports = {
+  visLoginSide,
+  login,
+  visOpretBrugerSide,
+  opretBruger,
+  skiftAdgangskode,
+  visIndstillinger
 };
