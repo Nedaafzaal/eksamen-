@@ -67,7 +67,7 @@
       <div class="højresideboks">
         <div class="diagramBoks">
           <h3>Fordeling af værdi</h3>
-          <div id="pieChart" style="width: 100%; max-width: 900px; height: 900px; margin: auto;"></div>
+          <div id="pieChart"></div>
         </div>
         <div class="højrenedreboks">
           <h3>Dato oprettet</h3>
@@ -116,97 +116,85 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+  const værdipapirer = <%- JSON.stringify(værdipapirer) %>;
+
+  const labels = værdipapirer.map(p => p.navn || 'Ukendt');
+  const series = værdipapirer.map(p =>
+    !isNaN(p.pris) && !isNaN(p.antal) ? p.antal * p.pris : 0
+  );
+
+  const pieOptions = {
+    chart: {
+      type: 'pie',
+      height: '75%',
+      width: '100%'
+    },
+    series: series,
+    labels: labels,
+    legend: {
+      position: 'bottom',
+      fontSize: '9px'
+    },
+    tooltip: {
+      y: {
+        formatter: function (val) {
+          return val.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' });
+        }
+      }
+    },
+    responsive: [{
+      breakpoint: 768,
+      options: {
+        legend: {
+          position: 'bottom'
+        }
+      }
+    }]
+  };
+
+  const pieChart = new ApexCharts(document.querySelector("#pieChart"), pieOptions);
+  pieChart.render();
+</script>
+
+  
+  
   <script>
-    const værdipapirer = <%- JSON.stringify(værdipapirer) %>;
-
-    const labels = værdipapirer.map(p => p.navn || 'Ukendt');
-    const series = værdipapirer.map(p =>
-      !isNaN(p.pris) && !isNaN(p.antal) ? p.antal * p.pris : 0
-    );
-
-    const options = {
+    const historik = <%- JSON.stringify(historik) %>;
+  
+    const datoer = historik.map(h => h.dato);
+    const værdier = historik.map(h => h.værdi);
+  
+    const lineOptions = {
       chart: {
-        type: 'pie',
-        height: 1000,
+        type: 'line',
+        toolbar: { show: false }
       },
-      series: series,
-      labels: labels,
-      title: {
-        text: 'Fordeling af porteføljens værdi',
-        align: 'center'
+      series: [{
+        name: 'Urealiseret værdi',
+        data: værdier
+      }],
+      xaxis: {
+        categories: datoer,
+        title: { text: 'Dato' }
       },
-      legend: {
-        position: 'right',
-        fontSize: '14px'
+      yaxis: {
+        title: { text: 'Værdi i DKK' },
+        labels: {
+          formatter: val => val.toFixed(2) + ' kr.'
+        }
       },
       tooltip: {
         y: {
-          formatter: function (val) {
-            return val.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' });
-          }
+          formatter: val => val.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' })
         }
-      },
-      responsive: [{
-        breakpoint: 768,
-        options: {
-          chart: {
-            width: 320,
-            height: 300
-          },
-          legend: {
-            position: 'bottom'
-          }
-        }
-      }]
+      }
     };
-
-    const chart = new ApexCharts(document.querySelector("#pieChart"), options);
-    chart.render();
+  
+    const lineChart = new ApexCharts(document.querySelector("#lineChart"), lineOptions);
+    lineChart.render();
   </script>
-  <script>
-  const historik = <%- JSON.stringify(historik) %>;
-
-const datoer = historik.map(h => h.dato);
-const værdier = historik.map(h => h.værdi);
-
-const lineOptions = {
-  chart: {
-    type: 'line',
-    height: 280,
-    toolbar: {
-      show: false 
-    }
-  },
-  series: [{
-    name: 'Urealiseret værdi',
-    data: værdier
-  }],
-  xaxis: {
-    categories: datoer,
-    title: { text: 'Dato' }
-  },
-  yaxis: {
-    title: {
-      text: 'Værdi i DKK'
-    },
-    labels: {
-      formatter: function (val) {
-        return val.toFixed(2) + ' kr.';
-      }
-    }
-  },
-  tooltip: {
-    y: {
-      formatter: function (val) {
-        return val.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' });
-      }
-    }
-  }
-};
-
-const lineChart = new ApexCharts(document.querySelector("#lineChart"), lineOptions);
-lineChart.render();
-
-  </script>  
+  
+  
 </body>
 </html>

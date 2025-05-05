@@ -28,6 +28,11 @@ body {
   padding-top: 20px;
 }
 
+.højresideboks {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 .grafboks {
   background-color: rgb(31, 31, 31);
   border-radius: 10px;
@@ -39,25 +44,14 @@ body {
   font-size: 16px;
 }
 
-.højresideboks {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
 
 .diagramBoks {
   background-color: rgb(31, 31, 31);
   border-radius: 10px;
   padding: 20px;
   width: 300px;
-  height: 280px;
+  height: 310px;
   position: relative;
-}
-
-#pieChart {
-  width: 240px;  /* ca. 80% af boksen */
-  height: 240px;
-  margin: 0 auto;
 }
 
 
@@ -66,7 +60,9 @@ body {
   border-radius: 10px;
   padding: 20px;
   width: 300px;
-  height: 50px;
+  height: 40px;
+  margin-bottom: 10px;
+  padding-bottom: 30px;
 }
 
 .nedersteboks {

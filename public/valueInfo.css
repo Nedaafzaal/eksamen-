@@ -101,7 +101,7 @@ body {
     border-radius: 10px;
     padding: 20px;
     width: 1000px; 
-    height: 110px; 
+    height: 200px; 
     margin-left: 142px;
   }
 
@@ -114,6 +114,18 @@ body {
     margin-left: 142px;
     margin-top: 50px;
   }
+
+  #lineChart {
+    width: 100%;
+    height: 260px; /* tilpas højde efter behov */
+  }
+  
+  #pieChart {
+    width: 100%;
+    height: 260px; /* ens med linechart for symmetri */
+  }
+  
+
 
   .listeOverskrifter, .aktieRække {
     display: grid;
