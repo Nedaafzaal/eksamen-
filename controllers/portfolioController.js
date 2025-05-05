@@ -186,24 +186,55 @@ async function købEllerSælg(req, res) {
   }
   
 
-// Viser detaljer for et værdipapir
-async function visVærdipapirDetaljer(req, res) {
-  const værdipapirID = parseInt(req.params.id, 10);
-  if (isNaN(værdipapirID)) {
-    return res.status(400).send("Ugyldigt værdipapir-ID");
-  }
-  try {
-    const værdipapir = await portfolioModel.hentVærdipapirMedID(værdipapirID);
-    if (!værdipapir) {
-      return res.status(404).send("Værdipapir ikke fundet.");
+  async function visVærdipapirDetaljer(req, res) {
+    const værdipapirID = parseInt(req.params.id, 10);
+      if (isNaN(værdipapirID)) {
+        return res.status(400).send("Ugyldigt værdipapir-ID");
+      }
+    
+      try {
+        const værdipapir = await portfolioModel.hentVærdipapirMedID(værdipapirID);
+        if (!værdipapir) {
+          return res.status(404).send("Værdipapir ikke fundet.");
+        }
+    
+        const symbol = værdipapir.tickerSymbol;
+    
+        // 🔄 Hent aktuel pris fra Alpha Vantage API
+        const prisLink = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${process.env.API_KEY}`;
+        const prisSvar = await fetch(prisLink);
+        const prisData = await prisSvar.json();
+        const aktuelPris = parseFloat(prisData["Global Quote"]?.["05. price"]);
+    
+        // ✅ Beregn og opdater urealiseret gevinst/tab
+        const antal = parseFloat(værdipapir.antal);
+        const GAK = parseFloat(værdipapir.GAK);
+    
+        if (!isNaN(aktuelPris) && !isNaN(GAK) && !isNaN(antal)) {
+          const gevinst = (aktuelPris - GAK) * antal;
+    
+          // Opdater i databasen
+          const db = await sql.connect(sqlConfig);
+          await db.request()
+            .input("gevinst", sql.Decimal(18, 2), gevinst)
+            .input("id", sql.Int, værdipapirID)
+            .query(`
+              UPDATE dbo.værdipapir
+              SET urealiseretPorteføljeGevinstTab = @gevinst
+              WHERE værdipapirID = @id
+            `);
+    
+          // Også opdatér objektet inden visning
+          værdipapir.urealiseretPorteføljeGevinstTab = gevinst;
+        }
+    
+        res.render("valueInfo", { værdipapir });
+    
+      } catch (err) {
+        console.error(err);
+        res.status(500).send("Fejl ved visning af værdipapir.");
+      }
     }
-    res.render("valueInfo", { værdipapir });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Fejl ved visning af værdipapir.");
-  }
-}
-
 
 module.exports = {
   visPortefoljeOversigt,
