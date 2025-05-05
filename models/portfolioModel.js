@@ -43,11 +43,11 @@ async function hentVærdipapirerTilPortefølje(porteføljeID) {
           GAK, 
           urealiseretPorteføljeGevinstTab
         FROM dbo.værdipapir
-        WHERE porteføljeID = @porteføljeID
+        WHERE porteføljeID = @porteføljeID AND antal > 0
       `);
   
     return result.recordset;
-  }  
+  }
 
 // Hent samlet værdi for alle porteføljer ud fra værdipapirer
 async function hentSamletVærdiForAllePorteføljer() {
@@ -81,13 +81,16 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
     const result = await db.request()
       .input("id", sql.Int, porteføljeID)
       .query(`
-        SELECT * FROM dbo.transaktioner 
-        WHERE porteføljeID = @id
-          AND transaktionstype IN ('køb', 'salg')
+        SELECT t.*, k.kontonavn
+        FROM dbo.transaktioner t
+        JOIN dbo.konto k ON t.kontoID = k.kontoID
+        WHERE t.porteføljeID = @id
+          AND t.transaktionstype IN ('køb', 'sælg')
+        ORDER BY t.tidspunkt DESC
       `);
   
     return result.recordset;
-  }
+  }  
 
   async function tilføjVærdipapirTilPortefølje(data) {
     const db = await sql.connect(sqlConfig);

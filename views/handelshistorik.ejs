@@ -42,6 +42,7 @@
     <!--Overskrifter for hver kolonne i listen-->
     <div class="listeOverskrifter">
       <span>Transaktionstype</span> 
+      <span>Kontonavn</span>
       <span>Værdi type</span>
       <span>Kurs</span> 
       <span>Antal</span>
@@ -61,6 +62,7 @@
         <!--En række for hver transaktion-->
         <div class="transaktionRække">
             <div><%= t.transaktionstype %></div>
+            <div><%= t.kontonavn %></div>
             <div><%= t.værditype %></div>
             <div><%= new Intl.NumberFormat('da-DK').format(t.pris) %> kr</div> <!--pris med KR-->
             <div><%= t.antal %></div>
