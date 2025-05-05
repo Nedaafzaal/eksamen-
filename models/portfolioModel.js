@@ -21,7 +21,6 @@ async function hentPortefoljeMedID(ID) {
         FROM dbo.porteføljer 
         WHERE porteføljeID = @porteføljeID
     `);
-      
 
   return result.recordset[0];
 }
@@ -106,43 +105,98 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
   
   // Tilføj ny handel til transaktioner
  // Denne funktion bruges til at købe eller sælge værdipapirer
-async function registrerHandel(data) {
+ async function registrerHandel(data) {
     const db = await sql.connect(sqlConfig);
-
-    console.log(data);
+    data.antal = parseInt(data.antal);
   
-    // 1. Find ud af hvor mange penge der er på kontoen
+    console.log("Handelsdata:", data);
+  
+    // 1. Hent saldo
     const result = await db.request()
       .input("kontoID", sql.Int, data.kontoID)
       .query("SELECT saldo FROM dbo.konto WHERE kontoID = @kontoID");
   
     const pengePåKonto = result.recordset[0]?.saldo;
-    console.log("Saldo:", pengePåKonto);
-
-  
-    if (pengePåKonto == null) {
-      throw new Error("Der er ikke nok penge på konto.");
-    }
+    if (pengePåKonto == null) throw new Error("Der er ikke penge på den valgte konto.");
   
     const prisMedGebyr = data.pris + (data.gebyr || 0);
   
-    // 2. Tjek om vi har penge nok til at købe
-    if (pengePåKonto < prisMedGebyr) {
+    // 2. Valider køb
+    if (data.type === "køb" && pengePåKonto < prisMedGebyr) {
       throw new Error("Du har ikke nok penge til at købe.");
     }
   
-    // 3. Regn ud hvor mange penge der er tilbage
+    // 3. Valider og håndter salg
+    if (data.type === "sælg") {
+      const eksisterende = await db.request()
+        .input("porteføljeID", sql.Int, data.porteføljeID)
+        .input("ticker", sql.NVarChar, data.tickerSymbol)
+        .query(`
+          SELECT antal FROM dbo.værdipapir
+          WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
+        `);
+  
+      const antalEjet = eksisterende.recordset[0]?.antal;
+      if (antalEjet == null) throw new Error("Du ejer ikke dette værdipapir.");
+      if (antalEjet < data.antal) throw new Error("Du forsøger at sælge flere aktier end du ejer.");
+  
+      // Træk fra beholdning
+      await db.request()
+        .input("porteføljeID", sql.Int, data.porteføljeID)
+        .input("ticker", sql.NVarChar, data.tickerSymbol)
+        .input("antal", sql.Int, data.antal)
+        .query(`
+          UPDATE dbo.værdipapir
+          SET antal = antal - @antal
+          WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
+        `);
+  
+      // Beregn og opdater gevinst/tab FØR sletning
+      const gevinstResult = await db.request()
+        .input("porteføljeID", sql.Int, data.porteføljeID)
+        .input("ticker", sql.NVarChar, data.tickerSymbol)
+        .query(`
+          SELECT antal, GAK FROM dbo.værdipapir
+          WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
+        `);
+  
+      const { antal, GAK } = gevinstResult.recordset[0] || {};
+      if (!isNaN(antal) && !isNaN(GAK)) {
+        const gevinst = (antal * data.pris) - (antal * GAK);
+        await db.request()
+          .input("gevinst", sql.Decimal(18, 2), gevinst)
+          .input("porteføljeID", sql.Int, data.porteføljeID)
+          .input("ticker", sql.NVarChar, data.tickerSymbol)
+          .query(`
+            UPDATE dbo.værdipapir
+            SET urealiseretPorteføljeGevinstTab = @gevinst
+            WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
+          `);
+      }
+  
+      // Slet værdipapir hvis antal = 0
+      if (antal === 0) {
+        await db.request()
+          .input("porteføljeID", sql.Int, data.porteføljeID)
+          .input("ticker", sql.NVarChar, data.tickerSymbol)
+          .query(`
+            DELETE FROM dbo.værdipapir
+            WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
+          `);
+      }
+    }
+  
+    // 4. Opdater saldo
     const nySaldo = data.type === "køb"
       ? pengePåKonto - prisMedGebyr
       : pengePåKonto + prisMedGebyr;
   
-    // 4. Gem den nye saldo
     await db.request()
       .input("kontoID", sql.Int, data.kontoID)
       .input("saldo", sql.Decimal(18, 2), nySaldo)
       .query("UPDATE dbo.konto SET saldo = @saldo WHERE kontoID = @kontoID");
   
-    // 5. Gem handlen i transaktionstabellen
+    // 5. Registrer transaktion
     await db.request()
       .input("porteføljeID", sql.Int, data.porteføljeID)
       .input("kontoID", sql.Int, data.kontoID)
@@ -160,9 +214,8 @@ async function registrerHandel(data) {
         VALUES (@porteføljeID, @kontoID, @type, @pris, @gebyr, @dato, @tid, @antal, NULL, NULL, @ticker, @værditype)
       `);
   
-    // 6. Hvis det er et køb, så læg værdipapiret ind i porteføljen
+    // 6. Ved køb: indsæt eller opdater værdipapir
     if (data.type === "køb") {
-      // Tjek om værdipapiret allerede findes
       const eksisterendePapir = await db.request()
         .input("porteføljeID", sql.Int, data.porteføljeID)
         .input("ticker", sql.NVarChar, data.tickerSymbol)
@@ -170,9 +223,8 @@ async function registrerHandel(data) {
           SELECT værdipapirID FROM dbo.værdipapir
           WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
         `);
-    
+  
       if (eksisterendePapir.recordset.length === 0) {
-        // Papiret findes ikke – indsæt nyt
         await db.request()
           .input("porteføljeID", sql.Int, data.porteføljeID)
           .input("navn", sql.NVarChar, data.navn)
@@ -187,7 +239,6 @@ async function registrerHandel(data) {
             VALUES (@porteføljeID, @navn, @symbol, @pris, @antal, @type, @dato)
           `);
       } else {
-        // Papiret findes – opdater antal og pris
         await db.request()
           .input("porteføljeID", sql.Int, data.porteføljeID)
           .input("ticker", sql.NVarChar, data.tickerSymbol)
@@ -202,9 +253,9 @@ async function registrerHandel(data) {
             WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
           `);
       }
-    
-      // 7. Beregn og opdater GAK i værdipapir-tabellen
-      const result = await db.request()
+  
+      // 7. Genberegn og opdater GAK
+      const gakResult = await db.request()
         .input("porteføljeID", sql.Int, data.porteføljeID)
         .input("ticker", sql.NVarChar, data.tickerSymbol)
         .query(`
@@ -214,9 +265,8 @@ async function registrerHandel(data) {
             AND tickerSymbol = @ticker
             AND transaktionstype = 'køb'
         `);
-    
-      const nyGAK = result.recordset[0]?.GAK;
-    
+  
+      const nyGAK = gakResult.recordset[0]?.GAK;
       if (nyGAK !== null && nyGAK !== undefined) {
         await db.request()
           .input("GAK", sql.Decimal(18, 2), nyGAK)
@@ -227,22 +277,20 @@ async function registrerHandel(data) {
             SET GAK = @GAK
             WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
           `);
-
-          // 8. Beregn og opdater urealiseret gevinst/tab
-      const aktuelPris = data.pris;
-      const result2 = await db.request()
+      }
+  
+      // 8. Opdater urealiseret gevinst/tab ved køb
+      const gevinstResult = await db.request()
         .input("porteføljeID", sql.Int, data.porteføljeID)
         .input("ticker", sql.NVarChar, data.tickerSymbol)
         .query(`
           SELECT antal, GAK FROM dbo.værdipapir
           WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
         `);
-
-      const { antal, GAK } = result2.recordset[0] || {};
-
+  
+      const { antal, GAK } = gevinstResult.recordset[0] || {};
       if (!isNaN(antal) && !isNaN(GAK)) {
-        const gevinst = (antal * aktuelPris) - (antal * GAK);
-
+        const gevinst = (antal * data.pris) - (antal * GAK);
         await db.request()
           .input("gevinst", sql.Decimal(18, 2), gevinst)
           .input("porteføljeID", sql.Int, data.porteføljeID)
@@ -252,12 +300,9 @@ async function registrerHandel(data) {
             SET urealiseretPorteføljeGevinstTab = @gevinst
             WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
           `);
-        }
-
       }
     }
-    
-    }
+  }
   
   // Hent alle konti for en bestemt bruger
 async function hentKontiForBruger(brugerID) {
@@ -290,7 +335,6 @@ async function hentKontiForBruger(brugerID) {
     return result.recordset[0];
   }
   
-
   async function hentVærdiHistorik(porteføljeID) {
     const db = await sql.connect(sqlConfig);
     const result = await db.request()
@@ -334,4 +378,5 @@ async function hentKontiForBruger(brugerID) {
     hentVærdiHistorik,
     opdaterSidsteHandelsDato
   };
+
   

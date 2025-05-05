@@ -34,7 +34,10 @@
   <!-- Indhold -->
   <div class="indhold">
     <div class="overskrift">
-      <h1>Detaljer for <%= værdipapir.navn %></h1>
+      <h2>Detaljer for <%= værdipapir.navn %></h2>
+      <div class="sælgKnapBox">
+        <a href="/portefolje/vaerdipapir/<%= værdipapir.værdipapirID %>/sellPapir">Sælg</a>
+      </div>
     </div>
 
     <div class="oversigtBox">
@@ -85,3 +88,5 @@
   </script>
 </body>
 </html>
+
+

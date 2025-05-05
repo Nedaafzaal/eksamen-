@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sælg værdipapir</title>
+  <link href="/sellPapir.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="sælgVærdipapir">
+    <h3>Sælg værdipapir <%= værdipapir.navn %></h3>
+    <form action="/portefolje/vaerdipapir/<%= værdipapir.værdipapirID %>/sellPapir" method="POST">
+
+      <div class="opretBox">
+        <input type="text" name="pris" value="<%= pris %>" readonly />
+      </div>
+
+      <div class="opretBox">
+        <input type="number" name="antal" placeholder="Antal" required />
+      </div>
+
+      <div class="opretBox">
+        <input type="number" name="gebyr" placeholder="Gebyr (valgfrit)" step="0.01" />
+      </div>
+
+      <div class="opretBox">
+        <select name="kontoID" placeholder="Konto hvorpå du ønsker pengene" required>
+          <% konti.forEach(k => { %>
+            <option value="<%= k.kontoID %>"><%= k.kontonavn %> - <%= k.valuta %></option>
+          <% }); %>
+        </select>
+      </div>
+
+      <input type="hidden" name="porteføljeID" value="<%= porteføljeID %>" />
+      <input type="hidden" name="værdipapirID" value="<%= værdipapir.værdipapirID %>" />
+      <input type="hidden" name="transaktionstype" value="sælg" />
+      <input type="hidden" name="værditype" value="<%= værditype %>" />
+      <input type="hidden" name="tickerSymbol" value="<%= tickerSymbol %>" />
+      <input type="hidden" name="navn" value="<%= navn %>" />
+      <input type="hidden" name="tidspunkt" value="<%= tidspunkt %>" />
+
+      <button id="sendFormular" type="submit">Bekræft salg</button>
+    </form>
+  </div>
+</body>
+</html>
