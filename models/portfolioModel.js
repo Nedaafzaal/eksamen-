@@ -67,12 +67,11 @@ async function opretNyPortefolje(data) {
     await db.request()
       .input("navn", sql.NVarChar, data.navn)
       .input("kontotilknytning", sql.NVarChar, data.kontotilknytning)
-      .input("forventetVærdi", sql.Decimal(18, 2), parseFloat(data.forventetVærdi))
       .input("brugerID", sql.Int, data.brugerID)
       .input("oprettelsesDato", sql.Date, new Date())
       .query(`
-        INSERT INTO dbo.porteføljer (navn, kontotilknytning, forventetværdi, brugerID, oprettelsesDato)
-        VALUES (@navn, @kontotilknytning, @forventetVærdi, @brugerID, @oprettelsesDato)
+        INSERT INTO dbo.porteføljer (navn, kontotilknytning, brugerID, oprettelsesDato)
+        VALUES (@navn, @kontotilknytning, @brugerID, @oprettelsesDato)
       `);
   }
   

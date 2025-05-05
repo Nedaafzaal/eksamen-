@@ -31,7 +31,6 @@
     </ul>
   </div>
 
-
   <!--Indhold på siden-->
   <div class="indhold">
     <h1 class="overskrift">Porteføljeoversigt</h1>
@@ -68,7 +67,6 @@
         <span>Portefølje Navn</span>
         <span>Bank Account</span>
         <span>Sidste Handel</span>
-        <span>Total Value</span>
       </div>
 
       <% if (portefoljer.length > 0) { %> <!--hvis der findes porteføljer vis dem-->
@@ -76,7 +74,6 @@
       
           <!--Sørger for man kan trykke hvor som helst på rækken for at blive viderestillet-->
           <a href="/portefolje/<%= p.porteføljeID %>" 
-            
             class="porteføljeRækkeLink">
       
             <!--Hele rækken, viser værdierne nedenfor-->
@@ -90,14 +87,14 @@
                   <em>Ingen handler endnu</em>
                 <% } %>
               </div>
-              
-              <div><%= new Intl.NumberFormat('da-DK', { style: 'currency', currency: 'DKK' }).format(p.forventetVærdi) %></div>
             </div>
           </a>
         <% }); %>
       <% } else { %>
         <p>Ingen porteføljer fundet endnu.</p> <!--hvis der ingen porteføljer er-->
       <% } %>
+    </div>
+
   </div>
 
   <script> //funktion til at åbne og lukke side menu
@@ -116,32 +113,32 @@
       menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
     }
   </script>
- <!-- ApexCharts bibliotek -->
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-<script>
-  var options = {
-    chart: {
-      type: 'donut',
-    },
-    series: [35000, 12000, 24000, 14000, 15000],
-    labels: ['Growth Tech', 'Tech Leaders', 'ETF +', 'Space & Defence', 'E-Com'],
-    responsive: [{
-      breakpoint: 480,
-      options: {
-        chart: {
-          width: 320
-        },
-        legend: {
-          position: 'bottom'
+  <!-- ApexCharts bibliotek -->
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+  <script>
+    var options = {
+      chart: {
+        type: 'donut',
+      },
+      series: [35000, 12000, 24000, 14000, 15000],
+      labels: ['Growth Tech', 'Tech Leaders', 'ETF +', 'Space & Defence', 'E-Com'],
+      responsive: [{
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 320
+          },
+          legend: {
+            position: 'bottom'
+          }
         }
-      }
-    }]
-  };
+      }]
+    };
 
-  var chart = new ApexCharts(document.querySelector("#donutChart"), options);
-  chart.render();
-</script>
-</script>
+    var chart = new ApexCharts(document.querySelector("#donutChart"), options);
+    chart.render();
+  </script>
 </body>
 </html>
