@@ -46,6 +46,10 @@ body {
   text-align: center;
 }
 
+.grøn {
+  color: green;
+}
+
 .højreØvreBoks {
   background-color: rgb(31, 31, 31);
   border-radius: 10px;
