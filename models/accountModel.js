@@ -58,25 +58,38 @@ async function opdaterSaldo(kontoID, beløb) {
 
 //gemmer en ny transaktion i vores database 
 async function gemTransaktion(data) {
-  const db = await sql.connect(sqlConfig);
-  const nu = new Date(); //tager nuværende data og tid 
-  await db.request() 
-    .input("porteføljeID", sql.Int, data.porteføljeID)
-    .input("kontoID", sql.Int, data.kontoID)
-    .input("sælgerID", sql.Int, data.type === "Hæv" ? data.kontoID : null) //hvis der er en hævning er kontoen afsender 
-    .input("modtagerID", sql.Int, data.type === "Indsæt" ? data.kontoID : null) //hvis der er en indsættelse er kontoen modtager 
-    .input("type", sql.VarChar(20), data.type) 
-    .input("dato", sql.Date, nu)
-    .input("tid", sql.Time, nu)
-    .input("valuta", sql.VarChar(10), data.valuta || "DKK") //valuta standard er DKK
-    .input("beløb", sql.Decimal(18, 2), data.beløb) 
-    .input("gebyr", sql.Int, 0) //gebyr stanard 0kr. 
-    .query(`
-      INSERT INTO dbo.transaktioner
-      (porteføljeID, kontoID, sælgerKontoID, modtagerKontoID, transaktionstype, dato, tidspunkt, værditype, pris, gebyr)
-      VALUES (@porteføljeID, @kontoID, @sælgerID, @modtagerID, @type, @dato, @tid, @valuta, @beløb, @gebyr)
-    `); //indsætter en ny transaktion i databasen 
-}
+    const db = await sql.connect(sqlConfig);
+    const nu = new Date(); // nuværende dato og tid
+  
+    // Gem selve transaktionen
+    await db.request() 
+      .input("porteføljeID", sql.Int, data.porteføljeID)
+      .input("kontoID", sql.Int, data.kontoID)
+      .input("sælgerID", sql.Int, data.type === "Hæv" ? data.kontoID : null)
+      .input("modtagerID", sql.Int, data.type === "Indsæt" ? data.kontoID : null)
+      .input("type", sql.VarChar(20), data.type)
+      .input("dato", sql.Date, nu)
+      .input("tid", sql.Time, nu)
+      .input("valuta", sql.VarChar(10), data.valuta || "DKK")
+      .input("beløb", sql.Decimal(18, 2), data.beløb)
+      .input("gebyr", sql.Int, 0)
+      .query(`
+        INSERT INTO dbo.transaktioner
+        (porteføljeID, kontoID, sælgerKontoID, modtagerKontoID, transaktionstype, dato, tidspunkt, værditype, pris, gebyr)
+        VALUES (@porteføljeID, @kontoID, @sælgerID, @modtagerID, @type, @dato, @tid, @valuta, @beløb, @gebyr)
+      `);
+  
+    // Opdater sidsteHandelsDato i porteføljen
+    await db.request()
+      .input("porteføljeID", sql.Int, data.porteføljeID)
+      .input("dato", sql.Date, nu)
+      .query(`
+        UPDATE dbo.porteføljer
+        SET sidsteHandelsDato = @dato
+        WHERE porteføljeID = @porteføljeID
+      `);
+  }
+  
 
 
 //opret en ny konto 

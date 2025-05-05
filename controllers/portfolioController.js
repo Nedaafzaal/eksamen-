@@ -155,32 +155,36 @@ async function visBuyPapirForm(req, res) {
 
 // Når brugeren køber eller sælger værdipapir
 async function købEllerSælg(req, res) {
-  try {
-    const dollarKurs = 7.0;
-    const prisIUSD = parseFloat(req.body.pris);
-    const prisIDKK = prisIUSD * dollarKurs;
-    const data = {
-      porteføljeID: parseInt(req.body.porteføljeID),
-      kontoID: parseInt(req.body.kontoID),
-      værditype: req.body.værditype,
-      type: req.body.transaktionstype,
-      pris: prisIDKK,
-      gebyr: parseFloat(req.body.gebyr) || 0,
-      dato: new Date(),
-      tidspunkt: new Date(),
-      antal: parseFloat(req.body.antal),
-      navn: req.body.navn,
-      tickerSymbol: Array.isArray(req.body.tickerSymbol)
-        ? req.body.tickerSymbol[0]
-        : req.body.tickerSymbol
-    };
-    await registrerHandel(data);
-    res.redirect(`/portefolje/${data.porteføljeID}`);
-  } catch (err) {
-    console.error("Fejl under handel:", err.message);
-    res.status(400).send("Noget gik galt: " + err.message);
+    try {
+      const dollarKurs = 7.0;
+      const prisIUSD = parseFloat(req.body.pris);
+      const prisIDKK = prisIUSD * dollarKurs;
+      const data = {
+        porteføljeID: parseInt(req.body.porteføljeID),
+        kontoID: parseInt(req.body.kontoID),
+        værditype: req.body.værditype,
+        type: req.body.transaktionstype,
+        pris: prisIDKK,
+        gebyr: parseFloat(req.body.gebyr) || 0,
+        dato: new Date(),
+        tidspunkt: new Date(),
+        antal: parseFloat(req.body.antal),
+        navn: req.body.navn,
+        tickerSymbol: Array.isArray(req.body.tickerSymbol)
+          ? req.body.tickerSymbol[0]
+          : req.body.tickerSymbol
+      };
+  
+      await registrerHandel(data);
+      await portfolioModel.opdaterSidsteHandelsDato(data.porteføljeID); // Ny model-funktion
+  
+      res.redirect(`/portefolje/${data.porteføljeID}`);
+    } catch (err) {
+      console.error("Fejl under handel:", err.message);
+      res.status(400).send("Noget gik galt: " + err.message);
+    }
   }
-}
+  
 
 // Viser detaljer for et værdipapir
 async function visVærdipapirDetaljer(req, res) {

@@ -82,21 +82,30 @@
       <div class="listeOverskrifter">
         <span>Navn</span>
         <span>Symbol</span>
+        <span>Købsdato</span>
       </div>
-
+    
       <% if (værdipapirer.length > 0) { %>
         <% værdipapirer.forEach(v => { %> 
           <a href="/portefolje/vaerdipapir/<%= v.id %>" class="aktieLink">
             <div class="aktieRække"> 
               <div><%= v.navn || 'Ukendt' %></div> 
               <div><%= v.tickerSymbol || 'Ukendt' %></div>
-            </div>
-            </a>          
+              <div>
+                <% if (v.datoKøbt) { %>
+                  <%= new Date(v.datoKøbt).toLocaleDateString('da-DK') %>
+                <% } else { %>
+                  <em>Ukendt</em>
+                <% } %>
+              </div>
+            </div> <!-- <- Manglede denne -->
+          </a>          
         <% }) %>
       <% } else { %>
         <p><em>Ingen værdipapirer fundet endnu.</em></p>
       <% } %>
-      
+    </div>
+    
 
     <script>
       const sidemenu = document.querySelector('.sidemenu');

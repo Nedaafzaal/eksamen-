@@ -40,6 +40,7 @@ async function hentVærdipapirerTilPortefølje(porteføljeID) {
           antal, 
           pris, 
           forventetVærdi, 
+          datoKøbt,
           GAK, 
           urealiseretPorteføljeGevinstTab
         FROM dbo.værdipapir
@@ -259,7 +260,6 @@ async function registrerHandel(data) {
     
     }
   
-  
   // Hent alle konti for en bestemt bruger
 async function hentKontiForBruger(brugerID) {
     const db = await sql.connect(sqlConfig);
@@ -308,9 +308,19 @@ async function hentKontiForBruger(brugerID) {
     return result.recordset;
   }
   
-
-
+  async function opdaterSidsteHandelsDato(porteføljeID) {
+    const db = await sql.connect(sqlConfig);
+    await db.request()
+      .input("porteføljeID", sql.Int, porteføljeID)
+      .input("dato", sql.Date, new Date())
+      .query(`
+        UPDATE dbo.porteføljer
+        SET sidsteHandelsDato = @dato
+        WHERE porteføljeID = @porteføljeID
+      `);
+  }
   
+
   module.exports = {
     hentAllePortefoljer,
     hentPortefoljeMedID,
@@ -322,6 +332,7 @@ async function hentKontiForBruger(brugerID) {
     registrerHandel,
     hentKontiForBruger,
     hentVærdipapirMedID,
-    hentVærdiHistorik
+    hentVærdiHistorik,
+    opdaterSidsteHandelsDato
   };
   
