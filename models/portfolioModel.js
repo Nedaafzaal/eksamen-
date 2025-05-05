@@ -5,7 +5,7 @@ const sqlConfig = require("../sqlConfig/sqlConfig");
 async function hentAllePortefoljer() {
   const db = await sql.connect(sqlConfig);
   const result = await db.request().query(`
-    SELECT * FROM eksamenSQL.porteføljer
+    SELECT * FROM dbo.porteføljer
   `);
 
   return result.recordset;
@@ -18,7 +18,7 @@ async function hentPortefoljeMedID(ID) {
     .input("porteføljeID", sql.Int, ID)
     .query(`
         SELECT porteføljeID, navn, oprettelsesDato 
-        FROM eksamenSQL.porteføljer 
+        FROM dbo.porteføljer 
         WHERE porteføljeID = @porteføljeID
     `);
       
@@ -42,7 +42,7 @@ async function hentVærdipapirerTilPortefølje(porteføljeID) {
           forventetVærdi, 
           GAK, 
           urealiseretPorteføljeGevinstTab
-        FROM eksamenSQL.værdipapir
+        FROM dbo.værdipapir
         WHERE porteføljeID = @porteføljeID
       `);
   
@@ -54,7 +54,7 @@ async function hentSamletVærdiForAllePorteføljer() {
   const db = await sql.connect(sqlConfig);
   const result = await db.request().query(`
     SELECT porteføljeID, SUM(forventetVærdi) AS samletVærdi
-    FROM eksamenSQL.værdipapir
+    FROM dbo.værdipapir
     GROUP BY porteføljeID
   `);
   return result.recordset;
@@ -62,18 +62,19 @@ async function hentSamletVærdiForAllePorteføljer() {
 
 // Opret en ny portefølje i databasen
 async function opretNyPortefolje(data) {
-  const db = await sql.connect(sqlConfig);
-  await db.request()
-    .input("navn", sql.NVarChar, data.navn)
-    .input("kontotilknytning", sql.NVarChar, data.kontotilknytning)
-    .input("forventetVærdi", sql.Decimal(18, 2), data.forventetVærdi)
-    .input("værdipapirNavn", sql.NVarChar, "Ingen endnu")
-    .query(`
-      INSERT INTO eksamenSQL.porteføljer
-      (navn, kontotilknytning, forventetVærdi, værdipapirNavn)
-      VALUES (@navn, @kontotilknytning, @forventetVærdi, @værdipapirNavn)
-    `);
-}
+    const db = await sql.connect(sqlConfig);
+    await db.request()
+      .input("navn", sql.NVarChar, data.navn)
+      .input("kontotilknytning", sql.NVarChar, data.kontotilknytning)
+      .input("forventetVærdi", sql.Decimal(18, 2), parseFloat(data.forventetVærdi))
+      .input("brugerID", sql.Int, data.brugerID)
+      .input("oprettelsesDato", sql.Date, new Date())
+      .query(`
+        INSERT INTO dbo.porteføljer (navn, kontotilknytning, forventetværdi, brugerID, oprettelsesDato)
+        VALUES (@navn, @kontotilknytning, @forventetVærdi, @brugerID, @oprettelsesDato)
+      `);
+  }
+  
 
 // Hent alle transaktioner for et portefølje
 async function hentTransaktionerForPortefølje(porteføljeID) {
@@ -81,7 +82,7 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
     const result = await db.request()
       .input("id", sql.Int, porteføljeID)
       .query(`
-        SELECT * FROM eksamenSQL.transaktioner 
+        SELECT * FROM dbo.transaktioner 
         WHERE porteføljeID = @id
           AND transaktionstype IN ('køb', 'salg')
       `);
@@ -98,7 +99,7 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
       .input("pris", sql.Decimal(18, 2), data.pris)
       .input("antal", sql.Int, data.antal)
       .query(`
-        INSERT INTO eksamenSQL.værdipapir (porteføljeID, navn, tickerSymbol, pris, antal)
+        INSERT INTO dbo.værdipapir (porteføljeID, navn, tickerSymbol, pris, antal)
         VALUES (@porteføljeID, @navn, @tickerSymbol, @pris, @antal)
       `);
   }
@@ -113,7 +114,7 @@ async function registrerHandel(data) {
     // 1. Find ud af hvor mange penge der er på kontoen
     const result = await db.request()
       .input("kontoID", sql.Int, data.kontoID)
-      .query("SELECT saldo FROM eksamenSQL.konto WHERE kontoID = @kontoID");
+      .query("SELECT saldo FROM dbo.konto WHERE kontoID = @kontoID");
   
     const pengePåKonto = result.recordset[0]?.saldo;
     console.log("Saldo:", pengePåKonto);
@@ -139,7 +140,7 @@ async function registrerHandel(data) {
     await db.request()
       .input("kontoID", sql.Int, data.kontoID)
       .input("saldo", sql.Decimal(18, 2), nySaldo)
-      .query("UPDATE eksamenSQL.konto SET saldo = @saldo WHERE kontoID = @kontoID");
+      .query("UPDATE dbo.konto SET saldo = @saldo WHERE kontoID = @kontoID");
   
     // 5. Gem handlen i transaktionstabellen
     await db.request()
@@ -154,7 +155,7 @@ async function registrerHandel(data) {
       .input("ticker", sql.NVarChar, data.tickerSymbol)
       .input("værditype", sql.NVarChar, data.værditype)
       .query(`
-        INSERT INTO eksamenSQL.transaktioner
+        INSERT INTO dbo.transaktioner
         (porteføljeID, kontoID, transaktionstype, pris, gebyr, dato, tidspunkt, antal, sælgerKontoID, modtagerKontoID, tickerSymbol, værditype)
         VALUES (@porteføljeID, @kontoID, @type, @pris, @gebyr, @dato, @tid, @antal, NULL, NULL, @ticker, @værditype)
       `);
@@ -166,7 +167,7 @@ async function registrerHandel(data) {
         .input("porteføljeID", sql.Int, data.porteføljeID)
         .input("ticker", sql.NVarChar, data.tickerSymbol)
         .query(`
-          SELECT værdipapirID FROM eksamenSQL.værdipapir
+          SELECT værdipapirID FROM dbo.værdipapir
           WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
         `);
     
@@ -181,7 +182,7 @@ async function registrerHandel(data) {
           .input("type", sql.NVarChar, data.værditype)
           .input("dato", sql.Date, new Date())
           .query(`
-            INSERT INTO eksamenSQL.værdipapir
+            INSERT INTO dbo.værdipapir
             (porteføljeID, navn, tickerSymbol, pris, antal, type, datoKøbt)
             VALUES (@porteføljeID, @navn, @symbol, @pris, @antal, @type, @dato)
           `);
@@ -194,7 +195,7 @@ async function registrerHandel(data) {
           .input("pris", sql.Decimal(18, 2), data.pris)
           .input("dato", sql.Date, new Date())
           .query(`
-            UPDATE eksamenSQL.værdipapir
+            UPDATE dbo.værdipapir
             SET antal = antal + @antal,
                 pris = @pris,
                 datoKøbt = @dato
@@ -208,7 +209,7 @@ async function registrerHandel(data) {
         .input("ticker", sql.NVarChar, data.tickerSymbol)
         .query(`
           SELECT AVG(pris) AS GAK
-          FROM eksamenSQL.transaktioner
+          FROM dbo.transaktioner
           WHERE porteføljeID = @porteføljeID
             AND tickerSymbol = @ticker
             AND transaktionstype = 'køb'
@@ -222,7 +223,7 @@ async function registrerHandel(data) {
           .input("porteføljeID", sql.Int, data.porteføljeID)
           .input("ticker", sql.NVarChar, data.tickerSymbol)
           .query(`
-            UPDATE eksamenSQL.værdipapir
+            UPDATE dbo.værdipapir
             SET GAK = @GAK
             WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
           `);
@@ -233,7 +234,7 @@ async function registrerHandel(data) {
         .input("porteføljeID", sql.Int, data.porteføljeID)
         .input("ticker", sql.NVarChar, data.tickerSymbol)
         .query(`
-          SELECT antal, GAK FROM eksamenSQL.værdipapir
+          SELECT antal, GAK FROM dbo.værdipapir
           WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
         `);
 
@@ -247,7 +248,7 @@ async function registrerHandel(data) {
           .input("porteføljeID", sql.Int, data.porteføljeID)
           .input("ticker", sql.NVarChar, data.tickerSymbol)
           .query(`
-            UPDATE eksamenSQL.værdipapir
+            UPDATE dbo.værdipapir
             SET urealiseretPorteføljeGevinstTab = @gevinst
             WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
           `);
@@ -265,7 +266,7 @@ async function hentKontiForBruger(brugerID) {
     const result = await db.request()
       .input("brugerID", sql.Int, brugerID)
       .query(`
-        SELECT * FROM eksamenSQL.konto WHERE brugerID = @brugerID
+        SELECT * FROM dbo.konto WHERE brugerID = @brugerID
       `);
   
     return result.recordset;
@@ -284,7 +285,7 @@ async function hentKontiForBruger(brugerID) {
         pris, 
         GAK, 
         urealiseretPorteføljeGevinstTab
-        FROM eksamenSQL.værdipapir
+        FROM dbo.værdipapir
         WHERE værdipapirID = @id`);
   
     return result.recordset[0];
@@ -299,7 +300,7 @@ async function hentKontiForBruger(brugerID) {
         SELECT 
           CONVERT(date, datoKøbt) as dato,
           SUM(urealiseretPorteføljeGevinstTab) as værdi
-        FROM eksamenSQL.værdipapir
+        FROM dbo.værdipapir
         WHERE porteføljeID = @porteføljeID
         GROUP BY CONVERT(date, datoKøbt)
         ORDER BY dato

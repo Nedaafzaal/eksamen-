@@ -8,7 +8,7 @@ class BrugerData {
     const resultat = await database.request()
       .input("brugernavn", sql.NVarChar, brugernavn)
       .query(`
-        SELECT * FROM [eksamenSQL].[bruger]
+        SELECT * FROM [dbo].[bruger]
         WHERE brugernavn = @brugernavn
       `);
 
@@ -27,7 +27,7 @@ class BrugerData {
       .input("fødselsdato", sql.Date, data.fødselsdag)
       .input("telefonnummer", sql.NVarChar, data.telefonnummer)
       .query(`
-        INSERT INTO [eksamenSQL].[bruger]
+        INSERT INTO [dbo].[bruger]
         (fornavn, efternavn, brugernavn, adgangskode, email, fødselsdato, telefonnummer)
         VALUES (@fornavn, @efternavn, @brugernavn, @adgangskode, @email, @fødselsdato, @telefonnummer)
       `);
@@ -40,7 +40,7 @@ class BrugerData {
       .input("brugernavn", sql.NVarChar, brugernavn)
       .input("adgangskode", sql.NVarChar, adgangskode)
       .query(`
-        SELECT * FROM [eksamenSQL].[bruger]
+        SELECT * FROM [dbo].[bruger]
         WHERE brugernavn = @brugernavn AND adgangskode = @adgangskode
       `);
 
@@ -54,7 +54,7 @@ class BrugerData {
       .input("brugernavn", sql.NVarChar, brugernavn)
       .input("nyKode", sql.NVarChar, nyKode)
       .query(`
-        UPDATE [eksamenSQL].[bruger]
+        UPDATE [dbo].[bruger]
         SET adgangskode = @nyKode
         WHERE brugernavn = @brugernavn
       `);

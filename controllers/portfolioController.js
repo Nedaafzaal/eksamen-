@@ -50,18 +50,33 @@ function visOpretPortefoljeFormular(req, res) {
 }
 
 // Når brugeren sender formularen og vil oprette ny portefølje
+// Når brugeren sender formularen og vil oprette ny portefølje
 async function opretPortefolje(req, res) {
-  const { navn, kontotilknytning, forventetVærdi } = req.body;
-  try {
-    await portfolioModel.opretNyPortefolje({ navn, kontotilknytning, forventetVærdi });
-    res.redirect("/portefolje/oversigt");
-  } catch (err) {
-    console.error("Fejl ved oprettelse af portefølje:", err);
-    res.status(500).send("Kunne ikke oprette portefølje.");
+    const { navn, kontotilknytning, forventetVærdi } = req.body;
+    const brugerID = req.cookies.brugerID; // eller hvor du gemmer det
+  
+    if (!brugerID) {
+      return res.status(401).send("Bruger ikke logget ind.");
+    }
+  
+    try {
+      await portfolioModel.opretNyPortefolje({
+        navn,
+        kontotilknytning,
+        forventetVærdi,
+        brugerID
+      });
+  
+      res.redirect("/portefolje/oversigt");
+    } catch (err) {
+      console.error("Fejl ved oprettelse af portefølje:", err);
+      res.status(500).send("Kunne ikke oprette portefølje.");
+    }
   }
-}
+  
 
 // Viser køb/salg transaktioner for en portefølje
+
 async function hentTransaktionerForPortefølje(req, res) {
     const porteføljeID = parseInt(req.params.id, 10);
     if (isNaN(porteføljeID)) {

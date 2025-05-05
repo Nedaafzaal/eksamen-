@@ -5,8 +5,8 @@ async function hentPorteføljerMedAktier() {
   const db = await sql.connect(sqlConfig);
   const result = await db.request().query(`
     SELECT p.navn, v.tickerSymbol, v.pris, v.antal
-    FROM eksamenSQL.porteføljer p
-    JOIN eksamenSQL.værdipapir v ON p.porteføljeID = v.porteføljeID
+    FROM dbo.porteføljer p
+    JOIN dbo.værdipapir v ON p.porteføljeID = v.porteføljeID
   `);
   return result.recordset;
 }

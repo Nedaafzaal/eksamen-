@@ -6,7 +6,7 @@ const sqlConfig = require("../sqlConfig/sqlConfig"); //importere oplysninger der
 async function hentAlleKonti() {
   const db = await sql.connect(sqlConfig); //opretter forbindelse til databasen
   const result = await db.request().query(`
-    SELECT * FROM eksamenSQL.konto
+    SELECT * FROM dbo.konto
   `); //SQL forspørgsel der henter alle konti
   return result.recordset; //retunere en liste af alle konti
 }
@@ -16,11 +16,13 @@ async function hentAlleKonti() {
 async function hentKontoMedID(kontoID) {
   const db = await sql.connect(sqlConfig);
   const result = await db.request()
-    .input("id", sql.Int, kontoID) //henter den parameter som forspørgslen kommer til at indeholde 
+    .input("ID", sql.Int, kontoID) //henter den parameter som forspørgslen kommer til at indeholde 
     .query(`
-      SELECT * FROM eksamenSQL.konto WHERE kontoID = @id 
+        SELECT kontoID, porteføljeID, kontonavn, saldo, valuta, oprettelsesdato, bankreference, brugerID, aktiv 
+        FROM dbo.konto 
+        WHERE kontoID = @ID
     `); //forspørgsel der henter konto som matcher id
-
+    
   return result.recordset[0]; //retunere selve kontoen 
 }
 
@@ -29,10 +31,10 @@ async function hentKontoMedID(kontoID) {
 async function hentTransaktionerForKonto(kontoID) {
   const db = await sql.connect(sqlConfig);
   const result = await db.request()
-  .input("id", sql.Int, kontoID) //angiver parameter til forspørgsel 
+  .input("ID", sql.Int, kontoID) //angiver parameter til forspørgsel 
   .query(`
-    SELECT * FROM eksamenSQL.transaktioner 
-    WHERE (sælgerKontoID = @id OR modtagerKontoID = @id)
+    SELECT * FROM dbo.transaktioner 
+    WHERE (sælgerKontoID = @ID OR modtagerKontoID = @ID)
       AND transaktionstype IN ('hæv', 'indsæt')
   `); //henter alle transaktioner hvor kontoen enten er modtager eller sælger 
 
@@ -44,12 +46,12 @@ async function hentTransaktionerForKonto(kontoID) {
 async function opdaterSaldo(kontoID, beløb) {
   const db = await sql.connect(sqlConfig);
   await db.request()
-    .input("id", sql.Int, kontoID) 
+    .input("ID", sql.Int, kontoID) 
     .input("beløb", sql.Decimal(18, 2), beløb) //parameter beløb til forspørgsel, enten positivt eller negativt tal
     .query(`
-      UPDATE eksamenSQL.konto 
+      UPDATE dbo.konto 
       SET saldo = saldo + @beløb 
-      WHERE kontoID = @id
+      WHERE kontoID = @ID
     `); //opdatere saldoen ved at ligge beløbet til uanset om det er + eller - 
 }
 
@@ -59,6 +61,8 @@ async function gemTransaktion(data) {
   const db = await sql.connect(sqlConfig);
   const nu = new Date(); //tager nuværende data og tid 
   await db.request() 
+    .input("porteføljeID", sql.Int, data.porteføljeID)
+    .input("kontoID", sql.Int, data.kontoID)
     .input("sælgerID", sql.Int, data.type === "Hæv" ? data.kontoID : null) //hvis der er en hævning er kontoen afsender 
     .input("modtagerID", sql.Int, data.type === "Indsæt" ? data.kontoID : null) //hvis der er en indsættelse er kontoen modtager 
     .input("type", sql.VarChar(20), data.type) 
@@ -68,9 +72,9 @@ async function gemTransaktion(data) {
     .input("beløb", sql.Decimal(18, 2), data.beløb) 
     .input("gebyr", sql.Int, 0) //gebyr stanard 0kr. 
     .query(`
-      INSERT INTO eksamenSQL.transaktioner
-      (sælgerKontoID, modtagerKontoID, transaktionstype, dato, tidspunkt, værditype, pris, gebyr)
-      VALUES (@sælgerID, @modtagerID, @type, @dato, @tid, @valuta, @beløb, @gebyr)
+      INSERT INTO dbo.transaktioner
+      (porteføljeID, kontoID, sælgerKontoID, modtagerKontoID, transaktionstype, dato, tidspunkt, værditype, pris, gebyr)
+      VALUES (@porteføljeID, @kontoID, @sælgerID, @modtagerID, @type, @dato, @tid, @valuta, @beløb, @gebyr)
     `); //indsætter en ny transaktion i databasen 
 }
 
@@ -79,32 +83,34 @@ async function gemTransaktion(data) {
 async function opretNyKonto(formData, brugerID) {
     const db = await sql.connect(sqlConfig);
     const result = await db.request()
-      .input("navn", sql.NVarChar, formData.navn)
-      .input("saldo", sql.Decimal(18, 2), parseFloat(formData.saldo))
-      .input("valuta", sql.NVarChar, formData.valuta)
-      .input("dato", sql.Date, new Date())
-      .input("bankref", sql.NVarChar, formData.bankreference)
-      .input("brugerID", sql.Int, brugerID)
-      .query(`
-        INSERT INTO eksamenSQL.konto
-        (kontonavn, saldo, valuta, oprettelsesdato, bankreference, brugerID)
-        VALUES (@navn, @saldo, @valuta, @dato, @bankref, @brugerID)
-      `); //opretter en ny konto i databasen 
-  
-    return result.recordset?.[0]?.kontoID; //returner kontoID efter oprettelsen så det kan bruges til at vise kontoen 
-  }
+  .input("navn", sql.NVarChar, formData.navn)
+  .input("saldo", sql.Decimal(18, 2), parseFloat(formData.saldo))
+  .input("valuta", sql.NVarChar, formData.valuta)
+  .input("dato", sql.Date, new Date())
+  .input("bankref", sql.NVarChar, formData.bankreference)
+  .input("brugerID", sql.Int, brugerID)
+  .input("porteføljeID", sql.Int, formData.porteføljeID)
+  .query(`
+    INSERT INTO dbo.konto
+    (kontonavn, saldo, valuta, oprettelsesdato, bankreference, brugerID, porteføljeID)
+    OUTPUT INSERTED.kontoID
+    VALUES (@navn, @saldo, @valuta, @dato, @bankref, @brugerID, @porteføljeID)
+  `);
+
+return result.recordset[0].kontoID;
+}
   
 
 //ændrer en kontos status så den er åben/lukket
 async function sætAktivStatus(kontoID, aktiv) {
     const db = await sql.connect(sqlConfig);
     await db.request()
-      .input("id", sql.Int, kontoID)
+      .input("ID", sql.Int, kontoID)
       .input("aktiv", sql.Bit, aktiv) //booleanværdi er true(1)=aktiv, false(0)=inaktiv
       .query(`
-        UPDATE eksamenSQL.konto
+        UPDATE dbo.konto
         SET aktiv = @aktiv
-        WHERE kontoID = @id
+        WHERE kontoID = @ID
       `); //opdaterer aktiv status i databasen
   }
   

@@ -11,101 +11,154 @@ async function visAlleKonti(req, res) {
   }
 }
 
-//viser en konto og de tilhørende transaktioner
+// Viser en konto og de tilhørende transaktioner
 async function visEnKonto(req, res) {
-  const kontoID = req.params.id; //henter brugerens kontiID fra URL
+  const kontoID = parseInt(req.params.id, 10);
 
-  const konto = await accountModel.hentKontoMedID(kontoID); //henter kontoen med det specifikke ID
+  const konto = await accountModel.hentKontoMedID(kontoID);
   if (!konto) {
-    return res.status(404).send("Konto med ID " + kontoID + " blev ikke fundet."); //hvis kontoen ikke findes sendes status 404
+    return res.status(404).send("Konto med ID " + kontoID + " blev ikke fundet.");
   }
 
-  const transaktioner = await accountModel.hentTransaktionerForKonto(kontoID); //henter alle transaktioner for den givne konto
-  res.render("konti", { konto, transaktioner }); //viser kontisiden med transaktioner og konto
+  const transaktioner = await accountModel.hentTransaktionerForKonto(kontoID);
+  res.render("konti", { konto, transaktioner });
 }
 
-//viser siden hvor man kan indsætte penge
+// Viser siden hvor man kan indsætte penge
 async function visIndsætFormular(req, res) {
-  const kontoID = req.params.id; 
+  const kontoID = parseInt(req.params.id, 10);
   try {
-    const konto = await accountModel.hentKontoMedID(kontoID); 
-    res.render("insertValue", { konto }); //viser indsæt værdi siden med info om den givne konto
+    const konto = await accountModel.hentKontoMedID(kontoID);
+    res.render("insertValue", { konto });
   } catch (err) {
-    console.error("Fejl ved visning af indsæt-side:", err); 
-    res.status(500).send("Kunne ikke finde kontoen"); //status kode til klient
+    console.error("Fejl ved visning af indsæt-side:", err);
+    res.status(500).send("Kunne ikke finde kontoen");
   }
 }
 
-//brugeren kan indsætte penge
+// Brugeren kan indsætte penge
 async function indsætVærdi(req, res) {
-  const { beløb, valuta, kontoID } = req.body; //trækker værdi ud af formularen 
+  const kontoID = parseInt(req.body.kontoID, 10);
+  const beløb = parseFloat(req.body.beløb);
+  const valuta = req.body.valuta;
+
   try {
-    await accountModel.opdaterSaldo(kontoID, +beløb); //lægger beløbet til kontoens saldo
+    const konto = await accountModel.hentKontoMedID(kontoID);
+    const porteføljeID = konto.porteføljeID;
+
+    if (!konto || isNaN(kontoID) || isNaN(porteføljeID)) {
+      return res.status(400).send("Ugyldige data");
+    }
+
+    await accountModel.opdaterSaldo(kontoID, beløb);
     await accountModel.gemTransaktion({
       type: "Indsæt",
+      porteføljeID,
       beløb,
       kontoID,
       valuta
-    }); //gemmer transaktionen i vores database
+    });
 
-    res.redirect(`/konto/${kontoID}`); //omdirigerer til kontoens side
+    res.redirect(`/konto/${kontoID}`);
   } catch (err) {
     console.error("Fejl ved indsættelse:", err);
-    res.status(500).send("Kunne ikke indsætte penge"); 
+    res.status(500).send("Kunne ikke indsætte penge");
   }
 }
 
-//viser siden hvor man kan hæve penge 
+// Viser siden hvor man kan hæve penge
 async function visHævFormular(req, res) {
-  const kontoID = req.params.id;
+  const kontoID = parseInt(req.params.id, 10);
   try {
     const konto = await accountModel.hentKontoMedID(kontoID);
-    res.render("withdrawValue", { konto }); //viser hæv værdi siden med den givne kontos oplysninger
+    res.render("withdrawValue", { konto });
   } catch (err) {
     console.error("Fejl ved visning af hæv-side:", err);
     res.status(500).send("Kunne ikke finde kontoen");
   }
 }
 
-//når brugeren vil hæve penge 
+// Brugeren vil hæve penge
 async function hævVærdi(req, res) {
-  const { beløb, valuta, kontoID } = req.body; //trækker info fra formular ud
+  const kontoID = parseInt(req.body.kontoID, 10);
+  const beløb = parseFloat(req.body.beløb);
+  const valuta = req.body.valuta;
+
   try {
-    await accountModel.opdaterSaldo(kontoID, -beløb); //trækker beløbet fra saldoen
+    const konto = await accountModel.hentKontoMedID(kontoID);
+    const porteføljeID = konto.porteføljeID;
+
+    if (!konto || isNaN(kontoID) || isNaN(porteføljeID)) {
+      return res.status(400).send("Ugyldige data");
+    }
+
+    await accountModel.opdaterSaldo(kontoID, -beløb);
     await accountModel.gemTransaktion({
       type: "Hæv",
+      porteføljeID,
       beløb,
       kontoID,
       valuta
-    }); //gemmer hævningen i databasen 
+    });
 
-    res.redirect(`/konto/${kontoID}`); //omdirigerer til kontoens side 
+    res.redirect(`/konto/${kontoID}`);
   } catch (err) {
     console.error("Fejl ved hævning:", err);
     res.status(500).send("Kunne ikke hæve penge");
   }
 }
 
+
 //viser siden hvor man kan oprette en konto
-function visOpretFormular(req, res) { //viser formularen fra opret konto 
-  res.render("opretKonto");
-}
+async function visOpretFormular(req, res) {
+    const brugerID = req.cookies.brugerID;
+  
+    try {
+      const db = await sql.connect(sqlConfig);
+      const result = await db.request()
+        .input("brugerID", sql.Int, brugerID)
+        .query(`SELECT porteføljeID FROM dbo.porteføljer WHERE brugerID = @brugerID`);
+  
+      const porteføljeID = result.recordset[0]?.porteføljeID;
+  
+      if (!porteføljeID) {
+        return res.status(404).send("Ingen portefølje fundet for denne bruger.");
+      }
+  
+      res.render("opretKonto", { porteføljeID });
+    } catch (err) {
+      console.error("Fejl ved hentning af porteføljeID:", err);
+      res.status(500).send("Noget gik galt");
+    }
+  }
+  
 
 //når brugeren opretter en ny konto
 async function opretKonto(req, res) {
-  try {
-    const nyKontoID = await accountModel.opretNyKonto(req.body); //opretter en ny konto baseret på det der er indtastet i formularen
+    try {
+      const brugerID = req.cookies.brugerID; // eller hvor du gemmer brugerID
 
-    if (!nyKontoID || isNaN(nyKontoID)) { //hvis kontoen ikke har et validt kontoID eller det ikke er et tal kastes en fejl
-      throw new Error("Konto blev ikke oprettet korrekt"); 
-    }
+      console.log("brugerID fra session:", req.cookies.brugerID);
 
-    res.redirect(`/konto/${nyKontoID}`); //går til den nye konto
-  } catch (err) {
-    console.error("Fejl ved oprettelse af konto:", err);
-    res.status(500).send("Kunne ikke oprette konto");
-  }
+  
+      if (!brugerID) {
+        return res.status(401).send("Bruger ikke logget ind");
+      }
+  
+      const nyKontoID = await accountModel.opretNyKonto(req.body, brugerID);
+
+        if (!nyKontoID || isNaN(nyKontoID)) {
+        throw new Error("Konto blev ikke oprettet korrekt");
 }
+
+  
+      res.redirect(`/konto/${nyKontoID}`);
+    } catch (err) {
+      console.error("Fejl ved oprettelse af konto:", err);
+      res.status(500).send("Kunne ikke oprette konto");
+    }
+  }
+  
 
 //når brugeren vil deaktivere sin konto
 async function lukKonto(req, res) {

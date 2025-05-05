@@ -15,7 +15,8 @@
     <form action="/konto/withdraw" method="POST">
 
     <input type="hidden" name="kontoID" value="<%= konto.kontoID %>"> <!--skjult input felt, sender konto ID så serevren ved hvilken konto beløbet skal indsættes på-->
-
+    <input type="hidden" name="porteføljeID" value="<%= konto.porteføljeID %>">
+    
       <div class="opretBox">
         <input type="number" placeholder="Beløb" name="beløb" required>
       </div>
