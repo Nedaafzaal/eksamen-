@@ -18,7 +18,7 @@ async function testVisPortefoljeOversigt() {
     return [];
   };
 
-  //vi laver en simpel kopi af res.render() så vi kan gemme det data controlleren sender og derefter teste, om det er korrekt
+  //vi laver vores egen version af res, så vi kan teste, om controlleren sender det rigtige data.
   const res = {
     data: null, //her gemmes data fra controlleren prøver at vise 
     render(view, data) {
@@ -26,19 +26,20 @@ async function testVisPortefoljeOversigt() {
     }
   };
 
-  // Kør funktionen
+  //kør funktionen 
   await portfolioController.visPortefoljeOversigt({}, res);
 
-  // ✅ Test 1: Tjek samlet værdi
+ //test 1: værdien skal blive 250 
   assert.strictEqual(res.data.totalVærdi, 250, "Samlet værdi skulle være 250 DKK");
 
-  // ✅ Test 2: Tjek at porteføljeID 2 og 5 findes
+ //test 2: portefølje ID 2 og 5 skal findes i resultater 
   const ids = res.data.portefoljer.map(p => p.porteføljeID);
   assert.ok(ids.includes(2), "PorteføljeID 2 mangler");
   assert.ok(ids.includes(5), "PorteføljeID 5 mangler");
 
+//hvis testen er ok så skal der vises denne succes besked i consollen 
   console.log("✅ TEST BESTÅET: Totalværdi og porteføljeID'er er korrekte.");
 }
 
-// Kør testen
+//kalder funktionen så så testen køres 
 testVisPortefoljeOversigt();
