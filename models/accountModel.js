@@ -126,6 +126,16 @@ async function sætAktivStatus(kontoID, aktiv) {
         WHERE kontoID = @ID
       `); //opdaterer aktiv status i databasen
   }
+
+  async function hentPorteføljeIDForBruger(brugerID) {
+    const db = await sql.connect(sqlConfig);
+    const result = await db.request()
+      .input("brugerID", sql.Int, brugerID)
+      .query(`SELECT porteføljeID FROM dbo.porteføljer WHERE brugerID = @brugerID`);
+  
+    return result.recordset[0]?.porteføljeID || null;
+  }
+  
   
 
 //gør det muligt at eksportere, så de kan bruges i controller
@@ -136,6 +146,7 @@ module.exports = {
   opdaterSaldo,
   gemTransaktion,
   opretNyKonto,
-  sætAktivStatus
+  sætAktivStatus,
+  hentPorteføljeIDForBruger
 };
 

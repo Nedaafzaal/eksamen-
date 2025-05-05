@@ -114,12 +114,7 @@ async function visOpretFormular(req, res) {
     const brugerID = req.cookies.brugerID;
   
     try {
-      const db = await sql.connect(sqlConfig);
-      const result = await db.request()
-        .input("brugerID", sql.Int, brugerID)
-        .query(`SELECT porteføljeID FROM dbo.porteføljer WHERE brugerID = @brugerID`);
-  
-      const porteføljeID = result.recordset[0]?.porteføljeID;
+      const porteføljeID = await accountModel.hentPorteføljeIDForBruger(brugerID);
   
       if (!porteføljeID) {
         return res.status(404).send("Ingen portefølje fundet for denne bruger.");
@@ -131,6 +126,7 @@ async function visOpretFormular(req, res) {
       res.status(500).send("Noget gik galt");
     }
   }
+  
   
 
 //når brugeren opretter en ny konto
