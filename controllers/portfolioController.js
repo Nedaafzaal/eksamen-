@@ -1,5 +1,4 @@
 const portfolioModel = require("../models/portfolioModel");
-const { registrerHandel } = require("../models/portfolioModel");
 
 // Viser alle porteføljer i en liste
 async function visPortefoljeOversigt(req, res) {
