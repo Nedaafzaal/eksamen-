@@ -154,3 +154,32 @@ body {
     font-family: Arial, Helvetica, sans-serif;
   }
   
+  .overskrift {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 140px;
+    margin-right: 100px;
+    margin-top: 40px; /* lidt mere luft nedad */
+  }
+  
+  .sælgKnapBox {
+    margin-top: 10px; /* gør at den kommer længere ned */
+  }
+  
+  .sælgKnap {
+    background-color: #2f2f2f;
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: rgb(195, 192, 192);
+    border: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  
+  .sælgKnap:hover {
+    background-color: #656363;
+  }
+  
