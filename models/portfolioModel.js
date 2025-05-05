@@ -363,6 +363,56 @@ async function hentKontiForBruger(brugerID) {
       `);
   }
   
+  async function hentOgOpdaterVærdipapirMedAktuelVærdi(værdipapirID) {
+    const db = await sql.connect(sqlConfig);
+  
+    const værdipapir = await db.request()
+      .input("id", sql.Int, værdipapirID)
+      .query(`
+        SELECT 
+          værdipapirID,
+          porteføljeID, 
+          navn, 
+          tickerSymbol, 
+          type, 
+          antal, 
+          pris, 
+          GAK, 
+          urealiseretPorteføljeGevinstTab
+        FROM dbo.værdipapir
+        WHERE værdipapirID = @id
+      `).then(res => res.recordset[0]);
+  
+    if (!værdipapir) return null;
+  
+    // 🔄 Hent aktuel pris fra API
+    const symbol = værdipapir.tickerSymbol;
+    const prisLink = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${process.env.API_KEY}`;
+    const prisSvar = await fetch(prisLink);
+    const prisData = await prisSvar.json();
+    const aktuelPris = parseFloat(prisData["Global Quote"]?.["05. price"]);
+  
+    const antal = parseFloat(værdipapir.antal);
+    const GAK = parseFloat(værdipapir.GAK);
+  
+    if (!isNaN(aktuelPris) && !isNaN(GAK) && !isNaN(antal)) {
+      const gevinst = (aktuelPris - GAK) * antal;
+  
+      await db.request()
+        .input("gevinst", sql.Decimal(18, 2), gevinst)
+        .input("id", sql.Int, værdipapirID)
+        .query(`
+          UPDATE dbo.værdipapir
+          SET urealiseretPorteføljeGevinstTab = @gevinst
+          WHERE værdipapirID = @id
+        `);
+  
+      værdipapir.urealiseretPorteføljeGevinstTab = gevinst;
+    }
+  
+    return værdipapir;
+  }
+  
 
   module.exports = {
     hentAllePortefoljer,
@@ -376,7 +426,8 @@ async function hentKontiForBruger(brugerID) {
     hentKontiForBruger,
     hentVærdipapirMedID,
     hentVærdiHistorik,
-    opdaterSidsteHandelsDato
+    opdaterSidsteHandelsDato,
+    hentOgOpdaterVærdipapirMedAktuelVærdi
   };
 
   
