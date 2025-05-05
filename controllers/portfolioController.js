@@ -217,7 +217,7 @@ async function visVærdipapirDetaljer(req, res) {
 async function sælgPapirForm(req, res) {
     const værdipapirID = parseInt(req.params.id);
 
-  console.log(værdipapirID)
+  //console.log(værdipapirID)test
 
     const værdipapir = await portfolioModel.hentVærdipapirMedID(værdipapirID);   
       

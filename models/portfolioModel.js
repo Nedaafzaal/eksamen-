@@ -111,6 +111,14 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
  async function registrerHandel(data) {
     const db = await sql.connect(sqlConfig);
     data.antal = parseInt(data.antal);
+
+    // Fast gebyr-regel
+    if (data.type === "sælg") {
+        data.gebyr = 19;
+    } else {
+        data.gebyr = 0;
+    }
+  
   
     console.log("Handelsdata:", data);
   
@@ -122,7 +130,10 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
     const pengePåKonto = result.recordset[0]?.saldo;
     if (pengePåKonto == null) throw new Error("Der er ikke penge på den valgte konto.");
   
-    const prisMedGebyr = data.pris + (data.gebyr || 0);
+    const prisMedGebyr = data.type === "sælg"
+    ? data.pris - data.gebyr
+    : data.pris + data.gebyr;
+
   
     // 2. Valider køb
     if (data.type === "køb" && pengePåKonto < prisMedGebyr) {

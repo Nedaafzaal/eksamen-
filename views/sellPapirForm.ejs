@@ -11,25 +11,29 @@
     <h3>Sælg værdipapir <%= værdipapir.navn %></h3>
     <form action="/portefolje/vaerdipapir/<%= værdipapir.værdipapirID %>/sellPapir" method="POST">
 
-      <div class="opretBox">
+      <div class="speciel">
+        <label>Pris per stk.</label>
         <input type="text" name="pris" value="<%= pris %>" readonly />
       </div>
-
+      
       <div class="opretBox">
-        <input type="number" name="antal" placeholder="Antal" required />
+        <input type="number" name="antal" placeholder="Antal du ønsker at sælge" required />
       </div>
 
       <div class="opretBox">
-        <input type="number" name="gebyr" placeholder="Gebyr (valgfrit)" step="0.01" />
-      </div>
-
-      <div class="opretBox">
-        <select name="kontoID" placeholder="Konto hvorpå du ønsker pengene" required>
+        <label>Vælg konto</label>
+        <select name="kontoID" required>
           <% konti.forEach(k => { %>
-            <option value="<%= k.kontoID %>"><%= k.kontonavn %> - <%= k.valuta %></option>
+            <option value="<%= k.kontoID %>">
+              <%= k.kontonavn %> - <%= k.valuta %> (Saldo: <%= new Intl.NumberFormat('da-DK').format(k.saldo) %> kr)
+            </option>
           <% }); %>
         </select>
       </div>
+      
+
+      <p>Vær opmærksom på, at der er et fast gebyr på 19 kr. ved salg af værdipapir.</p>
+      
 
       <input type="hidden" name="porteføljeID" value="<%= porteføljeID %>" />
       <input type="hidden" name="værdipapirID" value="<%= værdipapir.værdipapirID %>" />
