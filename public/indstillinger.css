@@ -112,6 +112,7 @@ h2{
   box-sizing: border-box;
   color: rgba(245, 245, 245, 0.95);
   font-size: 14px;
+
 }
 
 .inputBox input::placeholder {
