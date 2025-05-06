@@ -273,9 +273,10 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
         .input("porteføljeID", sql.Int, data.porteføljeID)
         .input("ticker", sql.NVarChar, data.tickerSymbol)
         .query(`
-          SELECT AVG(pris) AS GAK
-          FROM dbo.transaktioner
-          WHERE porteføljeID = @porteføljeID
+          SELECT 
+            CAST(SUM(pris * antal) AS FLOAT) / SUM(antal) AS GAK
+            FROM dbo.transaktioner
+            WHERE porteføljeID = @porteføljeID
             AND tickerSymbol = @ticker
             AND transaktionstype = 'køb'
         `);
@@ -408,6 +409,29 @@ async function hentKontiForBruger(brugerID) {
   
     const antal = parseFloat(værdipapir.antal);
     const GAK = parseFloat(værdipapir.GAK);
+
+    if (!isNaN(aktuelPris) && !isNaN(GAK) && !isNaN(antal)) {
+        const gevinst = (aktuelPris - GAK) * antal;
+        const forventetVærdi = aktuelPris * antal;
+      
+        await db.request()
+          .input("gevinst", sql.Decimal(18, 2), gevinst)
+          .input("forventetVærdi", sql.Decimal(18, 2), forventetVærdi)
+          .input("pris", sql.Decimal(18, 2), aktuelPris)
+          .input("id", sql.Int, værdipapirID)
+          .query(`
+            UPDATE dbo.værdipapir
+            SET urealiseretPorteføljeGevinstTab = @gevinst,
+                forventetVærdi = @forventetVærdi,
+                pris = @pris
+            WHERE værdipapirID = @id
+          `);
+      
+        værdipapir.urealiseretPorteføljeGevinstTab = gevinst;
+        værdipapir.forventetVærdi = forventetVærdi;
+        værdipapir.pris = aktuelPris;
+      }
+      
   
     if (!isNaN(aktuelPris) && !isNaN(GAK) && !isNaN(antal)) {
       const gevinst = (aktuelPris - GAK) * antal;

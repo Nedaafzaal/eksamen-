@@ -69,7 +69,7 @@
     <!--Overskrifter for hver kolonne i listen-->
     <div class="listeOverskrifter">
       <span>Transaktionstype</span> 
-      <span>Værdi type</span>
+      <span>Valuta</span>
       <span>Pris</span> 
       <span>Dato</span> 
       <span>Tidspunkt</span> 
@@ -88,7 +88,7 @@
             <div><%= t.værditype %></div>
             <div><%= new Intl.NumberFormat('da-DK').format(t.pris) %> kr</div> <!--pris med KR-->
             <div><%= new Date(t.dato).toLocaleDateString('da-DK') %></div>
-            <div><%= new Date('1970-01-01T' + t.tidspunkt).toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' }) %></div>
+            <div><%= new Date(t.tidspunkt).toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' }) %></div>
             <div><%= t.gebyr %> kr</div>
         </div> 
       <% }); %> <!--Slut på forEach-->

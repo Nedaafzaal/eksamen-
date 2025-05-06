@@ -68,16 +68,12 @@
         <span>Portefølje Navn</span>
         <span>Bank Account</span>
         <span>Sidste Handel</span>
+        <span>Total Value</span>
       </div>
-
-      <% if (portefoljer.length > 0) { %> <!--hvis der findes porteføljer vis dem-->
-        <% portefoljer.forEach(p => { %> <!--løber gennem hver portefølje-->
-      
-          <!--Sørger for man kan trykke hvor som helst på rækken for at blive viderestillet-->
-          <a href="/portefolje/<%= p.porteføljeID %>" 
-            class="porteføljeRækkeLink">
-      
-            <!--Hele rækken, viser værdierne nedenfor-->
+    
+      <% if (portefoljer.length > 0) { %>
+        <% portefoljer.forEach(p => { %>
+          <a href="/portefolje/<%= p.porteføljeID %>" class="porteføljeRækkeLink">
             <div class="porteføljeRække"> 
               <div><%= p.navn %></div> 
               <div><%= p.kontotilknytning %></div> 
@@ -88,15 +84,19 @@
                   <em>Ingen handler endnu</em>
                 <% } %>
               </div>
+              <div>
+                <%= new Intl.NumberFormat('da-DK', { style: 'currency', currency: 'DKK' }).format(p.totalValue || 0) %>
+              </div>
             </div>
           </a>
         <% }); %>
       <% } else { %>
-        <p>Ingen porteføljer fundet endnu.</p> <!--hvis der ingen porteføljer er-->
+        <p>Ingen porteføljer fundet endnu.</p>
       <% } %>
     </div>
-
-  </div>
+    
+      
+      
 
   <script> //funktion til at åbne og lukke side menu
     const sidemenu = document.querySelector('.sidemenu');

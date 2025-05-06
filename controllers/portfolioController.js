@@ -5,23 +5,26 @@ const { registrerHandel } = require("../models/portfolioModel");
 
 // Viser alle porteføljer i en liste
 async function visPortefoljeOversigt(req, res) {
-  try {
-    const portefoljer = await portfolioModel.hentAllePortefoljer();
-    let totalVærdi = 0;
-
-    for (const p of portefoljer) {
-      const papirer = await portfolioModel.hentVærdipapirerTilPortefølje(p.porteføljeID);
-      const samlet = papirer.reduce((sum, papir) => sum + (papir.pris * papir.antal), 0);
-      totalVærdi += samlet;
+    try {
+      const portefoljer = await portfolioModel.hentAllePortefoljer();
+  
+      for (const p of portefoljer) {
+        const papirer = await portfolioModel.hentVærdipapirerTilPortefølje(p.porteføljeID);
+        const totalValue = papirer.reduce((sum, papir) => sum + (papir.pris * papir.antal), 0);
+        p.totalValue = totalValue; // 🔁 læg værdien direkte ind i objektet
+      }
+  
+      // Du kan stadig regne samlet værdi hvis nødvendigt
+      const totalVærdi = portefoljer.reduce((sum, p) => sum + (p.totalValue || 0), 0);
+  
+      res.render("portefoljeOversigt", { portefoljer, totalVærdi });
+    } catch (err) {
+      console.error("Fejl ved hentning af porteføljer:", err);
+      res.status(500).send("Noget gik galt ved visning af porteføljeoversigten.");
     }
-
-    res.render("portefoljeOversigt", { portefoljer, totalVærdi });
-  } catch (err) {
-    console.error("Fejl ved hentning af porteføljer:", err);
-    res.status(500).send("Noget gik galt ved visning af porteføljeoversigten.");
   }
-}
-
+  
+  
 // Viser én bestemt portefølje og dens aktier
 async function visEnPortefolje(req, res) {
   const portefoljeID = parseInt(req.params.id, 10);

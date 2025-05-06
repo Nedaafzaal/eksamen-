@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title><%= værdipapir.navn %> - Detaljer</title>
-  <link href="/valueInfo.css" rel="stylesheet">
-  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
+  <link href="/valueInfo.css" rel="stylesheet" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 </head>
 
 <body>
   <!-- Sidemenu -->
   <div class="sidemenu">
     <div class="WebappLogo">
-      <img src="/logo.jpeg" alt="WebappLogo">
+      <img src="/logo.jpeg" alt="WebappLogo" />
     </div>
 
-    <button class="pil" onclick="skiftMenu()"> 
+    <button class="pil" onclick="skiftMenu()">
       <i class='bx bxs-chevron-left'></i>
     </button>
 
@@ -47,39 +47,30 @@
         <span>Symbol</span>
         <span>Antal</span>
         <span>Købs Pris</span>
-        <span>Værdi</span>
         <span>GAK</span>
         <span>Urealiseret gevinst</span>
+        <span>Forventet værdi</span>
       </div>
 
       <div class="aktieRække">
         <div><%= værdipapir.navn || 'Ukendt' %></div>
         <div><%= værdipapir.type || 'Ukendt' %></div>
         <div><%= værdipapir.tickerSymbol || 'Ukendt' %></div>
-        <div><%= !isNaN(værdipapir.antal) ? værdipapir.antal : 'Ukendt' %></div>
-        <div><%= !isNaN(værdipapir.pris) ? parseFloat(værdipapir.pris).toFixed(2) + ' DKK' : 'Ukendt' %></div>
-
-        <% 
-          const antal = parseFloat(værdipapir.antal);
-          const pris = parseFloat(værdipapir.pris);
-          const værdi = !isNaN(antal) && !isNaN(pris) ? (antal * pris).toFixed(2) : null;
-        %>
-        <div><%= værdi ? værdi + ' DKK' : 'Ukendt værdi' %></div>
-
-        <% const gak = parseFloat(værdipapir.GAK); %>
-        <div><%= !isNaN(gak) ? gak.toFixed(2) + ' DKK' : 'Ukendt' %></div>
-
-        <% const gevinst = parseFloat(værdipapir.urealiseretPorteføljeGevinstTab); %>
-        <div><%= !isNaN(gevinst) ? gevinst.toFixed(2) + ' DKK' : 'Ukendt' %></div>
-      </div> <!-- Slut på aktieRække -->
-    </div> <!-- Slut på oversigtBox -->
+        <div><%= værdipapir.antal ?? 'Ukendt' %></div>
+        <div><%= værdipapir.pris?.toFixed(2) ?? 'Ukendt' %> DKK</div>
+        <div><%= værdipapir.GAK?.toFixed(2) ?? 'Ukendt' %> DKK</div>
+        <div><%= værdipapir.urealiseretPorteføljeGevinstTab?.toFixed(2) ?? 'Ukendt' %> DKK</div>
+        <div><%= værdipapir.forventetVærdi?.toFixed(2) ?? 'Ukendt' %> DKK</div>
+      </div>
+    </div>
 
     <div class="diagramBoks">
       <h2>Oversigt over udvikling af værdi</h2>
- <div id="chart" style="max-width: 700px; margin-top: 2rem;"></div>
+      <div id="chart" style="max-width: 700px; margin-top: 2rem;"></div>
     </div>
-  </div> <!-- Slut på indhold -->
+  </div>
 
+  <!-- JS -->
   <script>
     const sidemenu = document.querySelector('.sidemenu');
     function skiftMenu() {
@@ -89,46 +80,33 @@
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <script>
     const historik = <%= JSON.stringify(historik || []) %>;
-  
+
     const data = historik.map(h => ({
       x: new Date(h.dato),
       y: parseFloat(h.værdi)
     }));
-  
+
     const options = {
-      chart: {
-        type: 'line',
-        height: 350,
-        zoom: { enabled: true }
-      },
-      series: [{
-        name: "Købsværdi",
-        data: data
-      }],
-      xaxis: {
-        type: 'datetime',
-        title: { text: 'Dato' }
-      },
+      chart: { type: 'line', height: 350, zoom: { enabled: true } },
+      series: [{ name: "Købsværdi", data }],
+      xaxis: { type: 'datetime', title: { text: 'Dato' } },
       yaxis: {
         title: { text: 'Købsværdi i DKK' },
-        labels: {
-          formatter: val => val.toFixed(2) + ' kr.'
-        }
+        labels: { formatter: val => val.toFixed(2) + ' kr.' }
       },
       tooltip: {
-        x: {
-          format: 'dd MMM yyyy'
-        },
+        x: { format: 'dd MMM yyyy' },
         y: {
-          formatter: val => val.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' })
+          formatter: val => val.toLocaleString('da-DK', {
+            style: 'currency',
+            currency: 'DKK'
+          })
         }
       }
     };
-  
+
     const chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
   </script>
 </body>
 </html>
-
-
