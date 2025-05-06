@@ -5,43 +5,43 @@ const kontoModel = require("../models/accountModel");
 //uni test på funktionen VisAlleKonti
 async function testVisAlleKonti() {
   
-  // 🔧 MOCK: erstatter hentAlleKonti med en version, der returnerer testdata
+  //test 1: skal retunere to fiktive konti i stedet for at hente fra databasen 
   kontoModel.hentAlleKonti = async () => [
     { kontoID: 1, navn: "Konto A" },
     { kontoID: 2, navn: "Konto B" }
   ];
 
-  // 🔧 MOCK: laver en simpel res-objekt som kan opfange render-kaldet
+  //test 2: Vi laver en kopi af res, så vi kan gemme og undersøge det controlleren prøver at vise eller sende men uden at starte en rigtig server
   const res = {
-    view: null,
-    data: null,
+    view: null, //gemmer navnet på view-filen 
+    data: null, //gemmer dataen som controlleren prøver at sende til view
     render(viewNavn, data) {
-      this.view = viewNavn;
-      this.data = data;
+      this.view = viewNavn; //fanger view navnet
+      this.data = data; //fanger dataen 
     },
-    status(code) {
+    status(code) { //bruges hvis controllleren sætter en status kode 
       this.statusCode = code;
       return this;
     },
-    send(msg) {
+    send(msg) { //bruges hvis controlleren sender en fejlbesked 
       this.message = msg;
     }
   };
 
-  // 🧪 Kør controller-funktionen med en tom req og mock res
+  //kør controller funktionen 
   await kontoController.visAlleKonti({}, res);
 
-  // ✅ Tjek at det rigtige view bliver brugt
+  //det skal væere den rigtige ejs fil der bliver brugt 
   assert.strictEqual(res.view, "kontiOversigt");
 
-  // ✅ Tjek at der blev sendt 2 konti
+  //tjekker om der blev sendt to konti
   assert.strictEqual(res.data.konti.length, 2);
 
-  // ✅ Tjek at en konto har det rigtige navn
+  //den første konto skal hedde konto A
   assert.strictEqual(res.data.konti[0].navn, "Konto A");
 
-  console.log("✅ TEST BESTÅET: visAlleKonti viser konti korrekt.");
+  console.log("TEST BESTÅET: visAlleKonti viser konti korrekt.");
 }
 
-// Kør testen
+//kalder funktionen så testen kører
 testVisAlleKonti();
