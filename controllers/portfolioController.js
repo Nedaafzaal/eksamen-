@@ -205,8 +205,9 @@ async function visVærdipapirDetaljer(req, res) {
       if (!værdipapir) {
         return res.status(404).send("Værdipapir ikke fundet.");
       }
-  
-      res.render("valueInfo", { værdipapir });
+  // henter histroik for værdipapir
+  const historik = await portfolioModel.hentHistorikForVærdipapir(værdipapirID);
+      res.render("valueInfo", { værdipapir,historik });
     } catch (err) {
       console.error(err);
       res.status(500).send("Fejl ved visning af værdipapir.");

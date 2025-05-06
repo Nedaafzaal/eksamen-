@@ -11,21 +11,23 @@ async function testVisPortefoljeOversigt() {
     { porteføljeID: 5 }
   ];
 
- //snyder funktionen til at retunere test data
+ //test 2: snyder funktionen til at retunere test data
   portfolioModel.hentVærdipapirerTilPortefølje = async (id) => {
     if (id === 2) return [{ pris: 100, antal: 2 }]; // 200
     if (id === 5) return [{ pris: 50, antal: 1 }];  // 50
     return [];
   };
 
-  //vi laver vores egen version af res, så vi kan teste, om controlleren sender det rigtige data.
+  //test 3: vi laver vores egen version af res, så vi kan teste om controlleren sender det rigtige data.
   const res = {
-    data: null, //her gemmes data fra controlleren prøver at vise 
+    data: null, //gemmer dataen, som controlleren sender til EJS-skabelonen
+    view: null, //gemmer navnet på det EJS-view, som controlleren prøver at vise
     render(view, data) {
-      this.data = data; //når controlleren kalder res.render fanger vi data her 
+      this.view = view; //når controlleren kalder res.render gemmes view navnet her 
+      this.data = data; //dataen gemmes her 
     }
   };
-
+  
   //kør funktionen 
   await portfolioController.visPortefoljeOversigt({}, res);
 
@@ -36,10 +38,13 @@ async function testVisPortefoljeOversigt() {
   const ids = res.data.portefoljer.map(p => p.porteføljeID);
   assert.ok(ids.includes(2), "PorteføljeID 2 mangler");
   assert.ok(ids.includes(5), "PorteføljeID 5 mangler");
+  //test 3
+  assert.strictEqual(res.view, "portefoljeOversigt", "Forkert view blev brugt");
+
 
 //hvis testen er ok så skal der vises denne succes besked i consollen 
-  console.log("✅ TEST BESTÅET: Totalværdi og porteføljeID'er er korrekte.");
+  console.log("TEST BESTÅET: Totalværdi og porteføljeID'er er korrekte.");
 }
 
-//kalder funktionen så så testen køres 
+//kalder funktionen så testen køres 
 testVisPortefoljeOversigt();

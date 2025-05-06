@@ -76,7 +76,7 @@
 
     <div class="diagramBoks">
       <h2>Oversigt over udvikling af værdi</h2>
-      <!-- Her kan du indsætte diagram senere -->
+ <div id="chart" style="max-width: 700px; margin-top: 2rem;"></div>
     </div>
   </div> <!-- Slut på indhold -->
 
@@ -85,6 +85,48 @@
     function skiftMenu() {
       sidemenu.classList.toggle('lukket');
     }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script>
+    const historik = <%- JSON.stringify(historik) %>;
+  
+    const data = historik.map(h => ({
+      x: new Date(h.dato),
+      y: parseFloat(h.værdi)
+    }));
+  
+    const options = {
+      chart: {
+        type: 'line',
+        height: 350,
+        zoom: { enabled: true }
+      },
+      series: [{
+        name: "Købsværdi",
+        data: data
+      }],
+      xaxis: {
+        type: 'datetime',
+        title: { text: 'Dato' }
+      },
+      yaxis: {
+        title: { text: 'Købsværdi i DKK' },
+        labels: {
+          formatter: val => val.toFixed(2) + ' kr.'
+        }
+      },
+      tooltip: {
+        x: {
+          format: 'dd MMM yyyy'
+        },
+        y: {
+          formatter: val => val.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' })
+        }
+      }
+    };
+  
+    const chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
   </script>
 </body>
 </html>
