@@ -50,6 +50,10 @@ async function indsætVærdi(req, res) {
       return res.status(400).send("Ugyldige data");
     }
 
+    if(konto.aktiv === false){
+        return res.status(400).send("Konto er lukket og der kan dermed ikke indsættes værdi")
+    }
+
     await accountModel.opdaterSaldo(kontoID, beløb);
     await accountModel.gemTransaktion({
       type: "Indsæt",
@@ -90,6 +94,10 @@ async function hævVærdi(req, res) {
 
     if (!konto || isNaN(kontoID) || isNaN(porteføljeID)) {
       return res.status(400).send("Ugyldige data");
+    }
+
+    if(konto.aktiv===false){
+        return res.status(400).send("Konto er lukket og der kan dermed ikke hæves værdi")
     }
 
     await accountModel.opdaterSaldo(kontoID, -beløb);

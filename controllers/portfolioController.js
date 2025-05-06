@@ -1,4 +1,5 @@
 const portfolioModel = require("../models/portfolioModel");
+const accountModel = require("../models/accountModel");
 const { registrerHandel } = require("../models/portfolioModel");
 
 
@@ -176,6 +177,11 @@ async function købEllerSælg(req, res) {
         værditype: req.body.værditype,
         navn: req.body.navn
       };
+
+      const konto = await accountModel.hentKontoMedID(data.kontoID);
+        if (!konto || konto.aktiv===false) {
+        return res.status(403).send("Handel er ikke mulig. Kontoen er lukket.");
+        }
   
       await portfolioModel.registrerHandel(data);
   

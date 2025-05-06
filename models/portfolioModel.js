@@ -110,6 +110,7 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
  // Denne funktion bruges til at købe eller sælge værdipapirer
  async function registrerHandel(data) {
     const db = await sql.connect(sqlConfig);
+
     data.antal = parseInt(data.antal);
 
     // Fast gebyr-regel
@@ -118,7 +119,6 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
     } else {
         data.gebyr = 0;
     }
-  
   
     console.log("Handelsdata:", data);
   
