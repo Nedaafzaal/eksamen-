@@ -1,6 +1,10 @@
 const sql = require("mssql");
 const sqlConfig = require("../sqlConfig/sqlConfig");
 
+async function hentDB(){
+    return await sql.connect(sqlConfig);
+}
+
 class BrugerData {
   // Hent én bruger fra databasen ud fra brugernavn
   async hentBruger(brugernavn) {
@@ -17,8 +21,8 @@ class BrugerData {
 
   // Opret en ny bruger med info fra formularen
   async opretBruger(data) {
-    const database = await sql.connect(sqlConfig);
-    await database.request()
+    const db = await hentDB();
+    await db.request()
       .input("fornavn", sql.NVarChar, data.fornavn)
       .input("efternavn", sql.NVarChar, data.efternavn)
       .input("brugernavn", sql.NVarChar, data.opretbrugernavn)
@@ -35,8 +39,8 @@ class BrugerData {
 
   // Tjek om brugernavn OG adgangskode passer sammen
   async tjekAdgangskode(brugernavn, adgangskode) {
-    const database = await sql.connect(sqlConfig);
-    const resultat = await database.request()
+    const db = await hentDB();
+    const resultat = await db.request()
       .input("brugernavn", sql.NVarChar, brugernavn)
       .input("adgangskode", sql.NVarChar, adgangskode)
       .query(`
@@ -49,8 +53,8 @@ class BrugerData {
 
   // Skift brugerens adgangskode
   async opdaterAdgangskode(brugernavn, nyKode) {
-    const database = await sql.connect(sqlConfig);
-    await database.request()
+    const db = await hentDB();
+    await db.request()
       .input("brugernavn", sql.NVarChar, brugernavn)
       .input("nyKode", sql.NVarChar, nyKode)
       .query(`

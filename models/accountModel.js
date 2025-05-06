@@ -1,11 +1,14 @@
 const sql = require("mssql"); //importere mysql pakken
 const sqlConfig = require("../sqlConfig/sqlConfig"); //importere oplysninger der bruges til at oprette forbindelse til databasen
 
+async function hentDB(){
+    return await sql.connect(sqlConfig);
+}
 
 //hent alle konti fra databasen
 async function hentAlleKonti() {
-  const db = await sql.connect(sqlConfig); //opretter forbindelse til databasen
-  const result = await db.request().query(`
+    const db = await hentDB(); //opretter forbindelse til databasen
+    const result = await db.request().query(`
     SELECT * FROM dbo.konto
   `); //SQL forspørgsel der henter alle konti
   return result.recordset; //retunere en liste af alle konti
@@ -14,7 +17,7 @@ async function hentAlleKonti() {
 
 //henter en konto ud fra kontoID 
 async function hentKontoMedID(kontoID) {
-  const db = await sql.connect(sqlConfig);
+  const db = await hentDB();
   const result = await db.request()
     .input("ID", sql.Int, kontoID) //henter den parameter som forspørgslen kommer til at indeholde 
     .query(`
@@ -29,7 +32,7 @@ async function hentKontoMedID(kontoID) {
 
 //henter alle transaktioner for en konto 
 async function hentTransaktionerForKonto(kontoID) {
-  const db = await sql.connect(sqlConfig);
+  const db = await hentDB();
   const result = await db.request()
   .input("ID", sql.Int, kontoID) //angiver parameter til forspørgsel 
   .query(`
@@ -44,7 +47,7 @@ async function hentTransaktionerForKonto(kontoID) {
 
 //lig penge til eller trække penge fra saldoen 
 async function opdaterSaldo(kontoID, beløb) {
-  const db = await sql.connect(sqlConfig);
+  const db = await hentDB();
   await db.request()
     .input("ID", sql.Int, kontoID) 
     .input("beløb", sql.Decimal(18, 2), beløb) //parameter beløb til forspørgsel, enten positivt eller negativt tal
@@ -58,7 +61,7 @@ async function opdaterSaldo(kontoID, beløb) {
 
 //gemmer en ny transaktion i vores database 
 async function gemTransaktion(data) {
-    const db = await sql.connect(sqlConfig);
+    const db = await hentDB();
     const nu = new Date(); // nuværende dato og tid
   
     // Gem selve transaktionen
@@ -116,7 +119,7 @@ return result.recordset[0].kontoID;
 
 //ændrer en kontos status så den er åben/lukket
 async function sætAktivStatus(kontoID, aktiv) {
-    const db = await sql.connect(sqlConfig);
+    const db = await hentDB();
     await db.request()
       .input("ID", sql.Int, kontoID)
       .input("aktiv", sql.Bit, aktiv) //booleanværdi er true(1)=aktiv, false(0)=inaktiv

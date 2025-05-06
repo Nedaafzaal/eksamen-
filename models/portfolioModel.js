@@ -1,6 +1,10 @@
 const sql = require("mssql");
 const sqlConfig = require("../sqlConfig/sqlConfig");
 
+async function hentDB(){
+    return await sql.connect(sqlConfig);
+}
+
 // Hent alle porteføljer fra databasen
 async function hentAllePortefoljer() {
   const db = await sql.connect(sqlConfig);
@@ -13,7 +17,7 @@ async function hentAllePortefoljer() {
 
 // Hent én portefølje baseret på ID
 async function hentPortefoljeMedID(ID) {
-  const db = await sql.connect(sqlConfig);
+  const db = await hentDB();
   const result = await db.request()
     .input("porteføljeID", sql.Int, ID)
     .query(`
@@ -27,7 +31,7 @@ async function hentPortefoljeMedID(ID) {
 
 // Hent alle værdipapirer, der tilhører en bestemt portefølje
 async function hentVærdipapirerTilPortefølje(porteføljeID) {
-    const db = await sql.connect(sqlConfig);
+    const db = await hentDB();
     const result = await db.request()
       .input("porteføljeID", sql.Int, porteføljeID)
       .query(`
@@ -51,7 +55,7 @@ async function hentVærdipapirerTilPortefølje(porteføljeID) {
 
 // Hent samlet værdi for alle porteføljer ud fra værdipapirer
 async function hentSamletVærdiForAllePorteføljer() {
-  const db = await sql.connect(sqlConfig);
+  const db = await hentDB();
   const result = await db.request().query(`
     SELECT porteføljeID, SUM(forventetVærdi) AS samletVærdi
     FROM dbo.værdipapir
@@ -62,7 +66,7 @@ async function hentSamletVærdiForAllePorteføljer() {
 
 // Opret en ny portefølje i databasen
 async function opretNyPortefolje(data) {
-    const db = await sql.connect(sqlConfig);
+    const db = await hentDB();
     await db.request()
       .input("navn", sql.NVarChar, data.navn)
       .input("kontotilknytning", sql.NVarChar, data.kontotilknytning)
@@ -77,7 +81,7 @@ async function opretNyPortefolje(data) {
 
 // Hent alle transaktioner for et portefølje
 async function hentTransaktionerForPortefølje(porteføljeID) {
-    const db = await sql.connect(sqlConfig);
+    const db = await hentDB();
     const result = await db.request()
       .input("id", sql.Int, porteføljeID)
       .query(`
@@ -93,7 +97,7 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
   }  
 
   async function tilføjVærdipapirTilPortefølje(data) {
-    const db = await sql.connect(sqlConfig);
+    const db = await hentDB();
     await db.request()
       .input("porteføljeID", sql.Int, data.porteføljeID)
       .input("navn", sql.NVarChar, data.navn)
@@ -109,7 +113,7 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
   // Tilføj ny handel til transaktioner
  // Denne funktion bruges til at købe eller sælge værdipapirer
  async function registrerHandel(data) {
-    const db = await sql.connect(sqlConfig);
+    const db = await hentDB();
 
     data.antal = parseInt(data.antal);
 
@@ -327,7 +331,7 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
   
   // Hent alle konti for en bestemt bruger
 async function hentKontiForBruger(brugerID) {
-    const db = await sql.connect(sqlConfig);
+    const db = await hentDB();
     const result = await db.request()
       .input("brugerID", sql.Int, brugerID)
       .query(`
@@ -357,7 +361,7 @@ async function hentKontiForBruger(brugerID) {
   }
   
   async function hentVærdiHistorik(porteføljeID) {
-    const db = await sql.connect(sqlConfig);
+    const db = await hentDB();
     const result = await db.request()
       .input("porteføljeID", sql.Int, porteføljeID)
       .query(`
@@ -373,7 +377,7 @@ async function hentKontiForBruger(brugerID) {
   }
   
   async function opdaterSidsteHandelsDato(porteføljeID) {
-    const db = await sql.connect(sqlConfig);
+    const db = await hentDB();
     await db.request()
       .input("porteføljeID", sql.Int, porteføljeID)
       .input("dato", sql.Date, new Date())
@@ -385,7 +389,7 @@ async function hentKontiForBruger(brugerID) {
   }
   
   async function hentOgOpdaterVærdipapirMedAktuelVærdi(værdipapirID) {
-    const db = await sql.connect(sqlConfig);
+    const db = await hentDB();
   
     const værdipapir = await db.request()
       .input("id", sql.Int, værdipapirID)
@@ -458,7 +462,7 @@ async function hentKontiForBruger(brugerID) {
   }
   
   async function hentHistorikForVærdipapir(værdipapirID) {
-    const db = await sql.connect(sqlConfig);
+    const db = await hentDB();
   
     const meta = await db.request()
       .input("id", sql.Int, værdipapirID)
@@ -488,7 +492,7 @@ async function hentKontiForBruger(brugerID) {
   }
   
   async function hentTotalRealiseretGevinst() {
-    const db = await sql.connect(sqlConfig);
+    const db = await hentDB();
   
     const result = await db.request().query(`
       SELECT 
