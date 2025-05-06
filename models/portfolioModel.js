@@ -211,22 +211,28 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
       .query("UPDATE dbo.konto SET saldo = @saldo WHERE kontoID = @kontoID");
   
     // 5. Registrer transaktion
+    const sælgerID = (data.type === 'salg' || data.type === 'hæv') ? data.kontoID : null;
+    const modtagerID = (data.type === 'køb' || data.type === 'indsæt') ? data.kontoID : null;
+
     await db.request()
-      .input("porteføljeID", sql.Int, data.porteføljeID)
-      .input("kontoID", sql.Int, data.kontoID)
-      .input("type", sql.NVarChar, data.type)
-      .input("pris", sql.Decimal(18, 2), data.pris)
-      .input("gebyr", sql.Decimal(18, 2), data.gebyr || 0)
-      .input("dato", sql.Date, new Date())
-      .input("tid", sql.DateTime, new Date())
-      .input("antal", sql.Int, data.antal)
-      .input("ticker", sql.NVarChar, data.tickerSymbol)
-      .input("værditype", sql.NVarChar, data.værditype)
-      .query(`
+    .input("porteføljeID", sql.Int, data.porteføljeID)
+    .input("kontoID", sql.Int, data.kontoID)
+    .input("type", sql.NVarChar, data.type)
+    .input("pris", sql.Decimal(18, 2), data.pris)
+    .input("gebyr", sql.Decimal(18, 2), data.gebyr || 0)
+    .input("dato", sql.Date, new Date())
+    .input("tid", sql.DateTime, new Date())
+    .input("antal", sql.Int, data.antal)
+    .input("ticker", sql.NVarChar, data.tickerSymbol)
+    .input("værditype", sql.NVarChar, data.værditype)
+    .input("sælgerKontoID", sql.Int, sælgerID)
+    .input("modtagerKontoID", sql.Int, modtagerID)
+    .query(`
         INSERT INTO dbo.transaktioner
         (porteføljeID, kontoID, transaktionstype, pris, gebyr, dato, tidspunkt, antal, sælgerKontoID, modtagerKontoID, tickerSymbol, værditype)
-        VALUES (@porteføljeID, @kontoID, @type, @pris, @gebyr, @dato, @tid, @antal, NULL, NULL, @ticker, @værditype)
-      `);
+        VALUES (@porteføljeID, @kontoID, @type, @pris, @gebyr, @dato, @tid, @antal, @sælgerKontoID, @modtagerKontoID, @ticker, @værditype)
+    `);
+
   
     // 6. Ved køb: indsæt eller opdater værdipapir
     if (data.type === "køb") {
@@ -481,7 +487,20 @@ async function hentKontiForBruger(brugerID) {
     return result.recordset;
   }
   
-
+  async function hentTotalRealiseretGevinst() {
+    const db = await sql.connect(sqlConfig);
+  
+    const result = await db.request().query(`
+      SELECT 
+        SUM(CASE WHEN transaktionstype = 'salg' THEN (pris - gebyr) ELSE 0 END) AS totalSalg,
+        SUM(CASE WHEN transaktionstype = 'køb' THEN (pris + gebyr) ELSE 0 END) AS totalKøb
+      FROM dbo.transaktioner
+    `);
+  
+    const { totalSalg, totalKøb } = result.recordset[0];
+    return (totalSalg || 0) - (totalKøb || 0);
+  }
+  
 
   module.exports = {
     hentAllePortefoljer,
@@ -498,6 +517,7 @@ async function hentKontiForBruger(brugerID) {
     opdaterSidsteHandelsDato,
     hentOgOpdaterVærdipapirMedAktuelVærdi,
     hentHistorikForVærdipapir,
+    hentTotalRealiseretGevinst
   };
 
   

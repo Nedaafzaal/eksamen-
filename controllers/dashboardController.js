@@ -1,5 +1,7 @@
 const fetch = require("node-fetch");
 const dashboardModel = require("../models/dashboardModel");
+const portfolioModel = require("../models/portfolioModel");
+
 
 const API_KEY = "d0ad5fpr01qm3l9kmfg0d0ad5fpr01qm3l9kmfgg";
 const symbols = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA'];
@@ -23,6 +25,8 @@ async function visDashboard(req, res) {
     const top5 = await hentTopAktier();
     const porteføljer = await dashboardModel.hentPorteføljerMedAktier();
     const top5Profit = await hentTopUrealiseretGevinst(porteføljer);
+    const totalRealiseret = await portfolioModel.hentTotalRealiseretGevinst();
+
 
     let totalVærdi = 0;
     let totalUrealiseret = 0;
@@ -49,7 +53,7 @@ async function visDashboard(req, res) {
       top5Profit,
       totalVærdi,
       totalUrealiseret,
-      totalRealiseret: 0 // evt. placeholder
+      totalRealiseret
     });
 
   } catch (err) {

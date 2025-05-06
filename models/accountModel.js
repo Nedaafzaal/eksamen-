@@ -35,7 +35,7 @@ async function hentTransaktionerForKonto(kontoID) {
   .query(`
     SELECT * FROM dbo.transaktioner 
     WHERE (sælgerKontoID = @ID OR modtagerKontoID = @ID)
-      AND transaktionstype IN ('hæv', 'indsæt')
+      AND transaktionstype IN ('hæv', 'indsæt', 'køb', 'salg')
   `); //henter alle transaktioner hvor kontoen enten er modtager eller sælger 
 
   return result.recordset; //retunere en liste af transaktioner 
