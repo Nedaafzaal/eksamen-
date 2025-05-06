@@ -85,7 +85,7 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
         FROM dbo.transaktioner t
         JOIN dbo.konto k ON t.kontoID = k.kontoID
         WHERE t.porteføljeID = @id
-          AND t.transaktionstype IN ('køb', 'sælg')
+          AND t.transaktionstype IN ('køb', 'salg')
         ORDER BY t.tidspunkt DESC
       `);
   
@@ -113,7 +113,7 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
     data.antal = parseInt(data.antal);
 
     // Fast gebyr-regel
-    if (data.type === "sælg") {
+    if (data.type === "salg") {
         data.gebyr = 19;
     } else {
         data.gebyr = 0;
@@ -130,7 +130,7 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
     const pengePåKonto = result.recordset[0]?.saldo;
     if (pengePåKonto == null) throw new Error("Der er ikke penge på den valgte konto.");
   
-    const prisMedGebyr = data.type === "sælg"
+    const prisMedGebyr = data.type === "salg"
     ? data.pris - data.gebyr
     : data.pris + data.gebyr;
 
@@ -141,7 +141,7 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
     }
   
     // 3. Valider og håndter salg
-    if (data.type === "sælg") {
+    if (data.type === "salg") {
       const eksisterende = await db.request()
         .input("porteføljeID", sql.Int, data.porteføljeID)
         .input("ticker", sql.NVarChar, data.tickerSymbol)
