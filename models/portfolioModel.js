@@ -427,6 +427,37 @@ async function hentKontiForBruger(brugerID) {
     return værdipapir;
   }
   
+  async function hentHistorikForVærdipapir(værdipapirID) {
+    const db = await sql.connect(sqlConfig);
+  
+    const meta = await db.request()
+      .input("id", sql.Int, værdipapirID)
+      .query(`SELECT porteføljeID, tickerSymbol FROM dbo.værdipapir WHERE værdipapirID = @id`);
+  
+    if (!meta.recordset[0]) return [];
+  
+    const { porteføljeID, tickerSymbol } = meta.recordset[0];
+  
+    const result = await db.request()
+      .input("porteføljeID", sql.Int, porteføljeID)
+      .input("ticker", sql.NVarChar, tickerSymbol)
+      .query(`
+        SELECT 
+          CONVERT(date, dato) AS dato,
+          SUM(antal * pris) AS værdi
+        FROM dbo.transaktioner
+        WHERE tickerSymbol = @ticker
+          AND porteføljeID = @porteføljeID
+          AND transaktionstype = 'køb'
+          AND dato >= DATEADD(year, -1, GETDATE())
+        GROUP BY CONVERT(date, dato)
+        ORDER BY dato
+      `);
+  
+    return result.recordset;
+  }
+  
+
 
   module.exports = {
     hentAllePortefoljer,
@@ -441,7 +472,8 @@ async function hentKontiForBruger(brugerID) {
     hentVærdipapirMedID,
     hentVærdiHistorik,
     opdaterSidsteHandelsDato,
-    hentOgOpdaterVærdipapirMedAktuelVærdi
+    hentOgOpdaterVærdipapirMedAktuelVærdi,
+    hentHistorikForVærdipapir,
   };
 
   
