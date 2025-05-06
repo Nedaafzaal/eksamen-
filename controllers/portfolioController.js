@@ -207,7 +207,7 @@ async function visVærdipapirDetaljer(req, res) {
       }
   // henter histroik for værdipapir
   const historik = await portfolioModel.hentHistorikForVærdipapir(værdipapirID);
-      res.render("valueInfo", { værdipapir,historik });
+      res.render("valueInfo", { værdipapir, historik });
     } catch (err) {
       console.error(err);
       res.status(500).send("Fejl ved visning af værdipapir.");

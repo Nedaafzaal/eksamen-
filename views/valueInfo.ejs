@@ -88,7 +88,7 @@
   </script>
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <script>
-    const historik = <%- JSON.stringify(historik) %>;
+    const historik = <%= JSON.stringify(historik || []) %>;
   
     const data = historik.map(h => ({
       x: new Date(h.dato),

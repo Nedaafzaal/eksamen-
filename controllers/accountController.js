@@ -4,7 +4,7 @@ const accountModel = require("../models/accountModel"); //importerer account mod
 async function visAlleKonti(req, res) {
   try {
     const konti = await accountModel.hentAlleKonti(); //henter alle konti fra vores database
-    res.render("kontiOversigt", { konti }); //sender konti til vores kontiOversigt.ejs så det vises i browseren 
+    res.render("kontiOversigt", { konti }); //sender kontiobjekt til vores kontiOversigt.ejs så det vises i browseren 
   } catch (err) {
     console.error("Fejl ved hentning af konti:", err); //logger fejl i terminalen 
     res.status(500).send("Noget gik galt"); //sender statuskode 500
