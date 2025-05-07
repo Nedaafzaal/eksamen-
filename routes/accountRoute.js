@@ -7,7 +7,7 @@ router.get("/oversigt", accountController.visAlleKonti); //når brugeren går ti
 
 //viser siden og formularen hvor man kan indsætte penge 
 router.get("/insert/:id", accountController.visIndsætFormular);
-router.post("/insert", accountController.indsætVærdi);
+router.post("/insert/", accountController.indsætVærdi);
 
 //viser siden og formulaen hvor man kan hæve penge 
 router.get("/withdraw/:id", accountController.visHævFormular);

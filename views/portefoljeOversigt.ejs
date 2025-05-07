@@ -71,12 +71,12 @@
         <span>Total Value</span>
       </div>
     
-      <% if (portefoljer.length > 0) { %>
-        <% portefoljer.forEach(p => { %>
+      <% if (porteføljer.length > 0) { %>
+        <% porteføljer.forEach(p => { %>
           <a href="/portefolje/<%= p.porteføljeID %>" class="porteføljeRækkeLink">
             <div class="porteføljeRække"> 
               <div><%= p.navn %></div> 
-              <div><%= p.kontotilknytning %></div> 
+              <div><%= p.kontonavn %></div> 
               <div>
                 <% if (p.sidsteHandelsDato) { %>
                   <%= new Date(p.sidsteHandelsDato).toLocaleDateString("da-DK") %>

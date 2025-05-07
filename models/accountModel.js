@@ -6,24 +6,28 @@ async function hentDB(){
 }
 
 //hent alle konti fra databasen
-async function hentAlleKonti() {
+async function hentAlleKontiForBruger(brugerID) {
     const db = await hentDB(); //opretter forbindelse til databasen
-    const result = await db.request().query(`
+    const result = await db.request()
+    .input("brugerID", sql.Int, brugerID)
+    .query(`
     SELECT * FROM dbo.konto
+    WHERE brugerID = @brugerID
   `); //SQL forspørgsel der henter alle konti
   return result.recordset; //retunere en liste af alle konti
 }
 
 
 //henter en konto ud fra kontoID 
+
 async function hentKontoMedID(kontoID) {
   const db = await hentDB();
   const result = await db.request()
-    .input("ID", sql.Int, kontoID) //henter den parameter som forspørgslen kommer til at indeholde 
+    .input("kontoID", sql.Int, kontoID) //henter den parameter som forspørgslen kommer til at indeholde 
     .query(`
-        SELECT kontoID, porteføljeID, kontonavn, saldo, valuta, oprettelsesdato, bankreference, brugerID, aktiv 
+        SELECT kontoID, kontonavn, saldo, valuta, oprettelsesdato, bankreference, brugerID, aktiv 
         FROM dbo.konto 
-        WHERE kontoID = @ID
+        WHERE kontoID = @kontoID
     `); //forspørgsel der henter konto som matcher id
     
   return result.recordset[0]; //retunere selve kontoen 
@@ -58,42 +62,50 @@ async function opdaterSaldo(kontoID, beløb) {
     `); //opdatere saldoen ved at ligge beløbet til uanset om det er + eller - 
 }
 
-
+// del evnt den her op
 //gemmer en ny transaktion i vores database 
 async function gemTransaktion(data) {
     const db = await hentDB();
-    const nu = new Date(); // nuværende dato og tid
+    const nu = new Date(); // tidspunkt nu
   
-    // Gem selve transaktionen
-    await db.request() 
-      .input("porteføljeID", sql.Int, data.porteføljeID)
+    const harPortefølje = data.porteføljeID !== undefined && data.porteføljeID !== null;
+  
+    const request = db.request()
       .input("kontoID", sql.Int, data.kontoID)
-      .input("sælgerID", sql.Int, data.type === "Hæv" ? data.kontoID : null)
-      .input("modtagerID", sql.Int, data.type === "Indsæt" ? data.kontoID : null)
+      .input("sælgerID", sql.Int, data.type === "hæv" ? data.kontoID : null)
+      .input("modtagerID", sql.Int, data.type === "indsæt" ? data.kontoID : null)
       .input("type", sql.VarChar(20), data.type)
       .input("dato", sql.Date, nu)
       .input("tid", sql.Time, nu)
       .input("valuta", sql.VarChar(10), data.valuta || "DKK")
       .input("beløb", sql.Decimal(18, 2), data.beløb)
-      .input("gebyr", sql.Int, 0)
-      .query(`
-        INSERT INTO dbo.transaktioner
-        (porteføljeID, kontoID, sælgerKontoID, modtagerKontoID, transaktionstype, dato, tidspunkt, værditype, pris, gebyr)
-        VALUES (@porteføljeID, @kontoID, @sælgerID, @modtagerID, @type, @dato, @tid, @valuta, @beløb, @gebyr)
-      `);
+      .input("gebyr", sql.Int, 0);
   
-    // Opdater sidsteHandelsDato i porteføljen
-    await db.request()
-      .input("porteføljeID", sql.Int, data.porteføljeID)
-      .input("dato", sql.Date, nu)
-      .query(`
-        UPDATE dbo.porteføljer
-        SET sidsteHandelsDato = @dato
-        WHERE porteføljeID = @porteføljeID
-      `);
+    if (harPortefølje) {
+      request.input("porteføljeID", sql.Int, data.porteføljeID);
+    }
+  
+    const insertSql = `
+      INSERT INTO dbo.transaktioner
+      (${harPortefølje ? "porteføljeID," : ""} kontoID, sælgerKontoID, modtagerKontoID, transaktionstype, dato, tidspunkt, værditype, pris, gebyr)
+      VALUES (${harPortefølje ? "@porteføljeID," : ""} @kontoID, @sælgerID, @modtagerID, @type, @dato, @tid, @valuta, @beløb, @gebyr)
+    `;
+  
+    await request.query(insertSql);
+  
+    // Hvis vi har portefølje, opdater datoen
+    if (harPortefølje) {
+      await db.request()
+        .input("porteføljeID", sql.Int, data.porteføljeID)
+        .input("dato", sql.Date, nu)
+        .query(`
+          UPDATE dbo.porteføljer
+          SET sidsteHandelsDato = @dato
+          WHERE porteføljeID = @porteføljeID
+        `);
+    }
   }
   
-
 
 //opret en ny konto 
 async function opretNyKonto(formData, brugerID) {
@@ -105,12 +117,11 @@ async function opretNyKonto(formData, brugerID) {
   .input("dato", sql.Date, new Date())
   .input("bankref", sql.NVarChar, formData.bankreference)
   .input("brugerID", sql.Int, brugerID)
-  .input("porteføljeID", sql.Int, formData.porteføljeID)
   .query(`
     INSERT INTO dbo.konto
-    (kontonavn, saldo, valuta, oprettelsesdato, bankreference, brugerID, porteføljeID)
+    (kontonavn, saldo, valuta, oprettelsesdato, bankreference, brugerID)
     OUTPUT INSERTED.kontoID
-    VALUES (@navn, @saldo, @valuta, @dato, @bankref, @brugerID, @porteføljeID)
+    VALUES (@navn, @saldo, @valuta, @dato, @bankref, @brugerID)
   `);
 
 return result.recordset[0].kontoID;
@@ -143,7 +154,7 @@ async function sætAktivStatus(kontoID, aktiv) {
 
 //gør det muligt at eksportere, så de kan bruges i controller
 module.exports = {
-  hentAlleKonti,
+  hentAlleKontiForBruger,
   hentKontoMedID,
   hentTransaktionerForKonto,
   opdaterSaldo,

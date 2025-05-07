@@ -6,28 +6,39 @@ async function hentDB(){
 }
 
 // Hent alle porteføljer fra databasen
-async function hentAllePortefoljer() {
-  const db = await sql.connect(sqlConfig);
-  const result = await db.request().query(`
-    SELECT * FROM dbo.porteføljer
-  `);
-
-  return result.recordset;
-}
+async function hentAllePorteføljerForBruger(brugerID) {
+    const db = await hentDB();
+    const result = await db.request()
+      .input("brugerID", sql.Int, brugerID)
+      .query(`
+        SELECT 
+          p.porteføljeID,
+          p.navn,
+          p.sidsteHandelsDato,
+          k.kontonavn
+        FROM dbo.porteføljer p
+        JOIN dbo.konto k ON p.kontoID = k.kontoID
+        WHERE p.brugerID = @brugerID
+      `);
+  
+    return result.recordset;
+  }
+  
 
 // Hent én portefølje baseret på ID
-async function hentPortefoljeMedID(ID) {
-  const db = await hentDB();
-  const result = await db.request()
-    .input("porteføljeID", sql.Int, ID)
-    .query(`
-        SELECT porteføljeID, navn, oprettelsesDato 
-        FROM dbo.porteføljer 
-        WHERE porteføljeID = @porteføljeID
-    `);
-
-  return result.recordset[0];
-}
+async function hentPorteføljeMedID(porteføljeID) {
+    const db = await hentDB();
+    const result = await db.request()
+      .input("porteføljeID", sql.Int, porteføljeID)
+      .query(`
+          SELECT porteføljeID, navn, kontoID, oprettelsesDato
+          FROM dbo.porteføljer 
+          WHERE porteføljeID = @porteføljeID
+      `);
+  
+    return result.recordset[0];
+  }
+  
 
 // Hent alle værdipapirer, der tilhører en bestemt portefølje
 async function hentVærdipapirerTilPortefølje(porteføljeID) {
@@ -65,17 +76,17 @@ async function hentSamletVærdiForAllePorteføljer() {
 }
 
 // Opret en ny portefølje i databasen
-async function opretNyPortefolje(data) {
+async function opretNyPortefølje(data) {
     const db = await hentDB();
     await db.request()
-      .input("navn", sql.NVarChar, data.navn)
-      .input("kontotilknytning", sql.NVarChar, data.kontotilknytning)
-      .input("brugerID", sql.Int, data.brugerID)
-      .input("oprettelsesDato", sql.Date, new Date())
-      .query(`
-        INSERT INTO dbo.porteføljer (navn, kontotilknytning, brugerID, oprettelsesDato)
-        VALUES (@navn, @kontotilknytning, @brugerID, @oprettelsesDato)
-      `);
+  .input("navn", sql.NVarChar, data.navn)
+  .input("kontoID", sql.Int, data.kontoID)
+  .input("brugerID", sql.Int, data.brugerID) // VIGTIGT!
+  .input("oprettelsesDato", sql.Date, new Date())
+  .query(`
+    INSERT INTO dbo.porteføljer (navn, kontoID, brugerID, oprettelsesDato)
+    VALUES (@navn, @kontoID, @brugerID, @oprettelsesDato)
+  `);
   }
   
 
@@ -507,11 +518,11 @@ async function hentKontiForBruger(brugerID) {
   
 
   module.exports = {
-    hentAllePortefoljer,
-    hentPortefoljeMedID,
+    hentAllePorteføljerForBruger,
+    hentPorteføljeMedID,
     hentVærdipapirerTilPortefølje,
     hentSamletVærdiForAllePorteføljer,
-    opretNyPortefolje,
+    opretNyPortefølje,
     hentTransaktionerForPortefølje,
     tilføjVærdipapirTilPortefølje,
     registrerHandel,

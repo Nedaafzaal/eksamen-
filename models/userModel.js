@@ -1,8 +1,8 @@
 const sql = require("mssql");
 const sqlConfig = require("../sqlConfig/sqlConfig");
 
-async function hentDB(){
-    return await sql.connect(sqlConfig);
+async function hentDB() {
+  return await sql.connect(sqlConfig);
 }
 
 class BrugerData {
@@ -12,11 +12,24 @@ class BrugerData {
     const resultat = await database.request()
       .input("brugernavn", sql.NVarChar, brugernavn)
       .query(`
-        SELECT * FROM [dbo].[bruger]
+        SELECT * FROM dbo.bruger
         WHERE brugernavn = @brugernavn
       `);
 
     return resultat.recordset[0]; // returnér den første (eller undefined hvis ingen findes)
+  }
+
+  // Hent én bruger fra databasen ud fra brugerID
+  async hentBrugerMedID(brugerID) {
+    const db = await hentDB();
+    const resultat = await db.request()
+      .input("brugerID", sql.Int, brugerID)
+      .query(`
+        SELECT brugernavn FROM dbo.bruger
+        WHERE brugerID = @brugerID
+      `);
+
+    return resultat.recordset[0]; // fx { brugernavn: 'Yasaman' }
   }
 
   // Opret en ny bruger med info fra formularen
@@ -48,7 +61,7 @@ class BrugerData {
         WHERE brugernavn = @brugernavn AND adgangskode = @adgangskode
       `);
 
-    return resultat.recordset.length > 0; // returnér true hvis der findes én
+    return resultat.recordset.length > 0;
   }
 
   // Skift brugerens adgangskode

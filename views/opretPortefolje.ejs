@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Opret nyt portefølje</title>
     <link href="/opretPortefolje.css" rel="stylesheet" />
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -19,9 +18,16 @@
            </div>
            
            <div class="opretBox">
-              <input type="text" placeholder="Kontotilknytning" name="kontotilknytning" required>
-              <box-icon type='solid' name='bank'></box-icon>
-           </div>
+            <label for="kontoID">Vælg konto</label>
+            <select name="kontoID" id="kontoID" required>
+              <% konti.forEach(konto => { %>
+                <option value="<%= konto.kontoID %>">
+                  <%= konto.kontonavn %> (Saldo: <%= konto.saldo %>)
+                </option>
+              <% }); %>
+            </select>
+          </div>
+    
      
            <div class="opretBox">
               <input type="number" placeholder="Forventet værdi" name="forventetVærdi" required>

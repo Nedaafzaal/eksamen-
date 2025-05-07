@@ -1,6 +1,7 @@
 const fetch = require("node-fetch"); //importerer node-fetch, så vi kan sende HTTP-requests til et eksternt API 
 const dashboardModel = require("../models/dashboardModel"); 
 const portfolioModel = require("../models/portfolioModel"); 
+const userModel = require("../models/userModel");
 
 const API_KEY = "d0ad5fpr01qm3l9kmfg0d0ad5fpr01qm3l9kmfgg"; //vores API nøgle til finnHub
 
@@ -83,19 +84,36 @@ async function hentTopUrealiseretGevinst(porteføljer, kursMap) {
 //funktion som viser dashboard med det hele
 async function visDashboard(req, res) {
   try {
-    const porteføljer = await dashboardModel.hentPorteføljerMedAktier(); //henter på funktion fra dashboard model
-    const totalRealiseret = await portfolioModel.hentTotalRealiseretGevinst(); //henter funktion fra portfolio model.
+    const brugerID = parseInt(req.cookies.brugerID);
+    const bruger = await userModel.hentBrugerMedID(brugerID);
+    const brugernavn = bruger?.brugernavn || "Ukendt";
 
+<<<<<<< Updated upstream
     const kursMap = {}; //vores objekt hvori vi gemmer aktekurser, i stedet for hele tiden at hente fra API 
 
     for (const aktie of porteføljer) { //loop gennem hvert aktie i portefølje
+=======
+    const porteføljer = await dashboardModel.hentPorteføljerMedAktierForBruger(brugerID);
+    const totalRealiseret = await portfolioModel.hentTotalRealiseretGevinst();
+
+    const kursMap = {};
+
+    for (const aktie of porteføljer) {
+>>>>>>> Stashed changes
       const quoteUrl = `https://finnhub.io/api/v1/quote?symbol=${aktie.tickerSymbol}&token=${API_KEY}`;
       let data = getCache(quoteUrl); //prøver først at hente kursdata fra cache, hvis det allerede er hentet tidligere og stadig er gyldigt undgår vi et nyt API-kald og bruger den gemte data i stedet
 
+<<<<<<< Updated upstream
       if (!data) { //hvis der ikke findes fyldig data i cachen 
         const response = await fetch(quoteUrl); //henter kursdata fra Finhub
         data = await response.json(); //gør det til json objekt
         setCache(quoteUrl, data, 5 * 60 * 1000); //kan genbruges i 5 min
+=======
+      if (!data) {
+        const response = await fetch(quoteUrl);
+        data = await response.json();
+        setCache(quoteUrl, data, 5 * 60 * 1000);
+>>>>>>> Stashed changes
       }
 
       kursMap[aktie.tickerSymbol] = data; //gemmer data 
@@ -117,16 +135,20 @@ async function visDashboard(req, res) {
     const top5Profit = await hentTopUrealiseretGevinst(porteføljer, kursMap); //finder top 5 værdipapir med størst urealiseret gevinst på tværs af porteføljer 
     const top5 = await hentTopAktier(); //henter top 5 baseret på deres nuværende værdi
 
+<<<<<<< Updated upstream
     res.render("dashboard", { //sender følgende objekt med dets egenskaber videre til dashboard.ejs. Så vi altså kan se top 5 aktier med størst værdi, top 5 aktier med størst profit
+=======
+    res.render("dashboard", {
+>>>>>>> Stashed changes
       top5,
       top5Profit,
       totalVærdi,
       totalUrealiseret,
-      totalRealiseret
+      totalRealiseret,
+      brugernavn // 💡 sendes til EJS
     });
 
   } catch (err) {
-    //console.error("hentning af dashboard:", err);
     res.status(500).send("Noget gik galt med dashboardet.");
   }
 }

@@ -13,8 +13,8 @@
 
     <form action="/konto/insert" method="POST"> <!--definere ruten formularen skal sendes til-->
   
-    <input type="hidden" name="kontoID" value="<%= konto.kontoID %>"> <!--Skjult inputfelt, sender konto ID med så serveren ved hvilken konto der skal opdateres-->
-    <input type="hidden" name="porteføljeID" value="<%= konto.porteføljeID %>">
+      <input type="hidden" name="kontoID" value="<%= konto.kontoID %>">
+      <!--Skjult inputfelt, sender konto ID med så serveren ved hvilken konto der skal opdateres-->
 
       <div class="opretBox">
         <input type="number" placeholder="Beløb" name="beløb" required>

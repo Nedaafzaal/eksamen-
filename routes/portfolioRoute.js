@@ -2,11 +2,11 @@ const express = require("express");
 const router = express.Router();
 const portfolioController = require("../controllers/portfolioController");
 
-router.get("/oversigt", portfolioController.visPortefoljeOversigt);
+router.get("/oversigt", portfolioController.visPorteføljeOversigt);
 
-router.get("/opret", portfolioController.visOpretPortefoljeFormular);
+router.get("/opret", portfolioController.visOpretPorteføljeFormular);
 
-router.post("/opret", portfolioController.opretPortefolje);
+router.post("/opret", portfolioController.opretPortefølje);
 
 router.get("/vaerdipapir/:id", portfolioController.visVærdipapirDetaljer);
 
@@ -25,7 +25,7 @@ router.post("/vaerdipapir/:id/sellPapir", portfolioController.købEllerSælg);
 
 
 // Denne route til sidst!
-router.get("/:id", portfolioController.visEnPortefolje);
+router.get("/:id", portfolioController.visEtPortefølje);
 
 
 module.exports = router;

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= portefolje.navn %></title>
+  <title><%= portefølje.navn %></title>
   <link href="/portefolje.css" rel="stylesheet">
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
 </head>
@@ -35,17 +35,17 @@
   <div class="indhold">
 
     <div class="overskrift">
-      <h1><%= portefolje.navn %></h1>
+      <h1><%= portefølje.navn %></h1>
 
       <!--søgefelt-->
-      <form action="/portefolje/<%= portefolje.porteføljeID %>/searchPapir" method="GET" class="søgForm">
+      <form action="/portefolje/<%= portefølje.porteføljeID %>/searchPapir" method="GET" class="søgForm">
         <input type="text" name="query" placeholder="Søg efter navn på værdipapir" required>
         <button type="submit">Søg</button>
       </form>
 
       <!--Handelshistorik-knap-->
       <div class="tilføjKnapBox">
-        <form action="/portefolje/<%= portefolje.porteføljeID %>/handelshistorik" method="GET" class="tilføjKnap">
+        <form action="/portefolje/<%= portefølje.porteføljeID %>/handelshistorik" method="GET" class="tilføjKnap">
           <button type="submit">Handelshistorik</button>
         </form>
       </div>
@@ -71,7 +71,7 @@
         </div>
         <div class="højrenedreboks">
           <h3>Dato oprettet</h3>
-          <p><%= new Date(portefolje.oprettelsesDato).toLocaleDateString('da-DK') %></p>
+          <p><%= new Date(portefølje.oprettelsesDato).toLocaleDateString('da-DK') %></p>
         </div>
       </div>
     </div>
