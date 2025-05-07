@@ -2,14 +2,6 @@ const accountModel = require("../models/accountModel"); //importerer account mod
 
 //funktion som viser en oversigt over alle konti
 async function visAlleKonti(req, res) {
-<<<<<<< Updated upstream
-  try {
-    const konti = await accountModel.hentAlleKonti(); //kalder på en funktion fra accountmodel, som henter alle konti fra vores database
-    res.render("kontiOversigt", { konti }); //sender kontiobjekt til vores kontiOversigt.ejs så det vises i browseren 
-  } catch (err) {
-    //console.error("Fejl ved hentning af konti:", err); //til eget brug så  
-    res.status(500).send("Noget gik galt");
-=======
     try {
       const brugerID = parseInt(req.cookies.brugerID);
       if (!brugerID) {
@@ -23,7 +15,6 @@ async function visAlleKonti(req, res) {
       console.error("Fejl ved hentning af konti:", err);
       res.status(500).send("Noget gik galt");
     }
->>>>>>> Stashed changes
   }
   
 
@@ -53,45 +44,6 @@ async function visIndsætFormular(req, res) {
   }
 }
 
-<<<<<<< Updated upstream
-
-//funktion hvor penge sættes ind på konto
-async function indsætVærdi(req, res) { 
-  const kontoID = parseInt(req.body.kontoID, 10);//tager fat i kontoID ud fra formularen som sendes (hidden input, POST rute), laver om fra string til helttal
-  const beløb = parseFloat(req.body.beløb); //henter beløb fra formularen og konventerer til kommatal
-  const valuta = req.body.valuta;
-
-  try { 
-    const konto = await accountModel.hentKontoMedID(kontoID);
-    const porteføljeID = konto.porteføljeID; //udtrækker porteføljeID fra den hentede konti så det kan bruges videre i funktionaliteten 
-
-    if (!konto || isNaN(kontoID) || isNaN(porteføljeID)) { //hvis konto ikke eksisterer eller hvis kontoID ikke er et tal eller hvis porteføljeID ikke er et tal, sendes følgende statuskode med fejl meddelse 
-      return res.status(400).send("Noget gik galt");
-    }
-
-    if(konto.aktiv === false){ //hvis konto ikke er aktiv, sendes følgende
-        return res.status(400).send("Konto er lukket og der kan dermed ikke indsættes værdi")
-    }
-
-    await accountModel.opdaterSaldo(kontoID, beløb); //når penge er indsat på konto, skal saldo opdateres bestemt med kontoID 
-    await accountModel.gemTransaktion({ //transaktion skal gemmes efter indsættelse med følgende attributter: 
-      type: "Indsæt", 
-      porteføljeID, 
-      beløb, 
-      kontoID,
-      valuta
-    });
-
-    res.redirect(`/konto/${kontoID}`); //efter penge er indsat på konto, skal brugeres dirigeres til den opdaterede konto.ejs
-  } catch (err) { 
-    //console.error("Indsæt værdi", err); //til eget brug
-    res.status(500).send("Kunne ikke indsætte penge");
-  }
-}
-
-
-//funktion som viser hæv-formular
-=======
 //Funktionen hvor penge sættes ind på konto
 async function indsætVærdi(req, res) {
     const kontoID = parseInt(req.body.kontoID); // sletter 10
@@ -129,7 +81,6 @@ async function indsætVærdi(req, res) {
   
   
 //Funktion som viser hæv-formular
->>>>>>> Stashed changes
 async function visHævFormular(req, res) {
   const kontoID = parseInt(req.params.id, 10); //henter kontoID fra url og konventerer det til heltal 
   try { 
@@ -144,37 +95,6 @@ async function visHævFormular(req, res) {
 
 //funktion som hæver værdi
 async function hævVærdi(req, res) {
-<<<<<<< Updated upstream
-  const kontoID = parseInt(req.body.kontoID, 10);
-  const beløb = parseFloat(req.body.beløb);
-  const valuta = req.body.valuta;
-
-  try {
-    const konto = await accountModel.hentKontoMedID(kontoID);
-    const porteføljeID = konto.porteføljeID; //udtrækker porteføljeID fra den hentede konti så det kan bruges videre i funktionaliteten 
-
-    if (!konto || isNaN(kontoID) || isNaN(porteføljeID)) { //hvis konto ikke eksisterer eller hvis kontoID ikke er et tal eller hvis porteføljeID ikke er et tal, sendes følgende statuskode med fejl meddelse 
-      return res.status(400).send("Noget gik galt");
-    }
-
-    if(konto.aktiv===false){ //hvis konto ikke er aktiv sendes denne status kode
-        return res.status(400).send("Konto er lukket og der kan dermed ikke hæves værdi")
-    }
-
-    await accountModel.opdaterSaldo(kontoID, -beløb); //kalder funktion som opdaterer saldo ved at trække beløbet fra saldoen på det valgte kontoID
-    await accountModel.gemTransaktion({ //funktion der gemmer transaktionen
-      type: "Hæv", 
-      porteføljeID,
-      beløb,
-      kontoID,
-      valuta
-    });
-
-    res.redirect(`/konto/${kontoID}`);
-  } catch (err) {
-    //console.error("Hævningfejl:", err);
-    res.status(500).send("Kunne ikke hæve penge");
-=======
     const kontoID = parseInt(req.body.kontoID, 10);
     const beløb = parseFloat(req.body.beløb);
     const valuta = req.body.valuta;
@@ -203,14 +123,12 @@ async function hævVærdi(req, res) {
     } catch (err) {
       res.status(500).send("Kunne ikke hæve penge");
     }
->>>>>>> Stashed changes
   }
   
 
 
 //funktion for formular til at oprette ny konto
 async function visOpretFormular(req, res) {
-<<<<<<< Updated upstream
     const brugerID = req.cookies.brugerID; //bruger cookies til at hente brugerID, som tidligere er gemt i browser efter første gangs login
   
     try { 
@@ -221,27 +139,12 @@ async function visOpretFormular(req, res) {
       }
   
       res.render("opretKonto", { porteføljeID });//sender porteføljeID-objekt videre til opretKonto.ejs til visning
-=======
-    try {
-      const brugerID = req.cookies.brugerID; // Hent brugerens ID fra cookies
-  
-      if (!brugerID) {
-        return res.status(401).send("Bruger ikke logget ind.");
-      }
-  
-      res.render("opretKonto"); // Ingen porteføljeID sendes, da konto er uafhængig
->>>>>>> Stashed changes
     } catch (err) {
       console.error("Fejl ved visning af opret konto-formular:", err);
       res.status(500).send("Noget gik galt");
     }
   }
   
-<<<<<<< Updated upstream
-=======
-  
-  
->>>>>>> Stashed changes
 
 //når brugeren opretter en ny konto
 async function opretKonto(req, res) {
