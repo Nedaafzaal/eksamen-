@@ -21,14 +21,8 @@
       </div>
 
       <div class="opretBox">
-        <label>Vælg konto</label>
-        <select name="kontoID" required>
-          <% konti.forEach(k => { %>
-            <option value="<%= k.kontoID %>">
-              <%= k.kontonavn %> - <%= k.valuta %> (Saldo: <%= new Intl.NumberFormat('da-DK').format(k.saldo) %> kr)
-            </option>
-          <% }); %>
-        </select>
+        <label>Penge indsættes på <%= portefølje.kontoID%></label>
+        <input type="hidden" name="kontoID" value="<%= portefølje.kontoID %>">
       </div>
       
 

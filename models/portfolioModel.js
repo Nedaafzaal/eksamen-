@@ -124,7 +124,7 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
         data.gebyr = 0;
     }
   
-    console.log("Handelsdata:", data);
+    //console.log("Handelsdata:", data);
   
     // 1. Hent saldo
     const result = await db.request()

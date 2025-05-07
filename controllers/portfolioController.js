@@ -111,7 +111,7 @@ async function søgEfterPapir(req, res) {
         const søgeLink = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${søgning}&apikey=${process.env.API_KEY}`;
         const svar = await fetch(søgeLink);
         const data = await svar.json();
-        console.log("Alpha Vantage response:", data);
+        //console.log("Alpha Vantage response:", data);
     const fundet = data.bestMatches?.[0];
     if (!fundet) {
       return res.send("Ingen værdipapir fundet.");

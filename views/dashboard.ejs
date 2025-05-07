@@ -86,33 +86,42 @@
       </div>
 
     <!--boks for top 5 baseret på profit-->
-      <div class="lilleBoks">
-        <h3>Top 5 Værdipapirer baseret på profit</h3>
-        <div class="top5-header"> <!--header række-->
-          <div class="kolonne">Name</div>
-          <div class="kolonne">Portfolio</div>
-          <div class="kolonne">Value</div>
-        </div>
-
-        <% if (top5Profit && top5Profit.length > 0) { %>
-          <% top5Profit.forEach(function(stock) { %>
-            <div class="top5-row">
-              <div class="kolonne">
-                <strong><%= stock.symbol %></strong><br>
-                <small>Gevinst: <%= stock.gevinst.toLocaleString("da-DK", { style: "currency", currency: "DKK" }) %></small>
-              </div>
-              <div class="kolonne"><%= stock.portefølje %></div>
-              <div class="kolonne"><%= stock.samletVærdi.toLocaleString("da-DK", { style: "currency", currency: "DKK" }) %></div>
-            </div>
-          <% }); %>
-        <% } else { %>
-          <p style="padding: 1rem;">Ingen gevinstdata tilgængelig.</p>
-        <% } %>
-
-        <!-- Indhold til profit liste tilføjes senere -->
-      </div>
-    </div>
+<div class="lilleBoks">
+  <h3>Top 5 Værdipapirer baseret på profit</h3>
+  <div class="top5-header">
+    <div class="kolonne">Name</div>
+    <div class="kolonne">Portfolio</div>
+    <div class="kolonne">Value</div>
   </div>
+
+  <% if (top5Profit && top5Profit.length > 0) { %>
+    <% top5Profit.forEach(function(stock) { %>
+      <div class="top5-row">
+        <div class="kolonne">
+          <strong><%= stock.symbol %></strong><br>
+          <small>
+            Gevinst:
+            <% if (stock.urealiseretGevinst !== undefined) { %>
+              <%= stock.urealiseretGevinst.toLocaleString("da-DK", { style: "currency", currency: "DKK" }) %>
+            <% } else { %>
+              Ikke tilgængelig
+            <% } %>
+          </small>
+        </div>
+        <div class="kolonne"><%= stock.portefølje %></div>
+        <div class="kolonne">
+          <% if (stock.samletVærdi !== undefined) { %>
+            <%= stock.samletVærdi.toLocaleString("da-DK", { style: "currency", currency: "DKK" }) %>
+          <% } else { %>
+            Ikke tilgængelig
+          <% } %>
+        </div>
+      </div>
+    <% }); %>
+  <% } else { %>
+    <p style="padding: 1rem;">Ingen gevinstdata tilgængelig.</p>
+  <% } %>
+</div>
 
   <!-- Script til funktionalitet for sidemenu -->
   <script>
