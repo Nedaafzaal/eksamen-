@@ -18,16 +18,15 @@
            </div>
            
            <div class="opretBox">
-            <label for="kontoID">Vælg konto</label>
-            <select name="kontoID" id="kontoID" required>
-              <% konti.forEach(konto => { %>
-                <option value="<%= konto.kontoID %>">
-                  <%= konto.kontonavn %> (Saldo: <%= konto.saldo %>)
+            <label for="kontoID">Vælg konto</label> <!--label der beskriver dropdown menu-->
+            <select name="kontoID" id="kontoID" required> 
+              <% konti.forEach(konto => { %> <!--ejs loop, gennemgår hver konto i konti arrayet-->
+                <option value="<%= konto.kontoID %>"> <!--hver konto bliver en mulighed i dropdown menuen-->
+                  <%= konto.kontonavn %> (Saldo: <%= konto.saldo %>) <!--viser kontonavn og saldo i dropwdown-->
                 </option>
               <% }); %>
             </select>
           </div>
-    
      
            <div class="opretBox">
               <input type="number" placeholder="Forventet værdi" name="forventetVærdi" required>

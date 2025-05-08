@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <!--Sidemenu navigation-->
+  <!--sidemenu navigation-->
   <div class="sidemenu">
     <div class="WebappLogo">
       <img src="/logo.jpeg" alt="WebappLogo">
@@ -31,52 +31,54 @@
     </ul>
   </div>
 
-  <!-- Indhold -->
+  <!--indhold -->
   <div class="indhold">
 
     <div class="overskrift">
       <h1><%= portefølje.navn %></h1>
 
       <!--søgefelt-->
-      <form action="/portefolje/<%= portefølje.porteføljeID %>/searchPapir" method="GET" class="søgForm">
+      <form action="/portefolje/<%= portefølje.porteføljeID %>/searchPapir" method="GET" class="søgForm"> <!--angive hvilken rute dataen skal sendes til nårformularen sendes, porteføljeID sættes ind dynamisk-->
         <input type="text" name="query" placeholder="Søg efter navn på værdipapir" required>
         <button type="submit">Søg</button>
       </form>
 
-      <!--Handelshistorik-knap-->
+      <!--handelshistorik-knap-->
       <div class="tilføjKnapBox">
-        <form action="/portefolje/<%= portefølje.porteføljeID %>/handelshistorik" method="GET" class="tilføjKnap">
+        <form action="/portefolje/<%= portefølje.porteføljeID %>/handelshistorik" method="GET" class="tilføjKnap"> <!--definere rute og henter porteføljeID dynamisk-->
           <button type="submit">Handelshistorik</button>
         </form>
       </div>
     </div>
 
-    <!-- Øverste sektion -->
+    <!--øverste sektion -->
     <div class="øverste">
       <div class="grafboks">
         <h3>Samlet værdi</h3>
-        <% if (værdipapirer.length > 0) { %>
+        <% if (værdipapirer.length > 0) { %> <!--ejs if sætning der tjekker om der er nogle værdipapir i porteføljen-->
           <p><%= samletVærdi.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' }) %></p>
         <% } else { %>
           <p><em>Ingen værdipapirer i porteføljen endnu</em></p>
         <% } %>
-     <!-- Line chart placeholder -->
-       <div id="lineChart" style="width: 100%; max-width: 900px; height: 400px;"></div>
+
+
+     <!--linje graf-->
+       <div id="lineChart" style="width: 100%; max-width: 900px; height: 400px;"></div> <!--målene til grafen-->
       </div>
 
       <div class="højresideboks">
         <div class="diagramBoks">
           <h3>Fordeling af værdi</h3>
-          <div id="pieChart"></div>
+          <div id="pieChart"></div> 
         </div>
         <div class="højrenedreboks">
           <h3>Dato oprettet</h3>
-          <p><%= new Date(portefølje.oprettelsesDato).toLocaleDateString('da-DK') %></p>
+          <p><%= new Date(portefølje.oprettelsesDato).toLocaleDateString('da-DK') %></p> <!--dataoprettelse for porteføljen-->
         </div>
       </div>
     </div>
 
-    <!-- Oversigt over værdipapirer -->
+    <!--oversigt over værdipapirer -->
     <div class="oversigtBox">
       <h3>Værdipapirer i portefølje</h3>
       <div class="listeOverskrifter">
@@ -85,20 +87,20 @@
         <span>Købsdato</span>
       </div>
     
-      <% if (værdipapirer.length > 0) { %>
-        <% værdipapirer.forEach(v => { %> 
-          <a href="/portefolje/vaerdipapir/<%= v.id %>" class="aktieLink">
+      <% if (værdipapirer.length > 0) { %> <!--ejs if der er værdipapirer i porteføljen-->
+        <% værdipapirer.forEach(v => { %> <!--looper igennem værdipapir-->
+          <a href="/portefolje/vaerdipapir/<%= v.id %>" class="aktieLink"> <!--link til at se detaljer om det enkelte værdipapir-->
             <div class="aktieRække"> 
-              <div><%= v.navn || 'Ukendt' %></div> 
+              <div><%= v.navn || 'Ukendt' %></div> <!--vis værdipapir navn hvis navn ikke findes sæt som ukendt-->
               <div><%= v.tickerSymbol || 'Ukendt' %></div>
               <div>
-                <% if (v.datoKøbt) { %>
+                <% if (v.datoKøbt) { %> <!--tjekker om datoen findes-->
                   <%= new Date(v.datoKøbt).toLocaleDateString('da-DK') %>
                 <% } else { %>
                   <em>Ukendt</em>
                 <% } %>
               </div>
-            </div> <!-- <- Manglede denne -->
+            </div> 
           </a>          
         <% }) %>
       <% } else { %>
@@ -108,7 +110,7 @@
     
 
     <script>
-      const sidemenu = document.querySelector('.sidemenu');
+      const sidemenu = document.querySelector('.sidemenu'); //funktion der åbner og lukker side menu 
       function skiftMenu() {
         sidemenu.classList.toggle('lukket');
       }
