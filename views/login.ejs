@@ -15,7 +15,7 @@
   <!--boks der indeholder login formular-->
    <div class="logindBox">
      <h2>Log ind</h2>
-     <form action="/login" method="POST"> <!--definere hvilken rute formularen skal sendes til-->
+     <form action="/login" method="POST"> <!--definere hvilken rute formularen skal sendes til som en POST-->
 
        <div class="inputBox">
          <input type="text" name="brugernavn" placeholder="Brugernavn" required>
@@ -41,11 +41,12 @@
      </div>
    
    </class>
+   
    </body>
 
-   <script> //script til at ise alert hvis login fejler
-   const fejl = "<%= typeof fejl !== 'undefined' ? fejl : '' %>"; //henter fejlbesked fra serveren
-   if (fejl) {
+   <script> //script der viser alert hvis login fejler
+   const fejl = "<%= typeof fejl !== 'undefined' ? fejl : '' %>"; //tjekker om variablen fejl eksiterer på server siden
+   if (fejl) { //hvis fejl eksistere så indsæt værdien af fejl som findes i controller ellers indsæt en tom string
      alert(fejl);
  }
    </script>

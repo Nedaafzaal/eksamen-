@@ -5,19 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil indstillinger</title>
     <link href="./indstillinger.css" rel="stylesheet" />
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" /> 
 </head>
 
 <body>
   <h1>Profil indstillinger</h1>
   
-  <!--Sidemenu navigation-->
+  <!--sidemenu navigation-->
   <div class="sidemenu">
     <div class="WebappLogo">
       <img src="logo.jpeg" alt="WebappLogo">
     </div>
 
-    <button class="pil" onclick="skiftMenu()"> 
+    <button class="pil" onclick="skiftMenu()"> <!--knap til at åbne og lukke sidemenuen-->
       <i class='bx bxs-chevron-left'></i>
     </button>
 
@@ -34,11 +34,11 @@
   </div>
 
 
-  <!--Formular til at ændre adgangskode-->
+  <!--formular til at ændre adgangskode-->
     <h2>Skift adgangskode</h2>
     
     <div class="skiftAdgangskodeBox">
-      <form action="/indstillinger" method="POST"> <!--formular der sender POST request til serveren-->
+      <form action="/indstillinger" method="POST"> <!--formular der sender data med en POST request til serveren-->
         
         <div class="inputBox">
           <input type="text" placeholder="Brugernavn" name="brugernavn" required>
@@ -64,9 +64,9 @@
       }
     </script>
 
-    <% if (typeof alert !== "undefined" && alert) { %> <!--hvis der er en alert fra serevren. vis en pop-up besked-->
+    <% if (typeof alert !== "undefined" && alert) { %> <!--EJS hvis der er en alert fra serevren. vis en pop-up besked-->
       <script>
-        alert("<%= alert %>"); //viser beskeden som en javascript alert
+        alert("<%= alert %>"); //viser alert-besked fra serveren 
       </script>
     <% } %>
 

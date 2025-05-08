@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="da">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= konto.kontonavn %></title>
+  <title><%= konto.kontonavn %></title> <!--dynamisk titel baseret på kontonavn-->
   <link href="/konti.css" rel="stylesheet">
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
 
 <body>
-  <!--Sidemenu navigation-->
+  <!--sidemenu navigation-->
   <div class="sidemenu">
     <div class="WebappLogo">
       <img src="/logo.jpeg" alt="WebappLogo">
@@ -31,9 +31,8 @@
     </ul>
   </div>
 
-  
 
-  <!-- Indhold på siden-->
+  <!--indhold på siden-->
   <div class="indhold">
     
     <div class="overskrift">
@@ -46,7 +45,7 @@
       <div class="mindreBoks">
         <p class="brødOverskrift">Saldo:</p>
         <p>
-            <%= new Intl.NumberFormat('da-DK', { style: 'currency', currency: konto.valuta }).format(konto.saldo) %> <!--viser kontoens saldo i korrekt valuta format-->
+            <%= new Intl.NumberFormat('da-DK', { style: 'currency', currency: konto.valuta }).format(konto.saldo) %> <!--viser kontoens saldo i dansk valuta format-->
         </p>
       </div>
       <!--boks med kontoens oprettelsesdato-->
@@ -62,11 +61,11 @@
     </div>
 
 
-<!--Midtboks transaktionsoversigt-->
+<!--midtboks transaktionsoversigt-->
 <div class="midtBoks">
-    <h3>Transaktionsoversigt</h3> <!-- (Manglede overskrift) -->
+    <h3>Transaktionsoversigt</h3> 
     
-    <!--Overskrifter for hver kolonne i listen-->
+    <!--overskrifter for hver kolonne i listen-->
     <div class="listeOverskrifter">
       <span>Transaktionstype</span> 
       <span>Valuta</span>
@@ -82,7 +81,7 @@
     <!--løber igennem alle transaktioner-->
       <% transaktioner.forEach(t => { %> 
         
-        <!--En række for hver transaktion-->
+        <!--en række for hver transaktion-->
         <div class="transaktionRække">
             <div><%= t.transaktionstype %></div>
             <div><%= t.værditype %></div>
@@ -91,10 +90,10 @@
             <div><%= new Date(t.tidspunkt).toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' }) %></div>
             <div><%= t.gebyr %> kr</div>
         </div> 
-      <% }); %> <!--Slut på forEach-->
+      <% }); %> <!--slut på forEach-->
   
     <% } else { %>
-      <p>Ingen transaktioner fundet endnu.</p> <!--Hvis der ingen transaktioner findes-->
+      <p>Ingen transaktioner fundet endnu.</p> <!--hvis der ingen transaktioner findes-->
     <% } %> 
   </div> 
 
@@ -105,7 +104,7 @@
       <div class="venstreBoks">
         <h2>Hæv eller indsæt værdi</h2>
         <div class="knapBoks">
-            <a href="/konto/insert/<%= konto.kontoID %>" class="knap">Indsæt værdi</a> <!--Den tager fat i det kontoID man er inde på-->
+            <a href="/konto/insert/<%= konto.kontoID %>" class="knap">Indsæt værdi</a> <!--den tager fat i det kontoID man er inde på-->
           <br><br>
           <a href="/konto/withdraw/<%=konto.kontoID %>" class="knap">Hæv værdi</a> <!--link til at hæve værdi fra den aktuelle konto-->
         </div>

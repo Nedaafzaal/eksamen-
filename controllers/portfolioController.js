@@ -2,19 +2,19 @@ const portfolioModel = require("../models/portfolioModel");
 const accountModel = require("../models/accountModel");
 
 
-// Viser alle porteføljer i en liste
+//viser alle porteføljer i en liste for den enkelte bruger
 async function visPorteføljeOversigt(req, res) {
     try {
-      const brugerID = parseInt(req.cookies.brugerID); // HENT BRUGER ID
+      const brugerID = parseInt(req.cookies.brugerID);//finder brugerID fra cookies
       if (!brugerID) {
         return res.status(401).send("Bruger ikke logget ind.");
       }
   
-      const porteføljer = await portfolioModel.hentAllePorteføljerForBruger(brugerID); // SEND MED
+      const porteføljer = await portfolioModel.hentAllePorteføljerForBruger(brugerID);//henter brugerens porteføljer
   
       for (const p of porteføljer) {
         const papirer = await portfolioModel.hentVærdipapirerTilPortefølje(p.porteføljeID);
-        p.totalValue = papirer.reduce((sum, papir) => sum + (papir.pris * papir.antal), 0);
+        p.totalValue = papirer.reduce((sum, papir) => sum + (papir.pris * papir.antal), 0);//udregner porteføljens samlede værdi
       }
   
       const totalVærdi = porteføljer.reduce((sum, p) => sum + (p.totalValue || 0), 0);
