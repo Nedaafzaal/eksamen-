@@ -2,20 +2,20 @@ const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
 
-// Login
+//hhv. get og post anmodninger for login
 router.get("/login", userController.visLoginSide);
 router.post("/login", userController.login);
 
-// Opret bruger
+//hhv. get og post anmodninger for opret bruger
 router.get("/opretbruger", userController.visOpretBrugerSide);
 router.post("/opretbruger", userController.opretBruger);
 
-// Skift adgangskode og viser indstillinger siden
+//hhv. get og post anmodninger for indstillinger og skiftadgangskode
 router.get("/indstillinger", userController.visIndstillinger); 
 router.post("/indstillinger", userController.skiftAdgangskode);
 
 
-// Redirect fra forsiden
+//redirct fra forsiden
 router.get("/", (req, res) => res.redirect("/login"));
 
 module.exports = router;

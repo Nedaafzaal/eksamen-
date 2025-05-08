@@ -1,16 +1,14 @@
-const sql = require("mssql");
-const sqlConfig = require("../sqlConfig/sqlConfig");
+//importerer nødvendige moduler
+const sql = require("mssql"); 
+const sqlConfig = require("../sqlConfig/sqlConfig"); 
 
-<<<<<<< Updated upstream
 async function hentDB(){
   return await sql.connect(sqlConfig);
 }
 
+
 class DashboardData {
 async hentPorteføljerMedAktierForBruger(brugerID) {
-=======
-async function hentPorteføljerMedAktierForBruger(brugerID) {
->>>>>>> Stashed changes
   const db = await sql.connect(sqlConfig);
   const result = await db.request()
   .input("brugerID", sql.Int, brugerID)
@@ -23,11 +21,7 @@ async function hentPorteføljerMedAktierForBruger(brugerID) {
   return result.recordset;
 }
 }
+
+//eksporterer en instans af DashboardData-klassen for at kunne bruge den i andre filer
 module.exports = new DashboardData();
 
-<<<<<<< Updated upstream
-=======
-module.exports = {
-  hentPorteføljerMedAktierForBruger
-};
->>>>>>> Stashed changes
