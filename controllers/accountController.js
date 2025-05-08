@@ -3,6 +3,7 @@ const accountModel = require("../models/accountModel"); //importerer account mod
 //funktion som viser en oversigt over alle konti
 async function visAlleKonti(req, res) {
     try {
+<<<<<<< Updated upstream
       const brugerID = parseInt(req.cookies.brugerID); //henter brugerens ID fra cookies og konveterer det til heltal
       if (!brugerID) {
         return res.status(401).send("Bruger ikke logget ind.");//hvis ingen brugerID findes sendes en fejlmeddelelse
@@ -14,6 +15,19 @@ async function visAlleKonti(req, res) {
     } catch (err) {
       console.error("Fejl ved hentning af konti:", err);
       res.status(500).send("Noget gik galt"); //fejl ved hentning
+=======
+      const brugerID = parseInt(req.cookies.brugerID);
+      if (!brugerID) {
+        return res.status(401).send("Bruger ikke logget ind.");
+      }
+  
+      const konti = await accountModel.hentAlleKontiForBruger(brugerID);
+      res.render("kontiOversigt", { konti });
+  
+    } catch (err) {
+      console.error("Fejl ved hentning af konti:", err);
+      res.status(500).send("Noget gik galt");
+>>>>>>> Stashed changes
     }
   }
   
@@ -34,7 +48,59 @@ async function visEnKonto(req, res) {
 
 //funktion som viser en formular når man ønsker at indsætte penge
 async function visIndsætFormular(req, res) {
+<<<<<<< Updated upstream
   const kontoID = parseInt(req.params.id);//tager fat i kontoID fra URL, omformer fra string til heltal
+=======
+  const kontoID = parseInt(req.params.id, 10); //tager igen fat i kontoID fra URL, omformer fra string til heltal. 
+  try { //beder program om at prøve at køre følgende kode
+    const konto = await accountModel.hentKontoMedID(kontoID);
+    res.render("insertValue", { konto }); //sender konto-objektet til insertValue.ejs, således vi kan tilgå dets attributter i formularen. 
+  } catch (err) { //hvis ikke det over lykkedes, skal følgende ske:
+    //console.error("Fejl ved visning af indsæt-side:", err); //således vi kunne se fejlen
+    res.status(500).send("Konto kunne ikke findes"); //statuskode sendes til brugeren med fejlmeddelse
+  }
+}
+
+//Funktionen hvor penge sættes ind på konto
+async function indsætVærdi(req, res) {
+    const kontoID = parseInt(req.body.kontoID); // sletter 10
+    //console.log(kontoID)
+    const beløb = parseFloat(req.body.beløb);
+    const valuta = req.body.valuta;
+  
+    try {
+      const konto = await accountModel.hentKontoMedID(kontoID);
+      if (!konto || isNaN(kontoID)) {
+        return res.status(400).send("Konto blev ikke fundet.");
+      }
+  
+      if (!konto.aktiv) {
+        return res.status(400).send("Kontoen er lukket.");
+      }
+  
+      // 1. Opdater saldo
+      await accountModel.opdaterSaldo(kontoID, beløb);
+  
+      // 2. Gem transaktion (uden porteføljeID)
+      await accountModel.gemTransaktion({
+        type: "indsæt",
+        kontoID,
+        valuta,
+        beløb
+      });
+  
+      res.redirect(`/konto/${kontoID}`);
+    } catch (err) {
+      console.error("Fejl under indsæt:", err);
+      res.status(500).send("Kunne ikke indsætte penge");
+    }
+  }
+  
+  
+//Funktion som viser hæv-formular
+async function visHævFormular(req, res) {
+  const kontoID = parseInt(req.params.id, 10);
+>>>>>>> Stashed changes
   try { 
     const konto = await accountModel.hentKontoMedID(kontoID);
     res.render("insertValue", { konto });//viser siden insertValue og sender konto data med til visning
@@ -93,13 +159,18 @@ async function visHævFormular(req, res) {
 
 //funktion, der behandler hævning af penge fra konto
 async function hævVærdi(req, res) {
+<<<<<<< Updated upstream
     const kontoID = parseInt(req.body.kontoID);
+=======
+    const kontoID = parseInt(req.body.kontoID, 10);
+>>>>>>> Stashed changes
     const beløb = parseFloat(req.body.beløb);
     const valuta = req.body.valuta;
   
     try {
       const konto = await accountModel.hentKontoMedID(kontoID);
   
+<<<<<<< Updated upstream
       if (!konto || isNaN(kontoID)) { //Hvis kontoen ikke findes eller kontoID'et ikke findes sendes der en fejlmeddelse
         return res.status(400).send("Noget gik galt");
       }
@@ -111,6 +182,19 @@ async function hævVærdi(req, res) {
       await accountModel.opdaterSaldo(kontoID, -beløb); //sørger for at saldoen bliver opdateret
   
       await accountModel.gemTransaktion({ //gemmer transaktionen som 'hæv'
+=======
+      if (!konto || isNaN(kontoID)) {
+        return res.status(400).send("Noget gik galt");
+      }
+  
+      if (konto.aktiv === false) {
+        return res.status(400).send("Konto er lukket og der kan dermed ikke hæves værdi");
+      }
+  
+      await accountModel.opdaterSaldo(kontoID, -beløb);
+  
+      await accountModel.gemTransaktion({
+>>>>>>> Stashed changes
         type: "hæv",
         beløb,
         kontoID,
@@ -127,6 +211,7 @@ async function hævVærdi(req, res) {
 
 //funktion der viser formular til at oprette ny konto
 async function visOpretFormular(req, res) {
+<<<<<<< Updated upstream
     const brugerID = req.cookies.brugerID; //bruger cookies til at hente brugerID, som tidligere er gemt i browser efter første gangs login
   
     try { 
@@ -137,12 +222,27 @@ async function visOpretFormular(req, res) {
       }
   
       res.render("opretKonto", { porteføljeID });//sender porteføljeID-objekt videre til opretKonto.ejs til visning
+=======
+    try {
+      const brugerID = req.cookies.brugerID; // Hent brugerens ID fra cookies
+  
+      if (!brugerID) {
+        return res.status(401).send("Bruger ikke logget ind.");
+      }
+  
+      res.render("opretKonto"); // Ingen porteføljeID sendes, da konto er uafhængig
+>>>>>>> Stashed changes
     } catch (err) {
       console.error("Fejl ved visning af opret konto-formular:", err);
       res.status(500).send("Noget gik galt");
     }
   }
   
+<<<<<<< Updated upstream
+=======
+  
+  
+>>>>>>> Stashed changes
 
 //behandler oprettelsen af ny konto
 async function opretKonto(req, res) {

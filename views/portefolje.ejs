@@ -38,14 +38,22 @@
       <h1><%= portefølje.navn %></h1>
 
       <!--søgefelt-->
+<<<<<<< Updated upstream
       <form action="/portefolje/<%= portefølje.porteføljeID %>/searchPapir" method="GET" class="søgForm"> <!--angive hvilken rute dataen skal sendes til nårformularen sendes, porteføljeID sættes ind dynamisk-->
+=======
+      <form action="/portefolje/<%= portefølje.porteføljeID %>/searchPapir" method="GET" class="søgForm">
+>>>>>>> Stashed changes
         <input type="text" name="query" placeholder="Søg efter navn på værdipapir" required>
         <button type="submit">Søg</button>
       </form>
 
       <!--handelshistorik-knap-->
       <div class="tilføjKnapBox">
+<<<<<<< Updated upstream
         <form action="/portefolje/<%= portefølje.porteføljeID %>/handelshistorik" method="GET" class="tilføjKnap"> <!--definere rute og henter porteføljeID dynamisk-->
+=======
+        <form action="/portefolje/<%= portefølje.porteføljeID %>/handelshistorik" method="GET" class="tilføjKnap">
+>>>>>>> Stashed changes
           <button type="submit">Handelshistorik</button>
         </form>
       </div>
@@ -73,7 +81,11 @@
         </div>
         <div class="højrenedreboks">
           <h3>Dato oprettet</h3>
+<<<<<<< Updated upstream
           <p><%= new Date(portefølje.oprettelsesDato).toLocaleDateString('da-DK') %></p> <!--dataoprettelse for porteføljen-->
+=======
+          <p><%= new Date(portefølje.oprettelsesDato).toLocaleDateString('da-DK') %></p>
+>>>>>>> Stashed changes
         </div>
       </div>
     </div>

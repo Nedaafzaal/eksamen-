@@ -8,7 +8,11 @@ async function hentDB(){
 class KontoData {
 
 //hent alle konti fra databasen
+<<<<<<< Updated upstream
 async hentAlleKontiForBruger(brugerID) {
+=======
+async function hentAlleKontiForBruger(brugerID) {
+>>>>>>> Stashed changes
     const db = await hentDB(); //opretter forbindelse til databasen
     const result = await db.request()
     .input("brugerID", sql.Int, brugerID)
@@ -21,7 +25,12 @@ async hentAlleKontiForBruger(brugerID) {
 
 
 //henter en konto ud fra kontoID 
+<<<<<<< Updated upstream
 async hentKontoMedID(kontoID) {
+=======
+
+async function hentKontoMedID(kontoID) {
+>>>>>>> Stashed changes
   const db = await hentDB();
   const result = await db.request()
     .input("kontoID", sql.Int, kontoID) //henter den parameter som forspørgslen kommer til at indeholde 
@@ -155,4 +164,18 @@ async sætAktivStatus(kontoID, aktiv) {
 module.exports = new KontoData();
 
 
+<<<<<<< Updated upstream
+=======
+//gør det muligt at eksportere, så de kan bruges i controller
+module.exports = {
+  hentAlleKontiForBruger,
+  hentKontoMedID,
+  hentTransaktionerForKonto,
+  opdaterSaldo,
+  gemTransaktion,
+  opretNyKonto,
+  sætAktivStatus,
+  hentPorteføljeIDForBruger
+};
+>>>>>>> Stashed changes
 

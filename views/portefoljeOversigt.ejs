@@ -71,9 +71,15 @@
         <span>Total Value</span>
       </div>
     
+<<<<<<< Updated upstream
       <% if (porteføljer.length > 0) { %> <!--tjekker om der er porteføljer-->
         <% porteføljer.forEach(p => { %> <!--looper gennem porteføljer-->
           <a href="/portefolje/<%= p.porteføljeID %>" class="porteføljeRækkeLink"> <!--gør rækkerne klikbarer-->
+=======
+      <% if (porteføljer.length > 0) { %>
+        <% porteføljer.forEach(p => { %>
+          <a href="/portefolje/<%= p.porteføljeID %>" class="porteføljeRækkeLink">
+>>>>>>> Stashed changes
             <div class="porteføljeRække"> 
               <div><%= p.navn %></div> 
               <div><%= p.kontonavn %></div> 

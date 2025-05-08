@@ -13,7 +13,12 @@
 
     <form action="/konto/insert" method="POST"> <!--definere ruten formularen skal sendes til som en POST-->
   
+<<<<<<< Updated upstream
       <input type="hidden" name="kontoID" value="<%= konto.kontoID %>"> <!--Skjult inputfelt, sender konto ID med så serveren ved hvilken konto der skal opdateres-->
+=======
+      <input type="hidden" name="kontoID" value="<%= konto.kontoID %>">
+      <!--Skjult inputfelt, sender konto ID med så serveren ved hvilken konto der skal opdateres-->
+>>>>>>> Stashed changes
 
       <div class="opretBox">
         <input type="number" placeholder="Beløb" name="beløb" required>

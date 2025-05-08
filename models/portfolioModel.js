@@ -5,10 +5,15 @@ async function hentDB(){
     return await sql.connect(sqlConfig);
 }
 
+<<<<<<< Updated upstream
 class PortefoljeData {
 
 // Hent alle porteføljer fra databasen
 async hentAllePorteføljerForBruger(brugerID) {
+=======
+// Hent alle porteføljer fra databasen
+async function hentAllePorteføljerForBruger(brugerID) {
+>>>>>>> Stashed changes
     const db = await hentDB();
     const result = await db.request()
       .input("brugerID", sql.Int, brugerID)
@@ -22,12 +27,20 @@ async hentAllePorteføljerForBruger(brugerID) {
         JOIN dbo.konto k ON p.kontoID = k.kontoID
         WHERE p.brugerID = @brugerID
       `);
+<<<<<<< Updated upstream
+=======
+  
+>>>>>>> Stashed changes
     return result.recordset;
   }
   
 
 // Hent én portefølje baseret på ID
+<<<<<<< Updated upstream
 async hentPorteføljeMedID(porteføljeID) {
+=======
+async function hentPorteføljeMedID(porteføljeID) {
+>>>>>>> Stashed changes
     const db = await hentDB();
     const result = await db.request()
       .input("porteføljeID", sql.Int, porteføljeID)
@@ -77,7 +90,11 @@ async hentSamletVærdiForAllePorteføljer() {
 }
 
 // Opret en ny portefølje i databasen
+<<<<<<< Updated upstream
 async opretNyPortefølje(data) {
+=======
+async function opretNyPortefølje(data) {
+>>>>>>> Stashed changes
     const db = await hentDB();
     await db.request()
   .input("navn", sql.NVarChar, data.navn)
@@ -519,6 +536,26 @@ async hentKontiForBruger(brugerID) {
   
 }
 
+<<<<<<< Updated upstream
 module.exports = new PortefoljeData();
+=======
+  module.exports = {
+    hentAllePorteføljerForBruger,
+    hentPorteføljeMedID,
+    hentVærdipapirerTilPortefølje,
+    hentSamletVærdiForAllePorteføljer,
+    opretNyPortefølje,
+    hentTransaktionerForPortefølje,
+    tilføjVærdipapirTilPortefølje,
+    registrerHandel,
+    hentKontiForBruger,
+    hentVærdipapirMedID,
+    hentVærdiHistorik,
+    opdaterSidsteHandelsDato,
+    hentOgOpdaterVærdipapirMedAktuelVærdi,
+    hentHistorikForVærdipapir,
+    hentTotalRealiseretGevinst
+  };
+>>>>>>> Stashed changes
 
   

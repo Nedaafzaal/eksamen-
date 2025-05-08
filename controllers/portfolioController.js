@@ -2,6 +2,7 @@ const portfolioModel = require("../models/portfolioModel");
 const accountModel = require("../models/accountModel");
 
 
+<<<<<<< Updated upstream
 //viser alle porteføljer i en liste for den enkelte bruger
 async function visPorteføljeOversigt(req, res) {
     try {
@@ -87,10 +88,98 @@ async function visOpretPorteføljeFormular(req, res) {
   }
   
   
+=======
+// Viser alle porteføljer i en liste
+async function visPorteføljeOversigt(req, res) {
+    try {
+      const brugerID = parseInt(req.cookies.brugerID); // HENT BRUGER ID
+      if (!brugerID) {
+        return res.status(401).send("Bruger ikke logget ind.");
+      }
+  
+      const porteføljer = await portfolioModel.hentAllePorteføljerForBruger(brugerID); // SEND MED
+  
+      for (const p of porteføljer) {
+        const papirer = await portfolioModel.hentVærdipapirerTilPortefølje(p.porteføljeID);
+        p.totalValue = papirer.reduce((sum, papir) => sum + (papir.pris * papir.antal), 0);
+      }
+  
+      const totalVærdi = porteføljer.reduce((sum, p) => sum + (p.totalValue || 0), 0);
+      res.render("portefoljeOversigt", { porteføljer, totalVærdi });
+    } catch (err) {
+      console.error("Fejl ved hentning af porteføljer:", err);
+      res.status(500).send("Noget gik galt ved visning af porteføljeoversigten.");
+    }
+  }
+  
+  
+// Viser én bestemt portefølje og dens aktier
+async function visEtPortefølje(req, res) {
+  const porteføljeID = parseInt(req.params.id, 10);
+  if (isNaN(porteføljeID)) {
+    return res.status(400).send("Ugyldigt portefølje-ID");
+  }
+  try {
+    const portefølje = await portfolioModel.hentPorteføljeMedID(porteføljeID);
+    if (!portefølje) {
+      return res.status(404).send("Portefølje ikke fundet.");
+    }
+    const værdipapirer = await portfolioModel.hentVærdipapirerTilPortefølje(porteføljeID);
+    const historik = await portfolioModel.hentVærdiHistorik(porteføljeID);
+    let samletVærdi = 0;
+    for (let i = 0; i < værdipapirer.length; i++) {
+      samletVærdi += værdipapirer[i].antal * værdipapirer[i].pris;
+    }
+    res.render("portefolje", { portefølje, værdipapirer, samletVærdi,historik });
+  } catch (err) {
+    console.error("Fejl ved visning af portefølje:", err);
+    res.status(500).send("Noget gik galt ved visning af portefølje.");
+  }
+}
+
+// Viser formularen til at oprette ny portefølje
+async function visOpretPorteføljeFormular(req, res) {
+    const brugerID = parseInt(req.cookies.brugerID);
+  
+    try {
+      const konti = await portfolioModel.hentKontiForBruger(brugerID);
+      res.render("opretportefolje", { konti });
+    } catch (err) {
+      console.error("Fejl ved hentning af konti:", err);
+      res.status(500).send("Kunne ikke hente konti");
+    }
+  }
+
+  async function opretPortefølje(req, res) {
+    const { navn, kontoID, forventetVærdi } = req.body;
+    const brugerID = req.cookies.brugerID;
+  
+    if (!brugerID) {
+      return res.status(401).send("Bruger ikke logget ind.");
+    }
+  
+    try {
+      await portfolioModel.opretNyPortefølje({
+        navn,
+        kontoID: parseInt(kontoID),
+        forventetVærdi: parseFloat(forventetVærdi),
+        brugerID: parseInt(brugerID)
+      });
+  
+      res.redirect("/portefolje/oversigt");
+    } catch (err) {
+      console.error("Fejl ved oprettelse af portefølje:", err);
+      res.status(500).send("Kunne ikke oprette portefølje.");
+    }
+  }
+  
+  
+>>>>>>> Stashed changes
 
 // Viser køb/salg transaktioner for en portefølje
 
 async function hentTransaktionerForPortefølje(req, res) {
+<<<<<<< Updated upstream
     const porteføljeID = parseInt(req.params.id, 10);
     if (isNaN(porteføljeID)) {
       return res.status(400).send("Ugyldigt portefølje-ID");
@@ -106,6 +195,23 @@ async function hentTransaktionerForPortefølje(req, res) {
       res.status(500).send("Kunne ikke hente handelshistorik.");
     }
   }
+=======
+    const porteføljeID = parseInt(req.params.id, 10);
+    if (isNaN(porteføljeID)) {
+      return res.status(400).send("Ugyldigt portefølje-ID");
+    }
+  
+    try {
+      const transaktioner = await portfolioModel.hentTransaktionerForPortefølje(porteføljeID);
+      const portefølje = await portfolioModel.hentPorteføljeMedID(porteføljeID); // <- her bruger du din eksisterende funktion
+  
+      res.render("handelshistorik", { transaktioner, portefølje });
+    } catch (err) {
+      console.error("Fejl ved hentning af handelshistorik:", err);
+      res.status(500).send("Kunne ikke hente handelshistorik.");
+    }
+  }
+>>>>>>> Stashed changes
 
 // Søger efter værdipapir med API og viser søgeresultat
 async function søgEfterPapir(req, res) {
@@ -149,6 +255,7 @@ async function søgEfterPapir(req, res) {
 
 // Viser formular til at købe værdipapir
 async function visBuyPapirForm(req, res) {
+<<<<<<< Updated upstream
     const porteføljeID = parseInt(req.params.id, 10);
     const symbol = req.query.symbol;
     const navn = req.query.navn;
@@ -187,6 +294,46 @@ async function visBuyPapirForm(req, res) {
     }
   }
   
+=======
+    const porteføljeID = parseInt(req.params.id, 10);
+    const symbol = req.query.symbol;
+    const navn = req.query.navn;
+    const pris = req.query.pris;
+  
+    if (!symbol || !navn || !pris) {
+      return res.status(400).send("Mangler nødvendige oplysninger i URL.");
+    }
+  
+    try {
+      const portefølje = await portfolioModel.hentPorteføljeMedID(porteføljeID);
+      if (!portefølje) {
+        return res.status(404).send("Portefølje ikke fundet.");
+      }
+
+      const konto = await accountModel.hentKontoMedID(portefølje.kontoID);
+      if(!konto){
+        return res.status(404).send("Tilknyttet konto findes ikke");
+      }
+  
+      res.render("buyPapir", {
+        tickerSymbol: symbol,
+        navn,
+        pris,
+        porteføljeID,
+        konto,
+        transaktionstype: "køb",
+        værditype: "Aktie",
+        gebyr: 0,
+        tidspunkt: new Date().toISOString()
+      });
+  
+    } catch (err) {
+      console.error("Fejl i visBuyPapirForm:", err);
+      res.status(500).send("Noget gik galt ved visning af køb-formular.");
+    }
+  }
+  
+>>>>>>> Stashed changes
 
 
 async function købEllerSælg(req, res) {
@@ -246,6 +393,7 @@ async function visVærdipapirDetaljer(req, res) {
   }
   
 
+<<<<<<< Updated upstream
   async function sælgPapirForm(req, res) {
     const værdipapirID = parseInt(req.params.id, 10);
   
@@ -296,6 +444,58 @@ module.exports = {
   købEllerSælg,
   visVærdipapirDetaljer,
   sælgPapirForm
+=======
+  async function sælgPapirForm(req, res) {
+    const værdipapirID = parseInt(req.params.id, 10);
+  
+    const værdipapir = await portfolioModel.hentVærdipapirMedID(værdipapirID);   
+  
+    if (!værdipapir) {
+      return res.status(404).send("Værdipapir ikke fundet.");
+    }
+  
+    const porteføljeID = værdipapir.porteføljeID;
+  
+    // Hent den portefølje værdipapiret tilhører
+    const portefølje = await portfolioModel.hentPorteføljeMedID(porteføljeID);
+    if (!portefølje) {
+      return res.status(404).send("Portefølje ikke fundet.");
+    }
+  
+    // Hent kontoen knyttet til porteføljen
+    const konto = await accountModel.hentKontoMedID(portefølje.kontoID);
+    if (!konto) {
+      return res.status(404).send("Konto ikke fundet.");
+    }
+  
+    res.render("sellPapirForm", {
+      værdipapir,
+      tickerSymbol: værdipapir.tickerSymbol,
+      navn: værdipapir.navn, 
+      pris: værdipapir.pris,
+      porteføljeID,
+      konto, 
+      transaktionstype: "sælg",
+      værditype: "Aktie",
+      gebyr: 0,
+      tidspunkt: new Date().toISOString()
+    });
+  }
+  
+  
+
+module.exports = {
+  visPorteføljeOversigt,
+  visEtPortefølje,
+  visOpretPorteføljeFormular,
+  opretPortefølje,
+  hentTransaktionerForPortefølje,
+  søgEfterPapir,
+  visBuyPapirForm,
+  købEllerSælg,
+  visVærdipapirDetaljer,
+  sælgPapirForm
+>>>>>>> Stashed changes
 };
 
 
