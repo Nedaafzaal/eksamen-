@@ -117,23 +117,23 @@
     </script>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script> <!--henter Apex charts biblioteket-->
 <script>
-  const værdipapirer = <%- JSON.stringify(værdipapirer) %>;
+  const værdipapirer = <%- JSON.stringify(værdipapirer) %>; //overfører værdipapirer som json til javascript 
 
-  const labels = værdipapirer.map(p => p.navn || 'Ukendt');
+  const labels = værdipapirer.map(p => p.navn || 'Ukendt'); //benytter map til at oprette et array af navne til grafen
   const series = værdipapirer.map(p =>
-    !isNaN(p.pris) && !isNaN(p.antal) ? p.antal * p.pris : 0
+    !isNaN(p.pris) && !isNaN(p.antal) ? p.antal * p.pris : 0 //opretter et nyt array med den samlede værdi af hvert værdipapir (antal * pris). Hvis pris eller antal mangler eller ikke er et tal, indsættes 0 som fallback
   );
 
-  const pieOptions = {
+  const pieOptions = { //konfirguation for pie chart
     chart: {
       type: 'pie',
       height: '75%',
       width: '100%'
     },
-    series: series,
-    labels: labels,
+    series: series, //data der skal vises i diagrammet
+    labels: labels, //labels til hver stykke i diagrammet
     legend: {
       position: 'bottom',
       fontSize: '9px'
@@ -141,7 +141,7 @@
     tooltip: {
       y: {
         formatter: function (val) {
-          return val.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' });
+          return val.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' }); //formatere værdi til dansk valuta
         }
       }
     },
@@ -155,26 +155,26 @@
     }]
   };
 
-  const pieChart = new ApexCharts(document.querySelector("#pieChart"), pieOptions);
-  pieChart.render();
+  const pieChart = new ApexCharts(document.querySelector("#pieChart"), pieOptions); //opretter pie chart emd id piechart
+  pieChart.render(); //tegner cirkeldiagrammet på siden
 </script>
 
   
   
   <script>
-    const historik = <%- JSON.stringify(historik) %>;
+    const historik = <%- JSON.stringify(historik) %>; //overfører historik data fra serveren til javascript
   
-    const datoer = historik.map(h => h.dato);
-    const værdier = historik.map(h => h.værdi);
+    const datoer = historik.map(h => h.dato); //tager datoer fra historik
+    const værdier = historik.map(h => h.værdi); //tager værdier fra historik
   
-    const lineOptions = {
+    const lineOptions = { ///konfirguation for linje chart
       chart: {
         type: 'line',
         toolbar: { show: false }
       },
       series: [{
-        name: 'Urealiseret værdi',
-        data: værdier
+        name: 'Urealiseret værdi', //navn på dataserie 
+        data: værdier //data der skal vises
       }],
       xaxis: {
         categories: datoer,
@@ -188,13 +188,13 @@
       },
       tooltip: {
         y: {
-          formatter: val => val.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' })
+          formatter: val => val.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' }) //valuta formatering
         }
       }
     };
   
-    const lineChart = new ApexCharts(document.querySelector("#lineChart"), lineOptions);
-    lineChart.render();
+    const lineChart = new ApexCharts(document.querySelector("#lineChart"), lineOptions); //opretter linje graf
+    lineChart.render(); //viser grafen på siden 
   </script>
   
   

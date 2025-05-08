@@ -8,12 +8,12 @@
 </head>
 <body>
   <div class="sælgVærdipapir">
-    <h3>Sælg værdipapir <%= værdipapir.navn %></h3>
-    <form action="/portefolje/vaerdipapir/<%= værdipapir.værdipapirID %>/sellPapir" method="POST">
+    <h3>Sælg værdipapir <%= værdipapir.navn %></h3> <!--dynamisk overskrift med værdipapirnavn-->
+    <form action="/portefolje/vaerdipapir/<%= værdipapir.værdipapirID %>/sellPapir" method="POST"> <!--formular der sendes til serveren ved salg-->
 
       <div class="speciel">
         <label>Pris per stk.</label>
-        <input type="text" name="pris" value="<%= pris %>" readonly />
+        <input type="text" name="pris" value="<%= pris %>" readonly /> <!--viser prisen på hver aktie som readonly så den ikke ændres-->
       </div>
       
       <div class="opretBox">
@@ -21,14 +21,14 @@
       </div>
 
       <div class="opretBox">
-        <label>Penge indsættes på <%= konto.kontoID%></label>
+        <label>Penge indsættes på <%= konto.kontoID%></label> <!--viser hvilken konto pengene sættes ind på-->
         <input type="hidden" name="kontoID" value="<%= konto.kontoID %>">
       </div>
       
 
       <p class="gebyrInfo">Vær OBS på der er et fast gebyr på 19 kr. ved salg af værdipapirer.</p>
       
-
+      <!--flere skjulte inputfelter der sender nødvendige data videre til serveren-->
       <input type="hidden" name="porteføljeID" value="<%= porteføljeID %>" />
       <input type="hidden" name="værdipapirID" value="<%= værdipapir.værdipapirID %>" />
       <input type="hidden" name="transaktionstype" value="salg" />

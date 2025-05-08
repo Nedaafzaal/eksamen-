@@ -5,8 +5,10 @@ async function hentDB(){
     return await sql.connect(sqlConfig);
 }
 
+class KontoData {
+
 //hent alle konti fra databasen
-async function hentAlleKontiForBruger(brugerID) {
+async hentAlleKontiForBruger(brugerID) {
     const db = await hentDB(); //opretter forbindelse til databasen
     const result = await db.request()
     .input("brugerID", sql.Int, brugerID)
@@ -19,8 +21,7 @@ async function hentAlleKontiForBruger(brugerID) {
 
 
 //henter en konto ud fra kontoID 
-
-async function hentKontoMedID(kontoID) {
+async hentKontoMedID(kontoID) {
   const db = await hentDB();
   const result = await db.request()
     .input("kontoID", sql.Int, kontoID) //henter den parameter som forspørgslen kommer til at indeholde 
@@ -35,7 +36,7 @@ async function hentKontoMedID(kontoID) {
 
 
 //henter alle transaktioner for en konto 
-async function hentTransaktionerForKonto(kontoID) {
+async hentTransaktionerForKonto(kontoID) {
   const db = await hentDB();
   const result = await db.request()
   .input("ID", sql.Int, kontoID) //angiver parameter til forspørgsel 
@@ -50,7 +51,7 @@ async function hentTransaktionerForKonto(kontoID) {
 
 
 //lig penge til eller trække penge fra saldoen 
-async function opdaterSaldo(kontoID, beløb) {
+async opdaterSaldo(kontoID, beløb) {
   const db = await hentDB();
   await db.request()
     .input("ID", sql.Int, kontoID) 
@@ -64,7 +65,7 @@ async function opdaterSaldo(kontoID, beløb) {
 
 // del evnt den her op
 //gemmer en ny transaktion i vores database 
-async function gemTransaktion(data) {
+async gemTransaktion(data) {
     const db = await hentDB();
     const nu = new Date(); // tidspunkt nu
   
@@ -108,7 +109,7 @@ async function gemTransaktion(data) {
   
 
 //opret en ny konto 
-async function opretNyKonto(formData, brugerID) {
+async opretNyKonto(formData, brugerID) {
     const db = await sql.connect(sqlConfig);
     const result = await db.request()
   .input("navn", sql.NVarChar, formData.navn)
@@ -129,7 +130,7 @@ return result.recordset[0].kontoID;
   
 
 //ændrer en kontos status så den er åben/lukket
-async function sætAktivStatus(kontoID, aktiv) {
+async sætAktivStatus(kontoID, aktiv) {
     const db = await hentDB();
     await db.request()
       .input("ID", sql.Int, kontoID)
@@ -141,7 +142,7 @@ async function sætAktivStatus(kontoID, aktiv) {
       `); //opdaterer aktiv status i databasen
   }
 
-  async function hentPorteføljeIDForBruger(brugerID) {
+  async hentPorteføljeIDForBruger(brugerID) {
     const db = await sql.connect(sqlConfig);
     const result = await db.request()
       .input("brugerID", sql.Int, brugerID)
@@ -149,18 +150,9 @@ async function sætAktivStatus(kontoID, aktiv) {
   
     return result.recordset[0]?.porteføljeID || null;
   }
+}
   
-  
+module.exports = new KontoData();
 
-//gør det muligt at eksportere, så de kan bruges i controller
-module.exports = {
-  hentAlleKontiForBruger,
-  hentKontoMedID,
-  hentTransaktionerForKonto,
-  opdaterSaldo,
-  gemTransaktion,
-  opretNyKonto,
-  sætAktivStatus,
-  hentPorteføljeIDForBruger
-};
+
 

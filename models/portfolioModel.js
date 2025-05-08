@@ -5,8 +5,10 @@ async function hentDB(){
     return await sql.connect(sqlConfig);
 }
 
+class PortefoljeData {
+
 // Hent alle porteføljer fra databasen
-async function hentAllePorteføljerForBruger(brugerID) {
+async hentAllePorteføljerForBruger(brugerID) {
     const db = await hentDB();
     const result = await db.request()
       .input("brugerID", sql.Int, brugerID)
@@ -20,13 +22,12 @@ async function hentAllePorteføljerForBruger(brugerID) {
         JOIN dbo.konto k ON p.kontoID = k.kontoID
         WHERE p.brugerID = @brugerID
       `);
-  
     return result.recordset;
   }
   
 
 // Hent én portefølje baseret på ID
-async function hentPorteføljeMedID(porteføljeID) {
+async hentPorteføljeMedID(porteføljeID) {
     const db = await hentDB();
     const result = await db.request()
       .input("porteføljeID", sql.Int, porteføljeID)
@@ -41,7 +42,7 @@ async function hentPorteføljeMedID(porteføljeID) {
   
 
 // Hent alle værdipapirer, der tilhører en bestemt portefølje
-async function hentVærdipapirerTilPortefølje(porteføljeID) {
+async hentVærdipapirerTilPortefølje(porteføljeID) {
     const db = await hentDB();
     const result = await db.request()
       .input("porteføljeID", sql.Int, porteføljeID)
@@ -65,7 +66,7 @@ async function hentVærdipapirerTilPortefølje(porteføljeID) {
   }
 
 // Hent samlet værdi for alle porteføljer ud fra værdipapirer
-async function hentSamletVærdiForAllePorteføljer() {
+async hentSamletVærdiForAllePorteføljer() {
   const db = await hentDB();
   const result = await db.request().query(`
     SELECT porteføljeID, SUM(forventetVærdi) AS samletVærdi
@@ -76,7 +77,7 @@ async function hentSamletVærdiForAllePorteføljer() {
 }
 
 // Opret en ny portefølje i databasen
-async function opretNyPortefølje(data) {
+async opretNyPortefølje(data) {
     const db = await hentDB();
     await db.request()
   .input("navn", sql.NVarChar, data.navn)
@@ -91,7 +92,7 @@ async function opretNyPortefølje(data) {
   
 
 // Hent alle transaktioner for et portefølje
-async function hentTransaktionerForPortefølje(porteføljeID) {
+async hentTransaktionerForPortefølje(porteføljeID) {
     const db = await hentDB();
     const result = await db.request()
       .input("id", sql.Int, porteføljeID)
@@ -107,7 +108,7 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
     return result.recordset;
   }  
 
-  async function tilføjVærdipapirTilPortefølje(data) {
+  async tilføjVærdipapirTilPortefølje(data) {
     const db = await hentDB();
     await db.request()
       .input("porteføljeID", sql.Int, data.porteføljeID)
@@ -123,7 +124,7 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
   
   // Tilføj ny handel til transaktioner
  // Denne funktion bruges til at købe eller sælge værdipapirer
- async function registrerHandel(data) {
+ async registrerHandel(data) {
     const db = await hentDB();
 
     data.antal = parseInt(data.antal);
@@ -341,7 +342,7 @@ async function hentTransaktionerForPortefølje(porteføljeID) {
   }
   
   // Hent alle konti for en bestemt bruger
-async function hentKontiForBruger(brugerID) {
+async hentKontiForBruger(brugerID) {
     const db = await hentDB();
     const result = await db.request()
       .input("brugerID", sql.Int, brugerID)
@@ -352,7 +353,7 @@ async function hentKontiForBruger(brugerID) {
     return result.recordset;
   }
   
-  async function hentVærdipapirMedID(id) {
+  async hentVærdipapirMedID(id) {
     const db = await sql.connect(sqlConfig);
     const result = await db.request()
       .input("id", sql.Int, id)
@@ -371,7 +372,7 @@ async function hentKontiForBruger(brugerID) {
     return result.recordset[0];
   }
   
-  async function hentVærdiHistorik(porteføljeID) {
+  async hentVærdiHistorik(porteføljeID) {
     const db = await hentDB();
     const result = await db.request()
       .input("porteføljeID", sql.Int, porteføljeID)
@@ -387,7 +388,7 @@ async function hentKontiForBruger(brugerID) {
     return result.recordset;
   }
   
-  async function opdaterSidsteHandelsDato(porteføljeID) {
+  async opdaterSidsteHandelsDato(porteføljeID) {
     const db = await hentDB();
     await db.request()
       .input("porteføljeID", sql.Int, porteføljeID)
@@ -399,7 +400,7 @@ async function hentKontiForBruger(brugerID) {
       `);
   }
   
-  async function hentOgOpdaterVærdipapirMedAktuelVærdi(værdipapirID) {
+  async hentOgOpdaterVærdipapirMedAktuelVærdi(værdipapirID) {
     const db = await hentDB();
   
     const værdipapir = await db.request()
@@ -472,7 +473,7 @@ async function hentKontiForBruger(brugerID) {
     return værdipapir;
   }
   
-  async function hentHistorikForVærdipapir(værdipapirID) {
+  async hentHistorikForVærdipapir(værdipapirID) {
     const db = await hentDB();
   
     const meta = await db.request()
@@ -502,7 +503,7 @@ async function hentKontiForBruger(brugerID) {
     return result.recordset;
   }
   
-  async function hentTotalRealiseretGevinst() {
+  async hentTotalRealiseretGevinst() {
     const db = await hentDB();
   
     const result = await db.request().query(`
@@ -516,23 +517,8 @@ async function hentKontiForBruger(brugerID) {
     return (totalSalg || 0) - (totalKøb || 0);
   }
   
+}
 
-  module.exports = {
-    hentAllePorteføljerForBruger,
-    hentPorteføljeMedID,
-    hentVærdipapirerTilPortefølje,
-    hentSamletVærdiForAllePorteføljer,
-    opretNyPortefølje,
-    hentTransaktionerForPortefølje,
-    tilføjVærdipapirTilPortefølje,
-    registrerHandel,
-    hentKontiForBruger,
-    hentVærdipapirMedID,
-    hentVærdiHistorik,
-    opdaterSidsteHandelsDato,
-    hentOgOpdaterVærdipapirMedAktuelVærdi,
-    hentHistorikForVærdipapir,
-    hentTotalRealiseretGevinst
-  };
+module.exports = new PortefoljeData();
 
   
