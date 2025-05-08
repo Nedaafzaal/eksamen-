@@ -1,14 +1,7 @@
-//importerer nødvendige moduler
-const sql = require("mssql"); 
-const sqlConfig = require("../sqlConfig/sqlConfig"); 
+const sql = require("mssql");
+const sqlConfig = require("../sqlConfig/sqlConfig");
 
-async function hentDB(){
-  return await sql.connect(sqlConfig);
-}
-
-
-class DashboardData {
-async hentPorteføljerMedAktierForBruger(brugerID) {
+async function hentPorteføljerMedAktierForBruger(brugerID) {
   const db = await sql.connect(sqlConfig);
   const result = await db.request()
   .input("brugerID", sql.Int, brugerID)
@@ -20,8 +13,7 @@ async hentPorteføljerMedAktierForBruger(brugerID) {
   `);
   return result.recordset;
 }
-}
 
-//eksporterer en instans af DashboardData-klassen for at kunne bruge den i andre filer
-module.exports = new DashboardData();
-
+module.exports = {
+  hentPorteføljerMedAktierForBruger
+};

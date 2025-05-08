@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -8,12 +8,12 @@
 </head>
 <body>
   <div class="sælgVærdipapir">
-    <h3>Sælg værdipapir <%= værdipapir.navn %></h3> <!--dynamisk overskrift med værdipapirnavn-->
-    <form action="/portefolje/vaerdipapir/<%= værdipapir.værdipapirID %>/sellPapir" method="POST"> <!--formular der sendes til serveren ved salg-->
+    <h3>Sælg værdipapir <%= værdipapir.navn %></h3>
+    <form action="/portefolje/vaerdipapir/<%= værdipapir.værdipapirID %>/sellPapir" method="POST">
 
       <div class="speciel">
         <label>Pris per stk.</label>
-        <input type="text" name="pris" value="<%= pris %>" readonly /> <!--viser prisen på hver aktie som readonly så den ikke ændres-->
+        <input type="text" name="pris" value="<%= pris %>" readonly />
       </div>
       
       <div class="opretBox">
@@ -21,18 +21,14 @@
       </div>
 
       <div class="opretBox">
-<<<<<<< Updated upstream
-        <label>Penge indsættes på <%= konto.kontoID%></label> <!--viser hvilken konto pengene sættes ind på-->
-=======
         <label>Penge indsættes på <%= konto.kontoID%></label>
->>>>>>> Stashed changes
         <input type="hidden" name="kontoID" value="<%= konto.kontoID %>">
       </div>
       
 
       <p class="gebyrInfo">Vær OBS på der er et fast gebyr på 19 kr. ved salg af værdipapirer.</p>
       
-      <!--flere skjulte inputfelter der sender nødvendige data videre til serveren-->
+
       <input type="hidden" name="porteføljeID" value="<%= porteføljeID %>" />
       <input type="hidden" name="værdipapirID" value="<%= værdipapir.værdipapirID %>" />
       <input type="hidden" name="transaktionstype" value="salg" />

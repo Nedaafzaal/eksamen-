@@ -5,21 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard</title>
   <link href="/handelshistorik.css" rel="stylesheet">
-  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"> <!--linker til de ikoner vi bruger-->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"> <!--Linker til de ikoner vi bruger-->
 </head>
 
 <body> 
-  <!--sidemenu-->
+  <!-- Sidemenu -->
   <div class="sidemenu">
     <div class="WebappLogo">
       <img src="/logo.jpeg" alt="WebappLogo"> 
     </div>
 
-    <button class="pil" onclick="skiftMenu()"> <!--knap til at åbne og lukke side menuen-->
+    <button class="pil" onclick="skiftMenu()"> <!--Knap til at åbne og lukke side menuen-->
       <i class='bx bxs-chevron-left'></i>  <!--ikon-->
     </button>
 
-  <!--navigations menu-->
+  <!--Navigations menu-->
     <ul class="menuValg">
       <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
       <li><a href="/konto/oversigt"><i class='bx bxs-user-account'></i>Konti</a></li>
@@ -27,19 +27,19 @@
       <li><a href="/indstillinger"><i class='bx bx-cog'></i>Indstillinger</a></li>
     </ul>
 
-  <!--logud knap/link-->
+  <!--Log ud knap-->
     <ul class="logUd">
       <li><a href="/login"><i class='bx bx-log-out'></i>Log ud</a></li>
     </ul>
   </div>
 
 
-<!--midtboks transaktionsoversigt-->
+<!--Midtboks transaktionsoversigt-->
 <div class="midtBoks">
-    <h3>Transaktionsoversigt for <%= portefølje.navn %></h3> <!--viser porteføljens navn dynamisk-->
+    <h3>Transaktionsoversigt for <%= portefølje.navn %></h3>
   </h3> 
     
-    <!--overskrifter for hver kolonne i listen-->
+    <!--Overskrifter for hver kolonne i listen-->
     <div class="listeOverskrifter">
       <span>Transaktionstype</span> 
       <span>Kontonavn</span>
@@ -50,15 +50,16 @@
       <span>Tidspunkt</span> 
       <span>Gebyr</span> 
       <span>Symbol</span> 
+     
     </div>
   
   <!--starter ejs if sætning, tjekker om der findes transaktioner-->
     <% if (transaktioner.length > 0) { %> 
   
-    <!--løber igennem alle transaktioner og viser dem-->
+    <!--løber igennem alle transaktioner-->
       <% transaktioner.forEach(t => { %> 
         
-        <!--en række for hver transaktion-->
+        <!--En række for hver transaktion-->
         <div class="transaktionRække">
             <div><%= t.transaktionstype %></div>
             <div><%= t.kontonavn %></div>
@@ -76,5 +77,7 @@
       <p>Ingen transaktioner fundet endnu.</p> <!--Hvis der ingen transaktioner findes-->
     <% } %> 
   </div> 
+
+
 </body> 
 

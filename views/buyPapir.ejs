@@ -1,28 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Køb værdipapir</title> 
-  <link href="/buyPapir.css" rel="stylesheet"> <!--tilføjer ekstern css fil til styling af siden-->
+  <title>Køb værdipapir</title>
+  <link href="/buyPapir.css" rel="stylesheet">
 </head>
 <body>
-  <div class="købVærdipapir"> <!--wrapper det hele ind i en div-->
+  <div class="købVærdipapir">
     <h1>Køb værdipapir</h1>
-<<<<<<< Updated upstream
-    <form action="/portefolje/<%= porteføljeID %>/buyPapir" method="POST"> <!--formular til at sende værdipapirkøb til serevren via POST-->
-
-        <p><strong>Værdipapir købes på:</strong> <%= konto.kontonavn %> (Saldo: <%= konto.saldo.toFixed(2) %> <%= konto.valuta %>)</p> <!--viser kontonavn og saldo for den givne konto, <% tegnen betyder at vi indsætter noget dynamisk-->
-
-        <input type="hidden" name="kontoID" value="<%= konto.kontoID %>"> <!--skjult input felt til kontoID så det kan sendes med formularen-->
-
-      <div class="opretBox"> 
-        <input type="number" step="0.01" placeholder="Antal" name="antal" required> <!--inputfelt til antal aktier der ønskes købt-->
-      </div>
-      
-
-        <!--skjulte felter der indeholder nødvendige data om værdipapiret og transaktionen-->
-=======
     <form action="/portefolje/<%= porteføljeID %>/buyPapir" method="POST">
 
         <p><strong>Værdipapir købes på:</strong> <%= konto.kontonavn %> (Saldo: <%= konto.saldo.toFixed(2) %> <%= konto.valuta %>)</p>
@@ -34,7 +20,6 @@
       
 
       <!-- Skjulte felter -->
->>>>>>> Stashed changes
         <input type="hidden" name="tickerSymbol" value="<%= tickerSymbol %>">
         <input type="hidden" name="navn" value="<%= navn %>">
         <input type="hidden" name="pris" value="<%= pris %>">

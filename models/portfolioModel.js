@@ -5,15 +5,8 @@ async function hentDB(){
     return await sql.connect(sqlConfig);
 }
 
-<<<<<<< Updated upstream
-class PortefoljeData {
-
-// Hent alle porteføljer fra databasen
-async hentAllePorteføljerForBruger(brugerID) {
-=======
 // Hent alle porteføljer fra databasen
 async function hentAllePorteføljerForBruger(brugerID) {
->>>>>>> Stashed changes
     const db = await hentDB();
     const result = await db.request()
       .input("brugerID", sql.Int, brugerID)
@@ -27,20 +20,13 @@ async function hentAllePorteføljerForBruger(brugerID) {
         JOIN dbo.konto k ON p.kontoID = k.kontoID
         WHERE p.brugerID = @brugerID
       `);
-<<<<<<< Updated upstream
-=======
   
->>>>>>> Stashed changes
     return result.recordset;
   }
   
 
 // Hent én portefølje baseret på ID
-<<<<<<< Updated upstream
-async hentPorteføljeMedID(porteføljeID) {
-=======
 async function hentPorteføljeMedID(porteføljeID) {
->>>>>>> Stashed changes
     const db = await hentDB();
     const result = await db.request()
       .input("porteføljeID", sql.Int, porteføljeID)
@@ -55,7 +41,7 @@ async function hentPorteføljeMedID(porteføljeID) {
   
 
 // Hent alle værdipapirer, der tilhører en bestemt portefølje
-async hentVærdipapirerTilPortefølje(porteføljeID) {
+async function hentVærdipapirerTilPortefølje(porteføljeID) {
     const db = await hentDB();
     const result = await db.request()
       .input("porteføljeID", sql.Int, porteføljeID)
@@ -79,7 +65,7 @@ async hentVærdipapirerTilPortefølje(porteføljeID) {
   }
 
 // Hent samlet værdi for alle porteføljer ud fra værdipapirer
-async hentSamletVærdiForAllePorteføljer() {
+async function hentSamletVærdiForAllePorteføljer() {
   const db = await hentDB();
   const result = await db.request().query(`
     SELECT porteføljeID, SUM(forventetVærdi) AS samletVærdi
@@ -90,11 +76,7 @@ async hentSamletVærdiForAllePorteføljer() {
 }
 
 // Opret en ny portefølje i databasen
-<<<<<<< Updated upstream
-async opretNyPortefølje(data) {
-=======
 async function opretNyPortefølje(data) {
->>>>>>> Stashed changes
     const db = await hentDB();
     await db.request()
   .input("navn", sql.NVarChar, data.navn)
@@ -109,7 +91,7 @@ async function opretNyPortefølje(data) {
   
 
 // Hent alle transaktioner for et portefølje
-async hentTransaktionerForPortefølje(porteføljeID) {
+async function hentTransaktionerForPortefølje(porteføljeID) {
     const db = await hentDB();
     const result = await db.request()
       .input("id", sql.Int, porteføljeID)
@@ -125,7 +107,7 @@ async hentTransaktionerForPortefølje(porteføljeID) {
     return result.recordset;
   }  
 
-  async tilføjVærdipapirTilPortefølje(data) {
+  async function tilføjVærdipapirTilPortefølje(data) {
     const db = await hentDB();
     await db.request()
       .input("porteføljeID", sql.Int, data.porteføljeID)
@@ -141,7 +123,7 @@ async hentTransaktionerForPortefølje(porteføljeID) {
   
   // Tilføj ny handel til transaktioner
  // Denne funktion bruges til at købe eller sælge værdipapirer
- async registrerHandel(data) {
+ async function registrerHandel(data) {
     const db = await hentDB();
 
     data.antal = parseInt(data.antal);
@@ -359,7 +341,7 @@ async hentTransaktionerForPortefølje(porteføljeID) {
   }
   
   // Hent alle konti for en bestemt bruger
-async hentKontiForBruger(brugerID) {
+async function hentKontiForBruger(brugerID) {
     const db = await hentDB();
     const result = await db.request()
       .input("brugerID", sql.Int, brugerID)
@@ -370,7 +352,7 @@ async hentKontiForBruger(brugerID) {
     return result.recordset;
   }
   
-  async hentVærdipapirMedID(id) {
+  async function hentVærdipapirMedID(id) {
     const db = await sql.connect(sqlConfig);
     const result = await db.request()
       .input("id", sql.Int, id)
@@ -389,7 +371,7 @@ async hentKontiForBruger(brugerID) {
     return result.recordset[0];
   }
   
-  async hentVærdiHistorik(porteføljeID) {
+  async function hentVærdiHistorik(porteføljeID) {
     const db = await hentDB();
     const result = await db.request()
       .input("porteføljeID", sql.Int, porteføljeID)
@@ -405,7 +387,7 @@ async hentKontiForBruger(brugerID) {
     return result.recordset;
   }
   
-  async opdaterSidsteHandelsDato(porteføljeID) {
+  async function opdaterSidsteHandelsDato(porteføljeID) {
     const db = await hentDB();
     await db.request()
       .input("porteføljeID", sql.Int, porteføljeID)
@@ -417,7 +399,7 @@ async hentKontiForBruger(brugerID) {
       `);
   }
   
-  async hentOgOpdaterVærdipapirMedAktuelVærdi(værdipapirID) {
+  async function hentOgOpdaterVærdipapirMedAktuelVærdi(værdipapirID) {
     const db = await hentDB();
   
     const værdipapir = await db.request()
@@ -490,7 +472,7 @@ async hentKontiForBruger(brugerID) {
     return værdipapir;
   }
   
-  async hentHistorikForVærdipapir(værdipapirID) {
+  async function hentHistorikForVærdipapir(værdipapirID) {
     const db = await hentDB();
   
     const meta = await db.request()
@@ -520,7 +502,7 @@ async hentKontiForBruger(brugerID) {
     return result.recordset;
   }
   
-  async hentTotalRealiseretGevinst() {
+  async function hentTotalRealiseretGevinst() {
     const db = await hentDB();
   
     const result = await db.request().query(`
@@ -534,11 +516,7 @@ async hentKontiForBruger(brugerID) {
     return (totalSalg || 0) - (totalKøb || 0);
   }
   
-}
 
-<<<<<<< Updated upstream
-module.exports = new PortefoljeData();
-=======
   module.exports = {
     hentAllePorteføljerForBruger,
     hentPorteføljeMedID,
@@ -556,6 +534,5 @@ module.exports = new PortefoljeData();
     hentHistorikForVærdipapir,
     hentTotalRealiseretGevinst
   };
->>>>>>> Stashed changes
 
   

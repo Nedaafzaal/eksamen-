@@ -5,21 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard</title>
   <link href="/dashboard.css" rel="stylesheet">
-  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"> <!--link til iconbibliotek-->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"> <!--Linker til de ikoner vi bruger-->
 </head>
 
 <body>
-<!--sidemenu med logo og navigation-->
+  <!-- Sidemenu -->
   <div class="sidemenu">
     <div class="WebappLogo">
       <img src="/logo.jpeg" alt="WebappLogo"> 
     </div>
 
-    <button class="pil" onclick="skiftMenu()"> <!--knap til at åbne og lukke side menuen-->
+    <button class="pil" onclick="skiftMenu()"> <!--Knap til at åbne og lukke side menuen-->
       <i class='bx bxs-chevron-left'></i>  <!--ikon-->
     </button>
 
-  <!--navigation-->
+  <!--Navigations menu-->
     <ul class="menuValg">
       <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
       <li><a href="/konto/oversigt"><i class='bx bxs-user-account'></i>Konti</a></li>
@@ -27,46 +27,41 @@
       <li><a href="/indstillinger"><i class='bx bx-cog'></i>Indstillinger</a></li>
     </ul>
 
-  <!--logud knap-->
+  <!--Log ud knap-->
     <ul class="logUd">
       <li><a href="/login"><i class='bx bx-log-out'></i>Log ud</a></li>
     </ul>
   </div>
 
 
-<!--hovedindhold på dashboard-->
+<!--Hoved indhold på siden-->
   <div class="indhold">
-<<<<<<< Updated upstream
-    <h1>Dashboard for <%= brugernavn %></h1> <!--viser brugeren dynamisk-->
-=======
     <h1>Dashboard for <%= brugernavn %></h1>
->>>>>>> Stashed changes
 
-    <!--øverste boksrække med nøgletal-->
+    <!-- Øverste boksrække med nøgletal -->
     <div class="øvreBoks">
       <div class="mindreBoks">
         <h4>Total værdi</h4>
-        <p><%= totalVærdi.toLocaleString("da-DK", { style: "currency", currency: "DKK" }) %></p> <!--ny boks til totalværdi, der bliver omdannet til DKK-->
+        <p><%= totalVærdi.toLocaleString("da-DK", { style: "currency", currency: "DKK" }) %></p>
       </div>
       <div class="mindreBoks">
         <h4>Total Realiseret Gevinst</h4>
-        <p><%= totalRealiseret.toLocaleString("da-DK", { style: "currency", currency: "DKK" }) %></p> <!--ny boks til realiseret gevinst-->
+        <p><%= totalRealiseret.toLocaleString("da-DK", { style: "currency", currency: "DKK" }) %></p>
       </div>
       <div class="mindreBoks">
         <h4>Total Urealiseret Gevinst</h4>
-        <p><%= totalUrealiseret.toLocaleString("da-DK", { style: "currency", currency: "DKK" }) %></p> <!--ny boks til realiseret gevinst-->
+        <p><%= totalUrealiseret.toLocaleString("da-DK", { style: "currency", currency: "DKK" }) %></p>
       </div>
     </div>
     
 
-    <!--boks med linjegraf-->
+    <!-- Boks med graf -->
     <div class="grafBoks">
       <h2 class="grafTitel">Samlet Værdi</h2>
       <div id="chart"></div>
     </div>
 
-
-    <!--nederste sektion med top 5 lister-->
+    <!-- Nederste sektion med top 5 lister-->
     <div class="nedreBoks">
     <!--boks for top 5 baseret på værdi-->
       <div class="lilleBoks">
@@ -77,19 +72,18 @@
           <div class="kolonne">Value</div>
         </div>
 
-        <!--datarækker-->
-        <% top5.forEach(function(stock) { %> <!--ejs foreach loop, går igennem top5 som er en liste med aktieobjekter, for hver aktie i listen og viser navn, symbol og værdi-->
+        <!--Datarækker-->
+        <% top5.forEach(function(stock) { %>
           <div class="top5-row">
             <div class="kolonne">
               <strong><%= stock.name %></strong><br> <!--navn på aktie-->
-              <small><%= stock.symbol %></small>  <!--symbol på aktie-->
+              <small><%= stock.symbol %></small> 
             </div>
-            <div class="kolonne">Growth Tech</div> 
-            <div class="kolonne"><%= stock.marketCap.toLocaleString() %> DKK</div> <!--virksomhedens markedsværdi, vises pænt med .-->
+            <div class="kolonne">Growth Tech</div> <!--Fast skrevet protefølje navn-->
+            <div class="kolonne"><%= stock.marketCap.toLocaleString() %> DKK</div> <!--market cap formateret-->
           </div>
-        <% }); %> <!--afsluter foreach loop-->
+        <% }); %>
       </div>
-
 
     <!--boks for top 5 baseret på profit-->
 <div class="lilleBoks">
@@ -100,60 +94,59 @@
     <div class="kolonne">Value</div>
   </div>
 
-  <% if (top5Profit && top5Profit.length > 0) { %> <!--tjekker om listen top5profit findes og ikke er tom-->
-    <% top5Profit.forEach(function(stock) { %> <!--gennemgår hver enkel aktie i fejs foreach loop-->
+  <% if (top5Profit && top5Profit.length > 0) { %>
+    <% top5Profit.forEach(function(stock) { %>
       <div class="top5-row">
         <div class="kolonne">
           <strong><%= stock.symbol %></strong><br>
           <small>
             Gevinst:
-            <% if (stock.urealiseretGevinst !== undefined) { %> <!--tjekker om urealiseret gevinst er tilgængelig-->
-              <%= stock.urealiseretGevinst.toLocaleString("da-DK", { style: "currency", currency: "DKK" }) %> <!--viser gevinst i DKK-->
+            <% if (stock.urealiseretGevinst !== undefined) { %>
+              <%= stock.urealiseretGevinst.toLocaleString("da-DK", { style: "currency", currency: "DKK" }) %>
             <% } else { %>
-              Ikke tilgængelig <!--vises hvis gevinst ikke er tilgængelig-->
+              Ikke tilgængelig
             <% } %>
           </small>
         </div>
         <div class="kolonne"><%= stock.portefølje %></div>
         <div class="kolonne">
-          <% if (stock.samletVærdi !== undefined) { %> <!--tjekker om værdi i er tilgængelig-->
+          <% if (stock.samletVærdi !== undefined) { %>
             <%= stock.samletVærdi.toLocaleString("da-DK", { style: "currency", currency: "DKK" }) %>
           <% } else { %>
             Ikke tilgængelig
           <% } %>
         </div>
       </div>
-    <% }); %> <!--afsluttet-->
+    <% }); %>
   <% } else { %>
-    <p>Ingen gevinstdata tilgængelig.</p> <!--besked vises hvis ingen gevinstdata er tilgængeligt-->
+    <p style="padding: 1rem;">Ingen gevinstdata tilgængelig.</p>
   <% } %>
 </div>
 
-  <!--script til funktionalitet for sidemenu-->
+  <!-- Script til funktionalitet for sidemenu -->
   <script>
     const sidemenu = document.querySelector('.sidemenu');
     function skiftMenu() {
       sidemenu.classList.toggle('lukket');
     }
   </script>
-
-   <!--ApexCharts-->
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script> <!--importerer Apex-charts biblioteket så vi kan bruge dte til at vise grafer-->
+   <!-- ApexCharts CDN -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
-  var options = { //definere et objekt med alle indstillinger for grafen 
+  var options = {
     chart: {
       type: 'line',
-      height: 260,  
-      width: '95%', 
+      height: 260,  // Mindre højde for bedre pasform
+      width: '95%', // Giver lidt luft i boksen
       background: 'transparent',
       toolbar: { show: false }
     },
     series: [{
       name: 'Samlet Værdi',
-      data: [210000, 250000, 300000, 280000, 350000, 310000, 400000, 360000, 330000, 300000, 340000, 380000] //fake data 
+      data: [210000, 250000, 300000, 280000, 350000, 310000, 400000, 360000, 330000, 300000, 340000, 380000]
     }],
     xaxis: {
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'], 
+      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
       labels: { style: { colors: '#aaa', fontSize: '12px' } }
     },
     yaxis: {
@@ -163,20 +156,21 @@
       }
     },
     stroke: {
-      curve: 'smooth', //linjen skal være glat
+      curve: 'smooth',
       width: 2.5
     },
     colors: ['#1E90FF'],
     grid: {
       borderColor: '#333',
-      strokeDashArray: 4 //gør gitterlinjer stiplede 
+      strokeDashArray: 4
     },
     tooltip: {
       theme: 'dark'
     }
   };
-  var chart = new ApexCharts(document.querySelector("#chart"), options); //opretter en ny graf i elementet med id="chart" og bruger indstillingerne ovenfor
-  chart.render(); //viser grafen på siden
+
+  var chart = new ApexCharts(document.querySelector("#chart"), options);
+  chart.render();
 </script>
 </body>
 </html>

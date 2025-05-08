@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,16 +9,12 @@
 
 <body>
   <div class="opretInsert">
-    <h1>Indsæt værdi på <br> <%=konto.kontonavn %> </h1> <!--overskrift der viser hvilken konto man indsætter værdi på dynamisk-->
+    <h1>Indsæt værdi på <br> <%=konto.kontonavn %> </h1> <!--overskrift der viser hvilken konto man indsætter værdi på-->
 
-    <form action="/konto/insert" method="POST"> <!--definere ruten formularen skal sendes til som en POST-->
+    <form action="/konto/insert" method="POST"> <!--definere ruten formularen skal sendes til-->
   
-<<<<<<< Updated upstream
-      <input type="hidden" name="kontoID" value="<%= konto.kontoID %>"> <!--Skjult inputfelt, sender konto ID med så serveren ved hvilken konto der skal opdateres-->
-=======
       <input type="hidden" name="kontoID" value="<%= konto.kontoID %>">
       <!--Skjult inputfelt, sender konto ID med så serveren ved hvilken konto der skal opdateres-->
->>>>>>> Stashed changes
 
       <div class="opretBox">
         <input type="number" placeholder="Beløb" name="beløb" required>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <!--sidemenu navigation-->
+  <!--Sidemenu navigation-->
   <div class="sidemenu">
     <div class="WebappLogo">
       <img src="/logo.jpeg" alt="WebappLogo">
@@ -31,66 +31,52 @@
     </ul>
   </div>
 
-  <!--indhold -->
+  <!-- Indhold -->
   <div class="indhold">
 
     <div class="overskrift">
       <h1><%= portefølje.navn %></h1>
 
       <!--søgefelt-->
-<<<<<<< Updated upstream
-      <form action="/portefolje/<%= portefølje.porteføljeID %>/searchPapir" method="GET" class="søgForm"> <!--angive hvilken rute dataen skal sendes til nårformularen sendes, porteføljeID sættes ind dynamisk-->
-=======
       <form action="/portefolje/<%= portefølje.porteføljeID %>/searchPapir" method="GET" class="søgForm">
->>>>>>> Stashed changes
         <input type="text" name="query" placeholder="Søg efter navn på værdipapir" required>
         <button type="submit">Søg</button>
       </form>
 
-      <!--handelshistorik-knap-->
+      <!--Handelshistorik-knap-->
       <div class="tilføjKnapBox">
-<<<<<<< Updated upstream
-        <form action="/portefolje/<%= portefølje.porteføljeID %>/handelshistorik" method="GET" class="tilføjKnap"> <!--definere rute og henter porteføljeID dynamisk-->
-=======
         <form action="/portefolje/<%= portefølje.porteføljeID %>/handelshistorik" method="GET" class="tilføjKnap">
->>>>>>> Stashed changes
           <button type="submit">Handelshistorik</button>
         </form>
       </div>
     </div>
 
-    <!--øverste sektion -->
+    <!-- Øverste sektion -->
     <div class="øverste">
       <div class="grafboks">
         <h3>Samlet værdi</h3>
-        <% if (værdipapirer.length > 0) { %> <!--ejs if sætning der tjekker om der er nogle værdipapir i porteføljen-->
+        <% if (værdipapirer.length > 0) { %>
           <p><%= samletVærdi.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' }) %></p>
         <% } else { %>
           <p><em>Ingen værdipapirer i porteføljen endnu</em></p>
         <% } %>
-
-
-     <!--linje graf-->
-       <div id="lineChart" style="width: 100%; max-width: 900px; height: 400px;"></div> <!--målene til grafen-->
+     <!-- Line chart placeholder -->
+       <div id="lineChart" style="width: 100%; max-width: 900px; height: 400px;"></div>
       </div>
 
       <div class="højresideboks">
         <div class="diagramBoks">
           <h3>Fordeling af værdi</h3>
-          <div id="pieChart"></div> 
+          <div id="pieChart"></div>
         </div>
         <div class="højrenedreboks">
           <h3>Dato oprettet</h3>
-<<<<<<< Updated upstream
-          <p><%= new Date(portefølje.oprettelsesDato).toLocaleDateString('da-DK') %></p> <!--dataoprettelse for porteføljen-->
-=======
           <p><%= new Date(portefølje.oprettelsesDato).toLocaleDateString('da-DK') %></p>
->>>>>>> Stashed changes
         </div>
       </div>
     </div>
 
-    <!--oversigt over værdipapirer -->
+    <!-- Oversigt over værdipapirer -->
     <div class="oversigtBox">
       <h3>Værdipapirer i portefølje</h3>
       <div class="listeOverskrifter">
@@ -99,20 +85,20 @@
         <span>Købsdato</span>
       </div>
     
-      <% if (værdipapirer.length > 0) { %> <!--ejs if der er værdipapirer i porteføljen-->
-        <% værdipapirer.forEach(v => { %> <!--looper igennem værdipapir-->
-          <a href="/portefolje/vaerdipapir/<%= v.id %>" class="aktieLink"> <!--link til at se detaljer om det enkelte værdipapir-->
+      <% if (værdipapirer.length > 0) { %>
+        <% værdipapirer.forEach(v => { %> 
+          <a href="/portefolje/vaerdipapir/<%= v.id %>" class="aktieLink">
             <div class="aktieRække"> 
-              <div><%= v.navn || 'Ukendt' %></div> <!--vis værdipapir navn hvis navn ikke findes sæt som ukendt-->
+              <div><%= v.navn || 'Ukendt' %></div> 
               <div><%= v.tickerSymbol || 'Ukendt' %></div>
               <div>
-                <% if (v.datoKøbt) { %> <!--tjekker om datoen findes-->
+                <% if (v.datoKøbt) { %>
                   <%= new Date(v.datoKøbt).toLocaleDateString('da-DK') %>
                 <% } else { %>
                   <em>Ukendt</em>
                 <% } %>
               </div>
-            </div> 
+            </div> <!-- <- Manglede denne -->
           </a>          
         <% }) %>
       <% } else { %>
@@ -122,30 +108,30 @@
     
 
     <script>
-      const sidemenu = document.querySelector('.sidemenu'); //funktion der åbner og lukker side menu 
+      const sidemenu = document.querySelector('.sidemenu');
       function skiftMenu() {
         sidemenu.classList.toggle('lukket');
       }
     </script>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script> <!--henter Apex charts biblioteket-->
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
-  const værdipapirer = <%- JSON.stringify(værdipapirer) %>; //overfører værdipapirer som json til javascript 
+  const værdipapirer = <%- JSON.stringify(værdipapirer) %>;
 
-  const labels = værdipapirer.map(p => p.navn || 'Ukendt'); //benytter map til at oprette et array af navne til grafen
+  const labels = værdipapirer.map(p => p.navn || 'Ukendt');
   const series = værdipapirer.map(p =>
-    !isNaN(p.pris) && !isNaN(p.antal) ? p.antal * p.pris : 0 //opretter et nyt array med den samlede værdi af hvert værdipapir (antal * pris). Hvis pris eller antal mangler eller ikke er et tal, indsættes 0 som fallback
+    !isNaN(p.pris) && !isNaN(p.antal) ? p.antal * p.pris : 0
   );
 
-  const pieOptions = { //konfirguation for pie chart
+  const pieOptions = {
     chart: {
       type: 'pie',
       height: '75%',
       width: '100%'
     },
-    series: series, //data der skal vises i diagrammet
-    labels: labels, //labels til hver stykke i diagrammet
+    series: series,
+    labels: labels,
     legend: {
       position: 'bottom',
       fontSize: '9px'
@@ -153,7 +139,7 @@
     tooltip: {
       y: {
         formatter: function (val) {
-          return val.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' }); //formatere værdi til dansk valuta
+          return val.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' });
         }
       }
     },
@@ -167,26 +153,26 @@
     }]
   };
 
-  const pieChart = new ApexCharts(document.querySelector("#pieChart"), pieOptions); //opretter pie chart emd id piechart
-  pieChart.render(); //tegner cirkeldiagrammet på siden
+  const pieChart = new ApexCharts(document.querySelector("#pieChart"), pieOptions);
+  pieChart.render();
 </script>
 
   
   
   <script>
-    const historik = <%- JSON.stringify(historik) %>; //overfører historik data fra serveren til javascript
+    const historik = <%- JSON.stringify(historik) %>;
   
-    const datoer = historik.map(h => h.dato); //tager datoer fra historik
-    const værdier = historik.map(h => h.værdi); //tager værdier fra historik
+    const datoer = historik.map(h => h.dato);
+    const værdier = historik.map(h => h.værdi);
   
-    const lineOptions = { ///konfirguation for linje chart
+    const lineOptions = {
       chart: {
         type: 'line',
         toolbar: { show: false }
       },
       series: [{
-        name: 'Urealiseret værdi', //navn på dataserie 
-        data: værdier //data der skal vises
+        name: 'Urealiseret værdi',
+        data: værdier
       }],
       xaxis: {
         categories: datoer,
@@ -200,13 +186,13 @@
       },
       tooltip: {
         y: {
-          formatter: val => val.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' }) //valuta formatering
+          formatter: val => val.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' })
         }
       }
     };
   
-    const lineChart = new ApexCharts(document.querySelector("#lineChart"), lineOptions); //opretter linje graf
-    lineChart.render(); //viser grafen på siden 
+    const lineChart = new ApexCharts(document.querySelector("#lineChart"), lineOptions);
+    lineChart.render();
   </script>
   
   
