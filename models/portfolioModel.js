@@ -41,7 +41,7 @@ async function hentPorteføljeMedID(porteføljeID) {
   
 
 // Hent alle værdipapirer, der tilhører en bestemt portefølje
-async function hentVærdipapirerTilPortefølje(porteføljeID) {
+async function hentVærdipapirTilPortefølje(porteføljeID) {
     const db = await hentDB();
     const result = await db.request()
       .input("porteføljeID", sql.Int, porteføljeID)
@@ -53,7 +53,6 @@ async function hentVærdipapirerTilPortefølje(porteføljeID) {
           type, 
           antal, 
           pris, 
-          forventetVærdi, 
           datoKøbt,
           GAK, 
           urealiseretPorteføljeGevinstTab
@@ -403,7 +402,7 @@ async function hentKontiForBruger(brugerID) {
     const db = await hentDB();
   
     const værdipapir = await db.request()
-      .input("id", sql.Int, værdipapirID)
+      .input("værdipapirID", sql.Int, værdipapirID)
       .query(`
         SELECT 
           værdipapirID,
@@ -416,12 +415,11 @@ async function hentKontiForBruger(brugerID) {
           GAK, 
           urealiseretPorteføljeGevinstTab
         FROM dbo.værdipapir
-        WHERE værdipapirID = @id
+        WHERE værdipapirID = @værdipapirID
       `).then(res => res.recordset[0]);
   
     if (!værdipapir) return null;
   
-    // 🔄 Hent aktuel pris fra API
     const symbol = værdipapir.tickerSymbol;
     const prisLink = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${process.env.API_KEY}`;
     const prisSvar = await fetch(prisLink);
@@ -430,54 +428,42 @@ async function hentKontiForBruger(brugerID) {
   
     const antal = parseFloat(værdipapir.antal);
     const GAK = parseFloat(værdipapir.GAK);
-
-    if (!isNaN(aktuelPris) && !isNaN(GAK) && !isNaN(antal)) {
-        const gevinst = (aktuelPris - GAK) * antal;
-        const forventetVærdi = aktuelPris * antal;
-      
-        await db.request()
-          .input("gevinst", sql.Decimal(18, 2), gevinst)
-          .input("forventetVærdi", sql.Decimal(18, 2), forventetVærdi)
-          .input("pris", sql.Decimal(18, 2), aktuelPris)
-          .input("id", sql.Int, værdipapirID)
-          .query(`
-            UPDATE dbo.værdipapir
-            SET urealiseretPorteføljeGevinstTab = @gevinst,
-                forventetVærdi = @forventetVærdi,
-                pris = @pris
-            WHERE værdipapirID = @id
-          `);
-      
-        værdipapir.urealiseretPorteføljeGevinstTab = gevinst;
-        værdipapir.forventetVærdi = forventetVærdi;
-        værdipapir.pris = aktuelPris;
-      }
-      
+    
   
     if (!isNaN(aktuelPris) && !isNaN(GAK) && !isNaN(antal)) {
       const gevinst = (aktuelPris - GAK) * antal;
   
+      // Kun opdater gevinst og pris i databasen
       await db.request()
         .input("gevinst", sql.Decimal(18, 2), gevinst)
-        .input("id", sql.Int, værdipapirID)
+        .input("pris", sql.Decimal(18, 2), aktuelPris)
+        .input("værdipapirID", sql.Int, værdipapirID)
         .query(`
           UPDATE dbo.værdipapir
-          SET urealiseretPorteføljeGevinstTab = @gevinst
-          WHERE værdipapirID = @id
+          SET urealiseretPorteføljeGevinstTab = @gevinst,
+              pris = @pris
+          WHERE værdipapirID = @værdipapirID
         `);
   
+      // Tilføj dynamiske egenskaber
+      værdipapir.aktuelPris = aktuelPris;
+      værdipapir.forventetVærdi = aktuelPris * antal;
       værdipapir.urealiseretPorteføljeGevinstTab = gevinst;
+      console.log("▶️ Aktuel pris:", aktuelPris);
+        console.log("▶️ Antal:", antal);
+
     }
   
     return værdipapir;
   }
   
+  
   async function hentHistorikForVærdipapir(værdipapirID) {
     const db = await hentDB();
   
     const meta = await db.request()
-      .input("id", sql.Int, værdipapirID)
-      .query(`SELECT porteføljeID, tickerSymbol FROM dbo.værdipapir WHERE værdipapirID = @id`);
+      .input("værdipapirID", sql.Int, værdipapirID)
+      .query(`SELECT porteføljeID, tickerSymbol FROM dbo.værdipapir WHERE værdipapirID = @værdipapirID`);
   
     if (!meta.recordset[0]) return [];
   
@@ -520,7 +506,7 @@ async function hentKontiForBruger(brugerID) {
   module.exports = {
     hentAllePorteføljerForBruger,
     hentPorteføljeMedID,
-    hentVærdipapirerTilPortefølje,
+    hentVærdipapirTilPortefølje,
     hentSamletVærdiForAllePorteføljer,
     opretNyPortefølje,
     hentTransaktionerForPortefølje,

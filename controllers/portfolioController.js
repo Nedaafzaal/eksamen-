@@ -13,7 +13,7 @@ async function visPorteføljeOversigt(req, res) {
       const porteføljer = await portfolioModel.hentAllePorteføljerForBruger(brugerID); // SEND MED
   
       for (const p of porteføljer) {
-        const papirer = await portfolioModel.hentVærdipapirerTilPortefølje(p.porteføljeID);
+        const papirer = await portfolioModel.hentVærdipapirTilPortefølje(p.porteføljeID);
         p.totalValue = papirer.reduce((sum, papir) => sum + (papir.pris * papir.antal), 0);
       }
   
@@ -37,7 +37,7 @@ async function visEtPortefølje(req, res) {
     if (!portefølje) {
       return res.status(404).send("Portefølje ikke fundet.");
     }
-    const værdipapirer = await portfolioModel.hentVærdipapirerTilPortefølje(porteføljeID);
+    const værdipapirer = await portfolioModel.hentVærdipapirTilPortefølje(porteføljeID);
     const historik = await portfolioModel.hentVærdiHistorik(porteføljeID);
     let samletVærdi = 0;
     for (let i = 0; i < værdipapirer.length; i++) {
@@ -232,6 +232,8 @@ async function visVærdipapirDetaljer(req, res) {
     try {
       // Henter og opdaterer urealiseret gevinst/tab via model
       const værdipapir = await portfolioModel.hentOgOpdaterVærdipapirMedAktuelVærdi(værdipapirID);
+      console.log("📦 Forventet værdi:", værdipapir);
+
   
       if (!værdipapir) {
         return res.status(404).send("Værdipapir ikke fundet.");

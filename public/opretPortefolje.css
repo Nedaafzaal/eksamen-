@@ -59,6 +59,35 @@ body {
     top: 30%;
     color: whitesmoke;
   }
+
+  .opretBox select {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    border-radius: 100px;
+    padding: 0px 15px;
+    box-sizing: border-box;
+    color: rgba(245, 245, 245, 0.95);
+    font-size: 13px;
+    font-family: Arial, Helvetica, sans-serif;
+    background-image: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    vertical-align: middle;
+    line-height: 50px;
+  }
+  
+  
+  
+  /* Hvis du også vil style teksten i dropdownens valgmuligheder */
+  .opretBox option {
+    background-color: black;
+    color: white;
+  }
+  
   
 #sendFormular{
     margin-top: 10px;
