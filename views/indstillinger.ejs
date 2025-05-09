@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil indstillinger</title>
-    <link href="./indstillinger.css" rel="stylesheet" />
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" /> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil indstillinger</title>
+  <link href="./indstillinger.css" rel="stylesheet" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" /> <!--linker til de ikoner vi bruger-->
 </head>
 
 <body>
   <h1>Profil indstillinger</h1>
-  
+
   <!--sidemenu navigation-->
   <div class="sidemenu">
     <div class="WebappLogo">
@@ -23,7 +23,7 @@
 
     <ul class="menuValg">
       <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
-      <li><a href="/konto/oversigt"><i class='bx bxs-user-account'></i>Konti</a>
+      <li><a href="/konto/oversigt"><i class='bx bxs-user-account'></i>Konti</a></li>
       <li><a href="/portefolje/oversigt"><i class='bx bx-doughnut-chart'></i>Porteføljer</a></li>
       <li><a href="/indstillinger"><i class='bx bx-cog'></i>Indstillinger</a></li>
     </ul>
@@ -33,44 +33,40 @@
     </ul>
   </div>
 
-
   <!--formular til at ændre adgangskode-->
-    <h2>Skift adgangskode</h2>
-    
-    <div class="skiftAdgangskodeBox">
-      <form action="/indstillinger" method="POST"> <!--formular der sender data med en POST request til serveren-->
-        
-        <div class="inputBox">
-          <input type="text" placeholder="Brugernavn" name="brugernavn" required>
-        </div>
-        
-        <div class="inputBox">
-          <input type="password" placeholder="Gammel adgangskode" name="gammelAdgangskode" required>
-        </div>
-        
-        <div class="inputBox">
-          <input type="password" placeholder="Ny adgangskode" name="nyAdgangskode" required>
-        </div>
-        
-        <button id="submit">Opdater Adgangskode</button> 
-      </form>
-    </div>
-        
-    <!--Script til at åbne/lukke sidemenu-->
+  <h2>Skift adgangskode</h2>
+
+  <div class="skiftAdgangskodeBox">
+    <form action="/indstillinger" method="POST"> <!--formular der sender data med en POST request til serveren-->
+
+      <div class="inputBox">
+        <input type="text" placeholder="Brugernavn" name="brugernavn" required>
+      </div>
+
+      <div class="inputBox">
+        <input type="password" placeholder="Gammel adgangskode" name="gammelAdgangskode" required>
+      </div>
+
+      <div class="inputBox">
+        <input type="password" placeholder="Ny adgangskode" name="nyAdgangskode" required>
+      </div>
+
+      <button id="submit">Opdater Adgangskode</button>
+    </form>
+  </div>
+
+  <!--script til at åbne/lukke sidemenu-->
+  <script>
+    const sidemenu = document.querySelector('.sidemenu');
+    function skiftMenu() {
+      sidemenu.classList.toggle('lukket');
+    }
+  </script>
+
+  <% if (typeof alert !== "undefined" && alert) { %> <!--EJS hvis der er en alert fra serveren så vis en pop-up besked-->
     <script>
-      const sidemenu = document.querySelector('.sidemenu');
-      function skiftMenu() {
-        sidemenu.classList.toggle('lukket');
-      }
+      alert("<%= alert %>"); //viser alert-besked fra serveren 
     </script>
-
-    <% if (typeof alert !== "undefined" && alert) { %> <!--EJS hvis der er en alert fra serevren. vis en pop-up besked-->
-      <script>
-        alert("<%= alert %>"); //viser alert-besked fra serveren 
-      </script>
-    <% } %>
-
-  
+  <% } %>
 </body>
-  
 </html>

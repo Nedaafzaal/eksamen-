@@ -41,7 +41,7 @@ async function visDashboard(req, res) {
     const brugernavn = bruger.brugernavn || "Ukendt";
 
     const porteføljer = await dashboardModel.hentPorteføljerMedAktierForBruger(brugerID);
-    const totalRealiseret = await portfolioModel.hentTotalRealiseretGevinst();
+    const totalRealiseret = await portfolioModel.hentTotalRealiseretGevinst(brugerID);
 
     let totalVærdi = 0;
     let totalUrealiseret = 0;
@@ -69,12 +69,13 @@ async function visDashboard(req, res) {
       });
     }
 
-    // Sortér og hent top 5 aktier med størst urealiseret gevinst
+    //sorterer og henter top 5 aktier med størst urealiseret gevinst
     const top5Profit = aktieData
       .sort((a, b) => b.urealiseretGevinst - a.urealiseretGevinst)
       .slice(0, 5);
 
-    // Hvis du stadig vil vise de generelle top 5 aktier (fx mest handlede eller noget andet), behold denne
+    
+    //vi henter top 5 aktie funktionen, således den vises i dashboard
     const top5 = await hentTopAktier();
 
     res.render("dashboard", {
@@ -93,7 +94,6 @@ async function visDashboard(req, res) {
 }
 
 
-//eksporterer funktioner således de kan bruges i controller.
 module.exports = {
   visDashboard,
   hentTopAktier,

@@ -6,11 +6,12 @@
   <title><%= værdipapir.navn %> - Detaljer</title>
   <link href="/valueInfo.css" rel="stylesheet" />
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <!--impoterer apexCharts biblioteket, der anvendes til at generere grafen-->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
 
 <body>
-  <!-- Sidemenu -->
+  <!--sidemenu hentes-->
   <div class="sidemenu">
     <div class="WebappLogo">
       <img src="/logo.jpeg" alt="WebappLogo" />
@@ -20,6 +21,7 @@
       <i class='bx bxs-chevron-left'></i>
     </button>
 
+    <!--liste der viser hvad sidemenuen indeholder-->
     <ul class="menuValg">
       <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
       <li><a href="/konto/oversigt"><i class='bx bxs-user-account'></i>Konti</a></li>
@@ -32,7 +34,7 @@
     </ul>
   </div>
 
-  <!-- Indhold -->
+  <!--sørger for at indeholdet på siden kommer ind på siden-->
   <div class="indhold">
     <div class="overskrift">
       <h2>Detaljer for <%= værdipapir.navn %></h2>
@@ -41,18 +43,20 @@
       </div>
     </div>
 
+    <!--viser detaljer om værdipapireret i en oversigt-->
     <div class="oversigtBox">
       <div class="listeOverskrifter">
         <span>Navn</span>
         <span>Type</span>
         <span>Symbol</span>
         <span>Antal</span>
-        <span>Erhvervelsesprisris</span>
+        <span>Erhvervelsespris</span>
         <span>GAK</span>
         <span>Urealiseret gevinst</span>
         <span>Forventet værdi</span>
       </div>
 
+      <!--viser værdierne og detaljerne for det specifikke værdipapir -->
       <div class="aktieRække">
         <div><%= værdipapir.navn || 'Ukendt' %></div>
         <div><%= værdipapir.type || 'Ukendt' %></div>
@@ -67,23 +71,25 @@
 
     <div class="diagramBoks">
       <h2>Oversigt over udvikling af værdi</h2> 
- <div id="lineChart" style="max-width: 600px;"></div>
+      <div id="lineChart" style="max-width: 600px;"></div>
     </div>
   </div>
 
-  <!-- JS -->
+  <!--indflettet JavaScript for at håndtere forskellige funktionaliteter for sidemenuen-->
   <script>
     const sidemenu = document.querySelector('.sidemenu');
     function skiftMenu() {
       sidemenu.classList.toggle('lukket');
     }
   </script>
+
+  <!--indflettet JavaScript for at håndtere kursgrafen-->
   <script>
     async function hentOgVisKursGraf() {
       const symbol = "<%= værdipapir.tickerSymbol %>";
       const response = await fetch(`/portefolje/vaerdipapir/${symbol}/historik`);
       const data = await response.json();
-  
+
       const options = {
         chart: { type: 'line', height: 350 },
         series: [{
@@ -102,11 +108,11 @@
           align: 'left'
         }
       };
-  
-      const chart = new ApexCharts(document.querySelector("#lineChart"), options);
+
+      const chart = new ApexCharts(document.querySelector("#lineChart"), options); //opretter grafen og viser den i elementet med ID 'lineChart' 
       chart.render();
     }
-  
+
     hentOgVisKursGraf();
   </script>
 </body>

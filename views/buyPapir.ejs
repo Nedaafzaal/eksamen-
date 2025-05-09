@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="da">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -9,9 +9,9 @@
 <body>
   <div class="købVærdipapir">
     <h1>Køb værdipapir</h1>
-    <form action="/portefolje/<%= porteføljeID %>/buyPapir" method="POST">
+    <form action="/portefolje/<%= porteføljeID %>/buyPapir" method="POST"> <!--formular til at sende data om køb af værdipapir via POST request-->
 
-        <p><strong>Værdipapir købes på:</strong> <%= konto.kontonavn %> (Saldo: <%= konto.saldo.toFixed(2) %> <%= konto.valuta %>)</p>
+        <p><strong>Værdipapir købes på:</strong> <%= konto.kontonavn %> (Saldo: <%= konto.saldo.toFixed(2) %> <%= konto.valuta %>)</p> <!--viser kontoens navn og saldo baseret på dynamiske værdier-->
         <input type="hidden" name="kontoID" value="<%= konto.kontoID %>">
 
       <div class="opretBox">
@@ -19,7 +19,7 @@
       </div>
       
 
-      <!-- Skjulte felter -->
+      <!--skjulte felter-->
         <input type="hidden" name="tickerSymbol" value="<%= tickerSymbol %>">
         <input type="hidden" name="navn" value="<%= navn %>">
         <input type="hidden" name="pris" value="<%= pris %>">

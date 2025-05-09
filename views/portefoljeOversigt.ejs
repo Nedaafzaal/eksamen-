@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <!-- Sidemenu -->
+   <!--her er vores sidemenu-->
   <div class="sidemenu">
     <div class="WebappLogo">
       <img src="/logo.jpeg" alt="WebappLogo">
@@ -18,36 +18,38 @@
     <button class="pil" onclick="skiftMenu()">
       <i class='bx bxs-chevron-left'></i>
     </button>
-
+<!--her kan man se navigationselementer i sidemenuen-->
     <ul class="menuValg">
       <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
       <li><a href="/konto/oversigt"><i class='bx bxs-user-account'></i>Konti</a></li>
       <li><a href="/portefolje/oversigt"><i class='bx bx-doughnut-chart'></i>Porteføljer</a></li>
       <li><a href="/indstillinger"><i class='bx bx-cog'></i>Indstillinger</a></li>
     </ul>
-
+<!--her er log ud knappen-->
     <ul class="logUd">
       <li><a href="/login"><i class='bx bx-log-out'></i>Log ud</a></li>
     </ul>
   </div>
 
-  <!--Indhold på siden-->
+  
   <div class="indhold">
     <h1 class="overskrift">Porteføljeoversigt</h1>
 
-    <!--Tilføj portefølje-knap-->
+    <!--her er tilføje portefølje knap-->
     <div class="tilføjKnapBox">
       <a href="/portefolje/opret" class="tilføjKnap">Opret ny portefølje</a>
     </div>      
 
-    <!--øverste sektion med samlede indhold-->
+
+    <!--her er den øverste sektion med det samlede indhold-->
     <div class="øversteIndhold">
-      <!--venstre side med total værdi og ændringer-->
+      <!--her er venstre side med total værdi og ændringer-->
       <div class="venstreSide">
         <div class="venstreØvreBoks">
           Total værdi i DKK:
           <%= new Intl.NumberFormat('da-DK', { style: 'currency', currency: 'DKK' }).format(totalVærdi || 0) %>
         </div>
+    <!--viser ændringerne over nogle tidsperioder-->
         <div class="ændringer">
           <span>Ændring i 24 timer: <span class="grøn">+0,70%</span></span>
           <span>Ændring i 7 dage: <span class="grøn">+3,47%</span></span>
@@ -58,11 +60,12 @@
 
       <div class="højreØvreBoks">
         <h3>Fordeling af værdi i porteføljer</h3>
+    <!--her indsættes donoutChart -->
         <div id="donutChart" style="max-width: 380px; margin: auto;"></div>
       </div>
     </div>
 
-    <!--Oversigt over eksisterende porteføljer-->
+    <!--her ses en liste over de eksisterende porteføljer-->
     <div class="oversigtBox">
       <div class="listeOverskrifter">
         <span>Portefølje Navn</span>
@@ -70,14 +73,16 @@
         <span>Sidste Handel</span>
         <span>Total Value</span>
       </div>
-    
+    <!--hvis der findes porteføljer bliver de vist-->
       <% if (porteføljer.length > 0) { %>
         <% porteføljer.forEach(p => { %>
+    <!--porteføljerne  bliver vist i en klikbar række-->
           <a href="/portefolje/<%= p.porteføljeID %>" class="porteføljeRækkeLink">
             <div class="porteføljeRække"> 
               <div><%= p.navn %></div> 
               <div><%= p.kontonavn %></div> 
               <div>
+      <!--viser den sidste handelsdato hvis den er tilgængelig-->
                 <% if (p.sidsteHandelsDato) { %>
                   <%= new Date(p.sidsteHandelsDato).toLocaleDateString("da-DK") %>
                 <% } else { %>
@@ -85,37 +90,37 @@
                 <% } %>
               </div>
               <div>
+              <!--total værdien bliver vist i DKK-->
                 <%= new Intl.NumberFormat('da-DK', { style: 'currency', currency: 'DKK' }).format(p.totalValue || 0) %>
               </div>
             </div>
           </a>
         <% }); %>
       <% } else { %>
+    <!--hvis der ikke findes nogle porteføljer så vises denne besked-->
         <p>Ingen porteføljer fundet endnu.</p>
       <% } %>
     </div>
     
-      
-      
-
-  <script> //funktion til at åbne og lukke side menu
+  
+  <script> 
+  //denne funktion bruges til at åbne og lukke side menu
     const sidemenu = document.querySelector('.sidemenu');
     function skiftMenu() {
       sidemenu.classList.toggle('lukket');
     }
-
-    function toggleKontoMenu() { //Funktion til at åbne/lukke konto-menu dropdown
+  //denne funktion bruges  til at åbne og lukke konto-menu dropdown
+    function toggleKontoMenu() { 
       const menu = document.getElementById('kontoMenu');
       menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
     }
-
-    function togglePortefoljeMenu() { //Funktion til at åbne/lukke portefølje-menu dropdown
+ //denne funktion bruges til at lukke og åbne portefølje-menu dropdown
+    function togglePortefoljeMenu() { 
       const menu = document.getElementById('portefoljeMenu');
       menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
     }
   </script>
-
-  <!-- ApexCharts bibliotek -->
+<!--her hentes fra ApexCharts-->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
   <script>

@@ -1,5 +1,5 @@
 //impoterer Node.js-pakken Microsoft SQL Server-database
-//importerer vores 
+//importerer vores databaseoplysninger
 const sql = require("mssql"); 
 const sqlConfig = require("../sqlConfig/sqlConfig"); 
 
@@ -8,33 +8,32 @@ async function hentDB(){
     return await sql.connect(sqlConfig);
 }
 
+
 class KontoData {
-//hent alle konti for brugeren fra databasen, funktionen tager parameter brugerID
+
+//hent alle konti for brugeren fra databasen
 async hentAlleKontiForBruger(brugerID) {
     const db = await hentDB(); 
     const result = await db.request()
-    .input("brugerID", sql.Int, brugerID)
+    .input("brugerID", sql.Int, brugerID) //henter den parameter som forspørgslen kommer til at indeholde 
     .query(`
     SELECT * FROM dbo.konto
     WHERE brugerID = @brugerID
-  `); //SQL forspørgsel der henter alle konti
-  return result.recordset; //retunere en liste af alle konti
+  `); 
+  return result.recordset; //retunerer en liste af alle konti
 }
 
-
-//henter en konto ud fra kontoID 
-
+//henter konto med ID for brugeren
 async hentKontoMedID(kontoID) {
   const db = await hentDB();
   const result = await db.request()
-    .input("kontoID", sql.Int, kontoID) //henter den parameter som forspørgslen kommer til at indeholde 
+    .input("kontoID", sql.Int, kontoID) 
     .query(`
         SELECT kontoID, kontonavn, saldo, valuta, oprettelsesdato, bankreference, brugerID, aktiv 
         FROM dbo.konto 
         WHERE kontoID = @kontoID
-    `); //forspørgsel der henter konto som matcher id
-    
-  return result.recordset[0]; //retunere selve kontoen 
+    `);
+  return result.recordset[0]; //her forventes kun en konto, hvorfor vi returnerer element med [0].
 }
 
 
@@ -42,35 +41,37 @@ async hentKontoMedID(kontoID) {
 async hentTransaktionerForKonto(kontoID) {
   const db = await hentDB();
   const result = await db.request()
-  .input("ID", sql.Int, kontoID) //angiver parameter til forspørgsel 
+  .input("kontoID", sql.Int, kontoID)
+
+  //henter alle transaktioner hvor kontoen enten er modtager eller sælger
   .query(`
     SELECT * FROM dbo.transaktioner 
-    WHERE (sælgerKontoID = @ID OR modtagerKontoID = @ID)
+    WHERE (sælgerKontoID = @kontoID OR modtagerKontoID = @kontoID)
       AND transaktionstype IN ('hæv', 'indsæt', 'køb', 'salg')
-  `); //henter alle transaktioner hvor kontoen enten er modtager eller sælger 
-
-  return result.recordset; //retunere en liste af transaktioner 
+  `); 
+  return result.recordset; 
 }
 
 
-//lig penge til eller trække penge fra saldoen 
+//sætter penge til eller fra saldo alt efter indsæt, hæv, køb eller salg
 async opdaterSaldo(kontoID, beløb) {
   const db = await hentDB();
   await db.request()
-    .input("ID", sql.Int, kontoID) 
-    .input("beløb", sql.Decimal(18, 2), beløb) //parameter beløb til forspørgsel, enten positivt eller negativt tal
+    .input("kontoID", sql.Int, kontoID) 
+    .input("beløb", sql.Decimal(10, 2), beløb) //beløb fortegn bestemmes i controller, alt efter saldo stiger eller reduceres
+
+    //SQL-forespørgsel som opdaterer saldo uanset om beløb er + eller -
     .query(`
       UPDATE dbo.konto 
       SET saldo = saldo + @beløb 
-      WHERE kontoID = @ID
-    `); //opdatere saldoen ved at ligge beløbet til uanset om det er + eller - 
+      WHERE kontoID = @kontoID
+    `);
 }
 
-// del evnt den her op
 //gemmer en ny transaktion i vores database 
 async gemTransaktion(data) {
     const db = await hentDB();
-    const nu = new Date(); // tidspunkt nu
+    const nu = new Date(); //tager tidspunkt som det tidspunkt, hvor transaktionen udføres.
   
     const harPortefølje = data.porteføljeID !== undefined && data.porteføljeID !== null;
   

@@ -7,6 +7,7 @@
   <link href="/sellPapir.css" rel="stylesheet" />
 </head>
 <body>
+   <!--formular til at sælge værdipapir-->
   <div class="sælgVærdipapir">
     <h3>Sælg værdipapir <%= værdipapir.navn %></h3>
     <form action="/portefolje/vaerdipapir/<%= værdipapir.værdipapirID %>/sellPapir" method="POST">
@@ -28,7 +29,7 @@
 
       <p class="gebyrInfo">Vær OBS på der er et fast gebyr på 19 kr. ved salg af værdipapirer.</p>
       
-
+       <!--skjulte input, der er nødvendige for serveren for at identificere den enkelte sælger og dets tilhørende elementer-->
       <input type="hidden" name="porteføljeID" value="<%= porteføljeID %>" />
       <input type="hidden" name="værdipapirID" value="<%= værdipapir.værdipapirID %>" />
       <input type="hidden" name="transaktionstype" value="salg" />

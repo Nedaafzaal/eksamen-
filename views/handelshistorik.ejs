@@ -5,21 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard</title>
   <link href="/handelshistorik.css" rel="stylesheet">
-  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"> <!--Linker til de ikoner vi bruger-->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"> <!--linker til de ikoner vi bruger-->
 </head>
 
-<body> 
-  <!-- Sidemenu -->
+<body>
+  <!--sidemenu-->
   <div class="sidemenu">
     <div class="WebappLogo">
       <img src="/logo.jpeg" alt="WebappLogo"> 
     </div>
 
-    <button class="pil" onclick="skiftMenu()"> <!--Knap til at åbne og lukke side menuen-->
-      <i class='bx bxs-chevron-left'></i>  <!--ikon-->
+    <button class="pil" onclick="skiftMenu()"> <!--knap til at åbne og lukke side menuen-->
+      <i class='bx bxs-chevron-left'></i>  
     </button>
 
-  <!--Navigations menu-->
+    <!--navigations menu-->
     <ul class="menuValg">
       <li><a href="/dashboard"><i class='bx bx-home'></i>Dashboard</a></li>
       <li><a href="/konto/oversigt"><i class='bx bxs-user-account'></i>Konti</a></li>
@@ -27,19 +27,17 @@
       <li><a href="/indstillinger"><i class='bx bx-cog'></i>Indstillinger</a></li>
     </ul>
 
-  <!--Log ud knap-->
+    <!--logud knap-->
     <ul class="logUd">
       <li><a href="/login"><i class='bx bx-log-out'></i>Log ud</a></li>
     </ul>
   </div>
 
-
-<!--Midtboks transaktionsoversigt-->
-<div class="midtBoks">
+  <!--midtboks transaktionsoversigt-->
+  <div class="midtBoks">
     <h3>Transaktionsoversigt for <%= portefølje.navn %></h3>
-  </h3> 
-    
-    <!--Overskrifter for hver kolonne i listen-->
+
+    <!--overskrifter for hver kolonne i listen-->
     <div class="listeOverskrifter">
       <span>Transaktionstype</span> 
       <span>Kontonavn</span>
@@ -50,34 +48,32 @@
       <span>Tidspunkt</span> 
       <span>Gebyr</span> 
       <span>Symbol</span> 
-     
     </div>
-  
-  <!--starter ejs if sætning, tjekker om der findes transaktioner-->
+
+    <!--starter ejs if sætning, tjekker om der findes transaktioner-->
     <% if (transaktioner.length > 0) { %> 
-  
-    <!--løber igennem alle transaktioner-->
+
+      <!--løber igennem alle transaktioner-->
       <% transaktioner.forEach(t => { %> 
-        
+
         <!--En række for hver transaktion-->
         <div class="transaktionRække">
-            <div><%= t.transaktionstype %></div>
-            <div><%= t.kontonavn %></div>
-            <div><%= t.værditype %></div>
-            <div><%= new Intl.NumberFormat('da-DK').format(t.pris) %> kr</div> <!--pris med KR-->
-            <div><%= t.antal %></div>
-            <div><%= new Date(t.dato).toLocaleDateString('da-DK') %></div>
-            <%= new Date(t.tidspunkt).toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' }) %>
-            <div><%= t.gebyr %> kr</div>
-            <div><%= t.tickerSymbol %></div>
+          <div><%= t.transaktionstype %></div>
+          <div><%= t.kontonavn %></div>
+          <div><%= t.værditype %></div>
+          <div><%= new Intl.NumberFormat('da-DK').format(t.pris) %> kr</div> <!--pris med KR-->
+          <div><%= t.antal %></div>
+          <div><%= new Date(t.dato).toLocaleDateString('da-DK') %></div>
+          <div><%= new Date(t.tidspunkt).toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' }) %></div>
+          <div><%= t.gebyr %> kr</div>
+          <div><%= t.tickerSymbol %></div>
         </div> 
-      <% }); %> <!--Slut på forEach-->
-  
+
+      <% }); %> <!--slut på forEach-->
+
     <% } else { %>
-      <p>Ingen transaktioner fundet endnu.</p> <!--Hvis der ingen transaktioner findes-->
+      <p>Ingen transaktioner fundet endnu.</p> <!--hvis der ingen transaktioner findes-->
     <% } %> 
-  </div> 
-
-
-</body> 
-
+  </div>
+</body>
+</html>

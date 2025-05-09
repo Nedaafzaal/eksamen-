@@ -1,7 +1,7 @@
 //importerer modeller
+const fetch = require("node-fetch"); 
 const portfolioModel = require("../models/portfolioModel");
 const accountModel = require("../models/accountModel");
-const fetch = require("node-fetch"); // Husk dette i toppen
 
 
 //funktion til at vise alle porteføljer for brugeren
@@ -215,7 +215,6 @@ async function visBuyPapirForm(req, res) {
       res.status(500).send("Noget gik galt ved visning af køb-formular.");
     }
   }
-  
 
 
 async function købEllerSælg(req, res) {

@@ -3,19 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Indsæt Værdi</title>
-  <link href="/removeValue.css" rel="stylesheet">
+  <title>Indsæt Værdi</title> 
+  <link href="/withdrawValue.css" rel="stylesheet">
 </head>
 
 <body>
-  <!--container til hævning af værdi-->
+  <!--container til hævning af værdi, hvor hele formularen til hævning er indkapslet-->
   <div class="opretRemove">
-    <h1>Hæv værdi på <br> <%=konto.kontonavn %> </h1> <!--overskrift der viser hvilken konto der hæves fra-->
+    <h1>Hæv værdi på <br> <%=konto.kontonavn %> </h1> 
 
+    <!--formularen der sender en POST-anmodning til serveren for at hæve penge-->
     <form action="/konto/withdraw" method="POST">
 
-    <input type="hidden" name="kontoID" value="<%= konto.kontoID %>"> 
+      <!--skjult input, der gemmer kontoID som er nødvendigt for serveren at identificere, hvilket konto hævelsen gælder for-->
+      <input type="hidden" name="kontoID" value="<%= konto.kontoID %>"> 
 
+      <!--input felter, der er påkrævet for at hæve beløbet-->
       <div class="opretBox">
         <input type="number" placeholder="Beløb" name="beløb" required>
       </div>

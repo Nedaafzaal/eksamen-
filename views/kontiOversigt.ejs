@@ -32,14 +32,13 @@
     </ul>
   </div>
 
-
   <!--indhold på siden-->
   <div class="indhold">
     <h1 class="overskrift">Konti oversigt</h1>
 
-    <!--knap til oprette en ny konto-->
+    <!--link til oprette en ny konto-->
     <div class="tilføjKnapBox">
-      <a href="/konto/opret" class="tilføjKnap">Opret ny konto</a> <!--link til opret konto siden-->
+      <a href="/konto/opret" class="tilføjKnap">Opret ny konto</a> 
     </div> 
 
     <!--boks der indholder en oversigt over eksisterende konti-->
@@ -55,12 +54,10 @@
         <span>Bankreference</span>
       </div>
 
-      
-      
       <% if (konti.length > 0) { %> <!--tjekker om konti arrayet har nogle konti-->
         <% konti.forEach(k => { %> <!--løber igennem hver konto i arrayet, k står for hvert objekt-->
           <a href="/konto/<%= k.kontoID %>" class="kontoRækkeLink"> <!--hver konti bliver et klikbart link til kontoens detaljer-->
-            
+
             <div class="kontoRække"> <!--visning af kontoens data-->
               <div><%= k.kontonavn %></div> 
               <div><%= new Intl.NumberFormat('da-DK').format(k.saldo) %></div> 
@@ -75,10 +72,9 @@
         <p>Ingen konto fundet.</p> <!--hvis ingen konto er fundet-->
       <% } %>
     </div> 
-    </div> 
   </div> 
 
-<!--åbne og lukke side menuen-->
+  <!--åbne og lukke side menuen-->
   <script>
     const sidemenu = document.querySelector('.sidemenu');
     function skiftMenu() {

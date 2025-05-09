@@ -1,59 +1,56 @@
-
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Opret bruger</title>
-      <link href="./opretbruger.css" rel="stylesheet">
-      <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opret bruger</title>
+    <link href="./opretbruger.css" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet"> <!--link til ikoner-->
+  </head>
+  <body>
+    <!--container til opret bruger formular-->
+    <div class="opretBruger">
+      <h2>Opret bruger</h2>
+      <form action="/opretbruger" method="POST"> <!--formular til at sende POST request-->
 
-   </head>
-   <body>
-      <!--container til opret bruger formular-->
-      <div class="opretBruger">
-         <h2>Opret bruger</h2>
-         <form action="/opretbruger" method="POST"> <!--formular til at sende POST request-->
-            
-            <div class="opretBox">
-               <input type="text" placeholder="Fornavn" name="fornavn" required>
-            </div>
-            
-            <div class="opretBox">
-               <input type="text" placeholder="Efternavn" name="efternavn" required>
-            </div>
-      
-            <div class="opretBox">
-               <input type="text" placeholder="Brugernavn" name="opretbrugernavn" required>
-            </div>
-      
-            <div class="opretBox">
-               <input type="password" placeholder="Adgangskode" name="opretadgangskode" required>
-            </div>
-      
-            <div class="opretBox">
-               <input type="email" placeholder="E-mail" name="e-mail" required>
-               <i class='bx bxs-envelope'></i>
-            </div>
-      
-            <div class="opretBox">
-               <input type="text" placeholder="Fødselsdagsdato YYYY-MM-DD" name="fødselsdag" required>
-            </div>
-      
-            <div class="opretBox">
-               <input type="tel" placeholder="Telefon nummer" name="telefonnummer" required>
-               <i class='bx bxs-phone' ></i>
-            </div>
-      
-            <button id="sendFormular" type="submit">Opret</button>
-            <br>
-      
-            <div class="logo">
-               <img src="logo.jpeg" alt="WebappLogo">
-             </div>
+        <div class="opretBox">
+          <input type="text" placeholder="Fornavn" name="fornavn" required>
+        </div>
 
-         </form>
-      </div>
-   </body>
+        <div class="opretBox">
+          <input type="text" placeholder="Efternavn" name="efternavn" required>
+        </div>
+
+        <div class="opretBox">
+          <input type="text" placeholder="Brugernavn" name="opretbrugernavn" required>
+        </div>
+
+        <div class="opretBox">
+          <input type="password" placeholder="Adgangskode" name="opretadgangskode" required>
+        </div>
+
+        <div class="opretBox">
+          <input type="email" placeholder="E-mail" name="e-mail" required>
+          <i class='bx bxs-envelope'></i>
+        </div>
+
+        <div class="opretBox">
+          <input type="text" placeholder="Fødselsdagsdato YYYY-MM-DD" name="fødselsdag" required>
+        </div>
+
+        <div class="opretBox">
+          <input type="tel" placeholder="Telefon nummer" name="telefonnummer" required>
+          <i class='bx bxs-phone'></i>
+        </div>
+
+        <button id="sendFormular" type="submit">Opret</button>
+        <br>
+
+        <div class="logo">
+          <img src="logo.jpeg" alt="WebappLogo">
+        </div>
+
+      </form>
+    </div>
+  </body>
 </html>
-

@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <!--Sidemenu navigation-->
+  <!--sidemenu-->
   <div class="sidemenu">
     <div class="WebappLogo">
       <img src="/logo.jpeg" alt="WebappLogo">
@@ -31,19 +31,20 @@
     </ul>
   </div>
 
-  <!-- Indhold -->
+  <!--indhold -->
   <div class="indhold">
 
     <div class="overskrift">
       <h1><%= portefølje.navn %></h1>
 
       <!--søgefelt-->
+      <!--laver en form som sender data til serveren. Dynamisk URL som indsætter porteføljeID. Gør det via. GET, som gør at porteføljeID tilsendes som en del af URL-->
       <form action="/portefolje/<%= portefølje.porteføljeID %>/searchPapir" method="GET" class="søgForm">
         <input type="text" name="query" placeholder="Søg efter navn på værdipapir" required>
         <button type="submit">Søg</button>
       </form>
 
-      <!--Handelshistorik-knap-->
+      <!--handelshistorik-knap-->
       <div class="tilføjKnapBox">
         <form action="/portefolje/<%= portefølje.porteføljeID %>/handelshistorik" method="GET" class="tilføjKnap">
           <button type="submit">Handelshistorik</button>
@@ -51,17 +52,19 @@
       </div>
     </div>
 
-    <!-- Øverste sektion -->
+    <!--øverste sektion -->
     <div class="øverste">
       <div class="grafboks">
         <h3>Samlet værdi</h3>
+        <!--hvis der findes værdipapirer i portefølje, skal samlet værdi vises i dansk valutaform-->
         <% if (værdipapirer.length > 0) { %>
           <p><%= samletVærdi.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' }) %></p>
         <% } else { %>
           <p><em>Ingen værdipapirer i porteføljen endnu</em></p>
         <% } %>
-     <!-- Line chart placeholder -->
-       <div id="lineChart" style="width: 100%; max-width: 900px; height: 400px;"></div>
+
+        <!--line chart container-->
+        <div id="lineChart" style="width: 100%; max-width: 900px; height: 400px;"></div>
       </div>
 
       <div class="højresideboks">
@@ -71,12 +74,13 @@
         </div>
         <div class="højrenedreboks">
           <h3>Dato oprettet</h3>
+          <!--konverterer oprettelsesdato fra string til JS-objekt og formaterer dernæst til dansk format-->
           <p><%= new Date(portefølje.oprettelsesDato).toLocaleDateString('da-DK') %></p>
         </div>
       </div>
     </div>
 
-    <!-- Oversigt over værdipapirer -->
+    <!--oversigt over værdipapirer-->
     <div class="oversigtBox">
       <h3>Værdipapirer i portefølje</h3>
       <div class="listeOverskrifter">
@@ -84,9 +88,13 @@
         <span>Symbol</span>
         <span>Købsdato</span>
       </div>
-    
+
+      <!--hvis værdipapirer eksisterer i portefølje, skal følgende ske-->
       <% if (værdipapirer.length > 0) { %>
+
+        <!--forloop gennem hvert værdipapir hvor den henter navn, symbol osv.-->
         <% værdipapirer.forEach(v => { %> 
+          <!--gør hele rækken trykbar-->
           <a href="/portefolje/vaerdipapir/<%= v.id %>" class="aktieLink">
             <div class="aktieRække"> 
               <div><%= v.navn || 'Ukendt' %></div> 
@@ -98,16 +106,16 @@
                   <em>Ukendt</em>
                 <% } %>
               </div>
-            </div> <!-- <- Manglede denne -->
-          </a>          
+            </div>
+          </a>  
         <% }) %>
       <% } else { %>
         <p><em>Ingen værdipapirer fundet endnu.</em></p>
       <% } %>
     </div>
-    
 
     <script>
+      //funktion som gør at sidemenuen kan åbnes og lukkes
       const sidemenu = document.querySelector('.sidemenu');
       function skiftMenu() {
         sidemenu.classList.toggle('lukket');
@@ -115,56 +123,57 @@
     </script>
   </div>
 
+  <!--vi importerer ApexCharts til at vise interaktiv grafer-->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<script>
-  const værdipapirer = <%- JSON.stringify(værdipapirer) %>;
+  <script>
+    const værdipapirer = <%- JSON.stringify(værdipapirer) %>;
+    //oprettes et array 'labels', som indeholder navne på de tilgængelige værdipapirer og hvis de ikke findes erstattes det med 'Ukendt'
+    const labels = værdipapirer.map(p => p.navn || 'Ukendt');
 
-  const labels = værdipapirer.map(p => p.navn || 'Ukendt');
-  const series = værdipapirer.map(p =>
-    !isNaN(p.pris) && !isNaN(p.antal) ? p.antal * p.pris : 0
-  );
+    //oprettes et array 'series', hvor alle input og tal og der beregnes værdier for hvert værdipapir. Hvis input ikke er tal erstattes de med 0
+    const series = værdipapirer.map(p =>
+      !isNaN(p.pris) && !isNaN(p.antal) ? p.antal * p.pris : 0
+    );
 
-  const pieOptions = {
-    chart: {
-      type: 'pie',
-      height: '75%',
-      width: '100%'
-    },
-    series: series,
-    labels: labels,
-    legend: {
-      position: 'bottom',
-      fontSize: '9px'
-    },
-    tooltip: {
-      y: {
-        formatter: function (val) {
-          return val.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' });
+    const pieOptions = {
+      chart: {
+        type: 'pie',
+        height: '75%',
+        width: '100%'
+      },
+      series: series,
+      labels: labels,
+      legend: {
+        position: 'bottom',
+        fontSize: '9px'
+      },
+      tooltip: {
+        y: {
+          formatter: function (val) {
+            return val.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' });
+          }
         }
-      }
-    },
-    responsive: [{
-      breakpoint: 768,
-      options: {
-        legend: {
-          position: 'bottom'
+      },
+      responsive: [{
+        breakpoint: 768,
+        options: {
+          legend: {
+            position: 'bottom'
+          }
         }
-      }
-    }]
-  };
+      }]
+    };
 
-  const pieChart = new ApexCharts(document.querySelector("#pieChart"), pieOptions);
-  pieChart.render();
-</script>
+    const pieChart = new ApexCharts(document.querySelector("#pieChart"), pieOptions);
+    pieChart.render();
+  </script>
 
-  
-  
   <script>
     const historik = <%- JSON.stringify(historik) %>;
-  
+
     const datoer = historik.map(h => h.dato);
     const værdier = historik.map(h => h.værdi);
-  
+
     const lineOptions = {
       chart: {
         type: 'line',
@@ -190,11 +199,10 @@
         }
       }
     };
-  
+
     const lineChart = new ApexCharts(document.querySelector("#lineChart"), lineOptions);
     lineChart.render();
   </script>
-  
-  
+
 </body>
 </html>
