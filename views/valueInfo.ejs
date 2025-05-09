@@ -71,7 +71,8 @@
 
     <div class="diagramBoks">
       <h2>Oversigt over udvikling af værdi</h2> 
-      <div id="lineChart" style="max-width: 600px;"></div>
+      <div id="lineChart" style="width: 100%; height: 100%; min-height: 400px;"></div>
+
     </div>
   </div>
 
@@ -89,25 +90,54 @@
       const symbol = "<%= værdipapir.tickerSymbol %>";
       const response = await fetch(`/portefolje/vaerdipapir/${symbol}/historik`);
       const data = await response.json();
-
-      const options = {
-        chart: { type: 'line', height: 350 },
-        series: [{
-          name: "Pris",
-          data: data.map(p => p.pris)
-        }],
-        xaxis: {
-          categories: data.map(p => p.dato),
-          title: { text: "Dato" }
-        },
-        yaxis: {
-          title: { text: "Pris (DKK)" }
-        },
-        title: {
-          text: 'Kursudvikling sidste år',
-          align: 'left'
-        }
-      };
+const options = {
+  chart: {
+    type: 'line',
+    height: '100%',
+    width: '100%',
+    toolbar: {
+      show: false // Fjern zoom/reset/download
+    }
+  },
+  stroke: {
+    curve: 'smooth'
+  },
+  series: [{
+    name: "Pris",
+    data: data.map(p => p.pris)
+  }],
+  xaxis: {
+    categories: data.map(p => p.dato),
+    title: { text: "Dato" },
+    labels: {
+      rotate: -45,
+      style: {
+        colors: '#ccc'
+      }
+    }
+  },
+  yaxis: {
+    title: { text: "Pris (DKK)" },
+    labels: {
+      style: {
+        colors: '#ccc'
+      }
+    }
+  },
+  title: {
+    text: 'Kursudvikling sidste år',
+    align: 'left',
+    style: {
+      color: '#fff',
+      fontSize: '16px'
+    }
+  },
+  tooltip: {
+    y: {
+      formatter: value => `${value.toFixed(2)} DKK`
+    }
+  }
+};
 
       const chart = new ApexCharts(document.querySelector("#lineChart"), options); //opretter grafen og viser den i elementet med ID 'lineChart' 
       chart.render();
