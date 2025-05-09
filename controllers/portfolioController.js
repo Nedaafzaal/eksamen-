@@ -1,6 +1,7 @@
 //importerer modeller
 const portfolioModel = require("../models/portfolioModel");
 const accountModel = require("../models/accountModel");
+const fetch = require("node-fetch"); // Husk dette i toppen
 
 
 //funktion til at vise alle porteføljer for brugeren
@@ -260,7 +261,7 @@ async function visVærdipapirDetaljer(req, res) {
     try {
       // Henter og opdaterer urealiseret gevinst/tab via model
       const værdipapir = await portfolioModel.hentOgOpdaterVærdipapirMedAktuelVærdi(værdipapirID);
-      console.log("📦 Forventet værdi:", værdipapir);
+      console.log("📦 Forventet vhentKursudviklinærdi:", værdipapir);
 
   
       if (!værdipapir) {
@@ -315,6 +316,41 @@ async function visVærdipapirDetaljer(req, res) {
   
   
 
+  async function hentKursudvikling(req, res) {
+    const symbol = req.params.symbol.toUpperCase();
+    const apiKey = process.env.API_KEY || "0ZX3UVLPJVTJZ5AG"; // brug din egen nøgle
+    const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${apiKey}`;
+  
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+  
+      if (!data["Time Series (Daily)"]) {
+        return res.status(400).json({ fejl: "Ugyldigt symbol eller API-fejl" });
+      }
+  
+      const sidsteÅr = new Date();
+      sidsteÅr.setFullYear(sidsteÅr.getFullYear() - 1);
+  
+      const historik = Object.entries(data["Time Series (Daily)"])
+        .filter(([dato, _]) => new Date(dato) >= sidsteÅr)
+        .map(([dato, værdier]) => ({
+          dato,
+          pris: parseFloat(værdier["4. close"])
+        }))
+        .sort((a, b) => new Date(a.dato) - new Date(b.dato));
+  
+      if (historik.length === 0) {
+        return res.status(404).json({ fejl: "Ingen data for sidste år." });
+      }
+  
+      res.json(historik);
+    } catch (err) {
+      console.error("Fejl ved kursopslag:", err);
+      res.status(500).json({ fejl: "Serverfejl ved hentning af kursdata" });
+    }
+  }
+
 module.exports = {
   visPorteføljeOversigt,
   visEtPortefølje,
@@ -325,6 +361,7 @@ module.exports = {
   visBuyPapirForm,
   købEllerSælg,
   visVærdipapirDetaljer,
-  sælgPapirForm
+  sælgPapirForm,
+  hentKursudvikling
 };
 

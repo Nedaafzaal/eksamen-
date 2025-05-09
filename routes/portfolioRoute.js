@@ -28,6 +28,6 @@ router.post("/vaerdipapir/:id/sellPapir", portfolioController.købEllerSælg);
 // Denne route til sidst!
 router.get("/:id", portfolioController.visEtPortefølje);
 
-
+router.get("/vaerdipapir/:symbol/historik", portfolioController.hentKursudvikling);
 module.exports = router;
 

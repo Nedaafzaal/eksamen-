@@ -6,6 +6,7 @@
   <title><%= værdipapir.navn %> - Detaljer</title>
   <link href="/valueInfo.css" rel="stylesheet" />
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
 
 <body>
@@ -65,8 +66,8 @@
     </div>
 
     <div class="diagramBoks">
-      <h2>Oversigt over udvikling af værdi</h2>
-      <div id="chart" style="max-width: 700px; margin-top: 2rem;"></div>
+      <h2>Oversigt over udvikling af værdi</h2> 
+ <div id="lineChart" style="max-width: 600px;"></div>
     </div>
   </div>
 
@@ -77,36 +78,36 @@
       sidemenu.classList.toggle('lukket');
     }
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <script>
-    const historik = <%= JSON.stringify(historik || []) %>;
-
-    const data = historik.map(h => ({
-      x: new Date(h.dato),
-      y: parseFloat(h.værdi)
-    }));
-
-    const options = {
-      chart: { type: 'line', height: 350, zoom: { enabled: true } },
-      series: [{ name: "Købsværdi", data }],
-      xaxis: { type: 'datetime', title: { text: 'Dato' } },
-      yaxis: {
-        title: { text: 'Købsværdi i DKK' },
-        labels: { formatter: val => val.toFixed(2) + ' kr.' }
-      },
-      tooltip: {
-        x: { format: 'dd MMM yyyy' },
-        y: {
-          formatter: val => val.toLocaleString('da-DK', {
-            style: 'currency',
-            currency: 'DKK'
-          })
+    async function hentOgVisKursGraf() {
+      const symbol = "<%= værdipapir.tickerSymbol %>";
+      const response = await fetch(`/portefolje/vaerdipapir/${symbol}/historik`);
+      const data = await response.json();
+  
+      const options = {
+        chart: { type: 'line', height: 350 },
+        series: [{
+          name: "Pris",
+          data: data.map(p => p.pris)
+        }],
+        xaxis: {
+          categories: data.map(p => p.dato),
+          title: { text: "Dato" }
+        },
+        yaxis: {
+          title: { text: "Pris (DKK)" }
+        },
+        title: {
+          text: 'Kursudvikling sidste år',
+          align: 'left'
         }
-      }
-    };
-
-    const chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
+      };
+  
+      const chart = new ApexCharts(document.querySelector("#lineChart"), options);
+      chart.render();
+    }
+  
+    hentOgVisKursGraf();
   </script>
 </body>
 </html>
