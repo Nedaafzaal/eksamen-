@@ -1,11 +1,10 @@
 const brugerData = require("../models/userModel");
 
-// Viser login-siden
 function visLoginSide(req, res) {
-  res.render("login", { fejl: null }); // fejl er tom i starten
+  res.render("login", { fejl: null }); //fejl er tom i starten
 }
 
-// Når brugeren prøver at logge ind
+//funktionaliteteer når bruger forsøger at logge ind
 async function login(req, res) {
   const { brugernavn, adgangskode } = req.body;
   const bruger = await brugerData.hentBruger(brugernavn);
@@ -15,38 +14,36 @@ async function login(req, res) {
   }
 
   if (adgangskode === bruger.adgangskode) {
-    // ✅ Sæt cookie med brugerID (gemmes i browseren)
-    res.cookie("brugerID", bruger.brugerID, { httpOnly: true });
+    
+    res.cookie("brugerID", bruger.brugerID, { httpOnly: true });//cookie der sørger for at gemme brugerID
     return res.redirect("/dashboard");
   } else {
     return res.render("login", { fejl: "Forkert adgangskode" });
   }
 }
-
-// Viser siden hvor man kan oprette en ny bruger
+//sørger for at visualisere opret bruger side 
 function visOpretBrugerSide(req, res) {
-  res.render("opretbruger"); // ingen ekstra info behøves
+  res.render("opretbruger"); 
 }
 
-// Når brugeren udfylder og sender formularen for at blive oprettet
+//hvad der sker når brugeren indtaster oplysninger og forsøger at oprette bruger
 async function opretBruger(req, res) {
   try {
-    await brugerData.opretBruger(req.body); // vi gemmer det brugeren skrev i databasen
-    res.redirect("/dashboard"); // send brugeren videre
+    await brugerData.opretBruger(req.body); // gemmer det brugeren skrev i databasen
+    res.redirect("/dashboard"); //omdirigerer brugeren videre til dashboard 
   } catch (err) {
-    console.error("Noget gik galt:", err);
+    console.error("Noget gik galt:", err); //fejlmeddelse hvis oprettelsen ikke går igennem
     res.status(500).send("Der skete en fejl, prøv igen senere");
   }
 }
 
-// Når brugeren vil skifte adgangskode
+//når brugeren vil skifte adgangskode
 async function skiftAdgangskode(req, res) {
   const { brugernavn, gammelAdgangskode, nyAdgangskode } = req.body;
 
   const adgangskodePasser = await brugerData.tjekAdgangskode(brugernavn, gammelAdgangskode);
 
-  if (!adgangskodePasser) {
-    // den gamle kode var forkert
+  if (!adgangskodePasser) { //tjekker om den gamle kode var forkert
     return res.render("indstillinger", {
       alert: "Forkert adgangskode",
       brugernavn: brugernavn,
@@ -54,26 +51,26 @@ async function skiftAdgangskode(req, res) {
   }
 
   try {
-    await brugerData.opdaterAdgangskode(brugernavn, nyAdgangskode);
+    await brugerData.opdaterAdgangskode(brugernavn, nyAdgangskode); //forsøger at ændre adgangskode til tilhørende brugerog giver en alert besked, hvis ændringen sker 
     res.render("indstillinger", {
       alert: "Adgangskode opdateret!",
       brugernavn: brugernavn,
     });
-  } catch (err) {
+
+  } catch (err) { //ellers sendes en fejlmeddelse
     console.error("Fejl:", err);
     res.status(500).send("Noget gik galt med opdatering af kode");
   }
 }
 
-// Viser indstillinger-siden
+//viser indstillinger-siden
 function visIndstillinger(req, res) {
   res.render("indstillinger", {
-    brugernavn: "", // tom til at starte med
+    brugernavn: "", //tom til at starte med
     alert: null
   });
 }
 
-// Eksporter alle funktioner samlet i bunden
 module.exports = {
   visLoginSide,
   login,
