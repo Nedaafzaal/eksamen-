@@ -1,85 +1,86 @@
-CREATE TABLE eksamenSQL.bruger (
-    brugerID INT IDENTITY (1,1), --BETYDER AT VÆRDIEN ATUOMATISK STARTER VED 1 OG TÆLLER OP MED 1 FOR HVER NU RÆKKE
-    porteføljeID INT,
+CREATE TABLE dbo.bruger (
+    brugerID INT IDENTITY (1,1), --betyder at den starter  ved 1 og og tæller autoimatisk op 
     brugernavn VARCHAR(256),
     adgangskode VARCHAR(256),
     email VARCHAR(256),
     fødselsdato DATE,
     telefonnummer INT,
-    CONSTRAINT PK_brugerID PRIMARY KEY (brugerID),
-    CONSTRAINT FK_porteføljeID FOREIGN KEY (porteføljeID)
-        REFERENCES eksamenSQL.porteføljer(porteføljeID)
+    fornavn VARCHAR(256),
+    efternavn VARCHAR(256),
+    CONSTRAINT PK_brugerID PRIMARY KEY (brugerID)
 );
 
-CREATE TABLE eksamenSQL.konto (
+CREATE TABLE dbo.konto (
     kontoID INT IDENTITY (1,1),
     brugerID INT,
     kontonavn VARCHAR(256),
     saldo DECIMAL,
-    valuta VARCHAR,
+    valuta VARCHAR (256),
     oprettelsesdato DATE,
     bankreference VARCHAR(256),
+    aktiv BIT,
     CONSTRAINT PK_kontoID PRIMARY KEY (kontoID),
     CONSTRAINT FK_brugerID FOREIGN key (brugerID)
-        REFERENCES eksamenSQL.bruger(brugerID)
+        REFERENCES dbo.bruger(brugerID)
 );
 
-CREATE TABLE eksamenSQL.transaktioner (
+CREATE TABLE dbo.porteføljer (
+    porteføljeID INT IDENTITY (1,1),
+    kontoID INT,
+    navn VARCHAR(256),
+    kontotilknytning INT,
+    sidsteHandelsDato DATE,
+    forventetVærdi DECIMAL,
+    værdipapirNavn VARCHAR(256),
+    oprettelsesDato DATE,
+    CONSTRAINT PK_porteføljeID PRIMARY KEY (porteføljeID),
+    CONSTRAINT FK_kontoID FOREIGN KEY (kontoID)
+        REFERENCES dbo.konto(kontoID)
+);
+
+CREATE TABLE dbo.transaktioner (
     transaktionID INT IDENTITY (1,1),
     sælgerKontoID INT,
     modtagerKontoId INT,
+    porteføljeID INT,
     værditype VARCHAR(256),
     dato DATE,
     tidspunkt TIME,
     transaktionstype VARCHAR(256),
-    pris DECIMAL,
     gebyr DECIMAL,
+    antal INT, 
+    tickersymbol VARCHAR(256),
     CONSTRAINT PK_transaktionID PRIMARY KEY (transaktionID),
 
     CONSTRAINT FK_sælgerKontoID FOREIGN KEY (sælgerKontoID)
-        REFERENCES eksamenSQL.konto(kontoID),
+        REFERENCES dbo.konto(kontoID),
 
     CONSTRAINT FK_modtagerKontoID FOREIGN KEY (modtagerKontoID)
-        REFERENCES eksamenSQL.konto(kontoID)
+        REFERENCES dbo.konto(kontoID),
+    
+    CONSTRAINT FK_porteføljeID FOREIGN KEY (porteføljeID)
+        REFERENCES dbo.porteføljer(porteføljeID)
 );
 
-CREATE TABLE eksamenSQL.værdipapir (
+
+CREATE TABLE dbo.værdipapir (
     værdipapirID INT IDENTITY (1,1), 
     transaktionID INT,
     navn VARCHAR(256),
     GAK DECIMAL,
     forventetVærdi DECIMAL,
     urealiseretPorteføljeGevinstTab DECIMAL,
+    antal INT, 
+    tickersymbol VARCHAR(256), 
+    pris DECIMAL, 
+    type NVARCHAR(256), 
+    datoKøbt DATE, 
+
     CONSTRAINT PK_værdipapirID PRIMARY KEY (værdipapirID),
 
     CONSTRAINT FK_transaktionId FOREIGN KEY (transaktionID)
-        REFERENCES eksamenSQL.transaktioner(transaktionID),
+        REFERENCES dbo.transaktioner(transaktionID)
 );
 
-CREATE TABLE eksamenSQL.porteføljeVærdipapir (
-    porteføljeVærdipapirID INT IDENTITY (1,1),
-    porteføljeID2 INT,
-    værdipapirID INT,
-    CONSTRAINT PK_porteføljeVærdipapirID PRIMARY KEY (porteføljeVærdipapirID),
-
-    CONSTRAINT FK_porteføljeID2 FOREIGN KEY (porteføljeID2)
-        REFERENCES eksamenSQL.porteføljer(porteføljeID),
-
-    CONSTRAINT FK_værdipapirID2 FOREIGN KEY (værdipapirID)
-        REFERENCES eksamenSQL.værdipapir(værdipapirID)
-);
-
-CREATE TABLE eksamenSQL.porteføljer (
-    porteføljeID INT IDENTITY (1,1),
-    værdipapirID INT,
-    navn VARCHAR(256),
-    kontotilknytning INT,
-    dato DATE,
-    forventetVærdi DECIMAL,
-    værdipapirNavn VARCHAR(256),
-    CONSTRAINT PK_porteføljeID PRIMARY KEY (porteføljeID),
-    CONSTRAINT FK_værdipapirID FOREIGN KEY (værdipapirID)
-        REFERENCES eksamenSQL.værdipapir(værdipapirID)
-);
 
 
