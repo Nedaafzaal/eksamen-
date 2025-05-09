@@ -1,9 +1,13 @@
 const sql = require("mssql");
 const sqlConfig = require("../sqlConfig/sqlConfig");
 
+async function hentDB(){ 
+    return await sql.connect(sqlConfig);
+}
+
 class DashboardData {
 async hentPorteføljerMedAktierForBruger(brugerID) {
-  const db = await sql.connect(sqlConfig);
+  const db = await hentDB();
   const result = await db.request()
   .input("brugerID", sql.Int, brugerID)
   .query(`

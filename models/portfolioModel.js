@@ -354,7 +354,7 @@ async hentKontiForBruger(brugerID) {
   }
   
   async hentVærdipapirMedID(id) {
-    const db = await sql.connect(sqlConfig);
+    const db = await hentDB();
     const result = await db.request()
       .input("id", sql.Int, id)
       .query(`SELECT 
@@ -402,7 +402,6 @@ async hentKontiForBruger(brugerID) {
   
   async hentOgOpdaterVærdipapirMedAktuelVærdi(værdipapirID) {
     const db = await hentDB();
-  
     const værdipapir = await db.request()
       .input("værdipapirID", sql.Int, værdipapirID)
       .query(`

@@ -113,7 +113,7 @@ async gemTransaktion(data) {
 
 //opret en ny konto 
 async opretNyKonto(formData, brugerID) {
-    const db = await sql.connect(sqlConfig);
+    const db = await hentDB();
     const result = await db.request()
   .input("navn", sql.NVarChar, formData.navn)
   .input("saldo", sql.Decimal(18, 2), parseFloat(formData.saldo))
@@ -146,7 +146,7 @@ async sætAktivStatus(kontoID, aktiv) {
   }
 
   async hentPorteføljeIDForBruger(brugerID) {
-    const db = await sql.connect(sqlConfig);
+    const db = await hentDB();
     const result = await db.request()
       .input("brugerID", sql.Int, brugerID)
       .query(`SELECT porteføljeID FROM dbo.porteføljer WHERE brugerID = @brugerID`);
