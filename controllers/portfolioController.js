@@ -1,24 +1,44 @@
+//importerer modeller
 const portfolioModel = require("../models/portfolioModel");
 const accountModel = require("../models/accountModel");
 
 
-// Viser alle porteføljer i en liste
+//funktion til at vise alle porteføljer for brugeren
 async function visPorteføljeOversigt(req, res) {
     try {
-      const brugerID = parseInt(req.cookies.brugerID); // HENT BRUGER ID
+      const brugerID = parseInt(req.cookies.brugerID); 
+
       if (!brugerID) {
         return res.status(401).send("Bruger ikke logget ind.");
       }
   
-      const porteføljer = await portfolioModel.hentAllePorteføljerForBruger(brugerID); // SEND MED
+      const porteføljer = await portfolioModel.hentAllePorteføljerForBruger(brugerID);
+      
+    
+    //går igennem hvert portefølje (p) for brugeren hvor den først henter alle værdipapirer og dernæst beregner den samlede værdi (total value) for alle værdipapirer i den p den er på. 
+    for (const portefølje of porteføljer) {
+        const aktier = await portfolioModel.hentVærdipapirTilPortefølje(portefølje.porteføljeID);
+        let samletVærdi = 0;
+    
+        for (const aktie of aktier) {
+            samletVærdi += aktie.pris * aktie.antal;
+        }
+        portefølje.totalValue = samletVærdi; //gemmer totalvalue som en egenskab af objektet porteføljer. 
+    }
   
-      for (const p of porteføljer) {
-        const papirer = await portfolioModel.hentVærdipapirTilPortefølje(p.porteføljeID);
-        p.totalValue = papirer.reduce((sum, papir) => sum + (papir.pris * papir.antal), 0);
-      }
-  
-      const totalVærdi = porteføljer.reduce((sum, p) => sum + (p.totalValue || 0), 0);
+    let totalVærdi = 0;
+
+        //gennemgår hvert portefølje ejet af brugeren og bestemmer totalværdien for alle porteføljer. Hvis ikke portefølje har en totalValue, lægges 0 til for at undgå programmet fejler. 
+        for (const portefølje of porteføljer) {
+        if (portefølje.totalValue) {
+            totalVærdi += portefølje.totalValue;
+        } else {
+            totalVærdi += 0; 
+        }
+    }
+
       res.render("portefoljeOversigt", { porteføljer, totalVærdi });
+
     } catch (err) {
       console.error("Fejl ved hentning af porteføljer:", err);
       res.status(500).send("Noget gik galt ved visning af porteføljeoversigten.");
@@ -26,7 +46,7 @@ async function visPorteføljeOversigt(req, res) {
   }
   
   
-// Viser én bestemt portefølje og dens aktier
+//funktion som henter portefølje og dens tihørende aktier
 async function visEtPortefølje(req, res) {
   const porteføljeID = parseInt(req.params.id, 10);
   if (isNaN(porteføljeID)) {
@@ -39,18 +59,21 @@ async function visEtPortefølje(req, res) {
     }
     const værdipapirer = await portfolioModel.hentVærdipapirTilPortefølje(porteføljeID);
     const historik = await portfolioModel.hentVærdiHistorik(porteføljeID);
+
+    //bestemmer samletværdi for værdipapirer i portefølje. Gennemgår en forloop gennem alle værdipapirer og ganger antallet af værdipapir med erhvevelsesprisen = samlet værdi. 
     let samletVærdi = 0;
     for (let i = 0; i < værdipapirer.length; i++) {
       samletVærdi += værdipapirer[i].antal * værdipapirer[i].pris;
     }
-    res.render("portefolje", { portefølje, værdipapirer, samletVærdi,historik });
+
+    res.render("portefolje", { portefølje, værdipapirer, samletVærdi, historik });
   } catch (err) {
     console.error("Fejl ved visning af portefølje:", err);
     res.status(500).send("Noget gik galt ved visning af portefølje.");
   }
 }
 
-// Viser formularen til at oprette ny portefølje
+//funktion som viser formular for oprettelse af portefølje
 async function visOpretPorteføljeFormular(req, res) {
     const brugerID = parseInt(req.cookies.brugerID);
   
@@ -63,8 +86,11 @@ async function visOpretPorteføljeFormular(req, res) {
     }
   }
 
-  async function opretPortefølje(req, res) {
-    const { navn, kontoID, forventetVærdi } = req.body;
+//funktion hvor oprettelsen foregår
+async function opretPortefølje(req, res) {
+    const navn = req.body.navn;
+    const kontoID = req.body.kontoID;
+    const forventetVærdi = req.body.forventetVærdi;
     const brugerID = req.cookies.brugerID;
   
     if (!brugerID) {
@@ -88,8 +114,7 @@ async function visOpretPorteføljeFormular(req, res) {
   
   
 
-// Viser køb/salg transaktioner for en portefølje
-
+//viser køb/salg transaktioner for et portefølje
 async function hentTransaktionerForPortefølje(req, res) {
     const porteføljeID = parseInt(req.params.id, 10);
     if (isNaN(porteføljeID)) {
@@ -98,7 +123,7 @@ async function hentTransaktionerForPortefølje(req, res) {
   
     try {
       const transaktioner = await portfolioModel.hentTransaktionerForPortefølje(porteføljeID);
-      const portefølje = await portfolioModel.hentPorteføljeMedID(porteføljeID); // <- her bruger du din eksisterende funktion
+      const portefølje = await portfolioModel.hentPorteføljeMedID(porteføljeID);
   
       res.render("handelshistorik", { transaktioner, portefølje });
     } catch (err) {
@@ -107,20 +132,23 @@ async function hentTransaktionerForPortefølje(req, res) {
     }
   }
 
-// Søger efter værdipapir med API og viser søgeresultat
+// //søger efter værdipapirer med API og viser resultat
 async function søgEfterPapir(req, res) {
   const søgning = req.query.query;
   const porteføljeID = req.params.id;
+
   if (!søgning) {
-      
-      return res.status(400).send("Skriv venligst noget du vil søge efter.");
+      return res.status(400).send("Skriv venligst noget.");
     }
     try {
+        //bygger et link til alpha vantage API til at søge efter aktier
         const søgeLink = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${søgning}&apikey=${process.env.API_KEY}`;
         const svar = await fetch(søgeLink);
         const data = await svar.json();
         //console.log("Alpha Vantage response:", data);
-    const fundet = data.bestMatches?.[0];
+    
+    //bestMaches er en liste array, og vi beder den om at gennem fundet som det første match 
+    const fundet = data.bestMatches[0];
     if (!fundet) {
       return res.send("Ingen værdipapir fundet.");
     }

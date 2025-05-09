@@ -1,13 +1,16 @@
-const sql = require("mssql"); //importere mysql pakken
-const sqlConfig = require("../sqlConfig/sqlConfig"); //importere oplysninger der bruges til at oprette forbindelse til databasen
+//impoterer Node.js-pakken Microsoft SQL Server-database
+//importerer vores 
+const sql = require("mssql"); 
+const sqlConfig = require("../sqlConfig/sqlConfig"); 
 
-async function hentDB(){
+//laver en funktion som connecter til vores database
+async function hentDB(){ 
     return await sql.connect(sqlConfig);
 }
 
-//hent alle konti fra databasen
+//hent alle konti for brugeren fra databasen, funktionen tager parameter brugerID
 async function hentAlleKontiForBruger(brugerID) {
-    const db = await hentDB(); //opretter forbindelse til databasen
+    const db = await hentDB(); 
     const result = await db.request()
     .input("brugerID", sql.Int, brugerID)
     .query(`

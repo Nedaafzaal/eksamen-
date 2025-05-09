@@ -1,6 +1,7 @@
-const accountModel = require("../models/accountModel"); //importerer account model hvor der er funktioner der bruges til at arbejde med konto data
+//importerer model så der er kommunikation til databasen
+const accountModel = require("../models/accountModel"); 
 
-//Funktion som viser en oversigt over alle konti
+//funktion som viser konti for brugeren
 async function visAlleKonti(req, res) {
     try {
       const brugerID = parseInt(req.cookies.brugerID);
@@ -9,41 +10,45 @@ async function visAlleKonti(req, res) {
       }
   
       const konti = await accountModel.hentAlleKontiForBruger(brugerID);
-      res.render("kontiOversigt", { konti });
+      res.render("kontiOversigt", { konti }); //videresender konti obejkt og dermed alle dens egenskaber videre til frontend, kontiOversigt.ejs.
   
     } catch (err) {
-      console.error("Fejl ved hentning af konti:", err);
+      //console.error("Fejl ved hent af konti:", err);
       res.status(500).send("Noget gik galt");
     }
   }
   
 
-//Funktion som viser en konto og de tilhørende transaktioner
+//funktion som viser en konto og dens tilhørende transaktioner
 async function visEnKonto(req, res) {
   const kontoID = parseInt(req.params.id, 10); //tager konto id'et fra url (ruten), som sendes ved forespørgslen, og laver den om fra string til heltal. 
 
   const konto = await accountModel.hentKontoMedID(kontoID); //henter konto med funktionen fra accountmodel, ved at tage fat i det kontoID der gives i url
-  if (!konto) { //hvis ikke konto eksisterer, sendes statuskode 404 (siden ikek fundet) med en besked.
-    return res.status(404).send("Konto med ID " + kontoID + " blev ikke fundet.");
+  if (!konto) {
+    return res.status(404).send("Konto med ID: " + kontoID + " blev ikke fundet.");
   }
 
   const transaktioner = await accountModel.hentTransaktionerForKonto(kontoID); //finder transaktion for den bestemte konto med funktion fra accountmodel.
   res.render("konti", { konto, transaktioner }); //sender konto og transaktions obejkt - fx navn, saldo, type, dato osv. - videre til konti.ejs.
 }
 
-//Funktion som viser formular for når bruger ønsker at indsætte penge. 
+//funktion som viser formular for når bruger ønsker at indsætte penge. 
 async function visIndsætFormular(req, res) {
-  const kontoID = parseInt(req.params.id, 10); //tager igen fat i kontoID fra URL, omformer fra string til heltal. 
-  try { //beder program om at prøve at køre følgende kode
+  const kontoID = parseInt(req.params.id, 10); 
+
+  //beder program om at prøve at køre følgende kode
+  try { 
     const konto = await accountModel.hentKontoMedID(kontoID);
-    res.render("insertValue", { konto }); //sender konto-objektet til insertValue.ejs, således vi kan tilgå dets attributter i formularen. 
-  } catch (err) { //hvis ikke det over lykkedes, skal følgende ske:
+    res.render("insertValue", { konto }); 
+
+    //hvis ikke konto kan hentes:
+  } catch (err) { 
     //console.error("Fejl ved visning af indsæt-side:", err); //således vi kunne se fejlen
-    res.status(500).send("Konto kunne ikke findes"); //statuskode sendes til brugeren med fejlmeddelse
+    res.status(500).send("Konto kunne ikke findes");
   }
 }
 
-//Funktionen hvor penge sættes ind på konto
+//funktionen hvor selve indsættelsen af penge sker
 async function indsætVærdi(req, res) {
     const kontoID = parseInt(req.body.kontoID); // sletter 10
     //console.log(kontoID)
@@ -55,15 +60,17 @@ async function indsætVærdi(req, res) {
       if (!konto || isNaN(kontoID)) {
         return res.status(400).send("Konto blev ikke fundet.");
       }
-  
+      
+      //hvis konto er deaktiv
       if (!konto.aktiv) {
         return res.status(400).send("Kontoen er lukket.");
       }
   
-      // 1. Opdater saldo
+      //ellers opdateres saldo
       await accountModel.opdaterSaldo(kontoID, beløb);
   
-      // 2. Gem transaktion (uden porteføljeID)
+
+      //transaktion gemmes 
       await accountModel.gemTransaktion({
         type: "indsæt",
         kontoID,
@@ -72,6 +79,7 @@ async function indsætVærdi(req, res) {
       });
   
       res.redirect(`/konto/${kontoID}`);
+
     } catch (err) {
       console.error("Fejl under indsæt:", err);
       res.status(500).send("Kunne ikke indsætte penge");
@@ -79,7 +87,7 @@ async function indsætVærdi(req, res) {
   }
   
   
-//Funktion som viser hæv-formular
+//funktion som henter hæv formular
 async function visHævFormular(req, res) {
   const kontoID = parseInt(req.params.id, 10);
   try { 
@@ -91,9 +99,9 @@ async function visHævFormular(req, res) {
   }
 }
 
-//Funktion som hæver værdi
+//funktion hvor bruger kan hæve 
 async function hævVærdi(req, res) {
-    const kontoID = parseInt(req.body.kontoID, 10);
+    const kontoID = parseInt(req.body.kontoID);
     const beløb = parseFloat(req.body.beløb);
     const valuta = req.body.valuta;
   
@@ -107,16 +115,19 @@ async function hævVærdi(req, res) {
       if (konto.aktiv === false) {
         return res.status(400).send("Konto er lukket og der kan dermed ikke hæves værdi");
       }
-  
+      
+      //da der er tale om hæv og der dermed reduceres penge på konto, vil det være minus beløb. 
       await accountModel.opdaterSaldo(kontoID, -beløb);
-  
+      
+      //transaktionen gemmes som typen hæv
       await accountModel.gemTransaktion({
         type: "hæv",
         beløb,
         kontoID,
         valuta
       });
-  
+      
+      //når bruger har hævet, skal de omdirigeres til den konto, hvorpå de har hævet. 
       res.redirect(`/konto/${kontoID}`);
     } catch (err) {
       res.status(500).send("Kunne ikke hæve penge");
@@ -125,43 +136,45 @@ async function hævVærdi(req, res) {
   
 
 
-//Funktion for formular til at oprette ny konto
+//funktion til formular af opret konto
 async function visOpretFormular(req, res) {
     try {
-      const brugerID = req.cookies.brugerID; // Hent brugerens ID fra cookies
+      const brugerID = req.cookies.brugerID;
   
       if (!brugerID) {
         return res.status(401).send("Bruger ikke logget ind.");
       }
   
-      res.render("opretKonto"); // Ingen porteføljeID sendes, da konto er uafhængig
+      res.render("opretKonto"); 
+
     } catch (err) {
       console.error("Fejl ved visning af opret konto-formular:", err);
       res.status(500).send("Noget gik galt");
     }
+
   }
   
   
   
-
-//når brugeren opretter en ny konto
+//funktion hvor oprettelsen foregår
 async function opretKonto(req, res) {
     try {
       const brugerID = req.cookies.brugerID; 
-
-      //console.log("brugerID er:", req.cookies.brugerID);
-
   
-      if (!brugerID) { //hvis ikke brugerId eksisterer
+      if (!brugerID) { 
         return res.status(401).send("Bruger kan ikke findes");
       }
-  
-      const nyKontoID = await accountModel.opretNyKonto(req.body, brugerID); //den oprettede konto får et kontoID
+      
+      //opretter/genere et nyt kontoID når ny konto oprettes
+      const nyKontoID = await accountModel.opretNyKonto(req.body, brugerID); 
 
-     if (!nyKontoID || isNaN(nyKontoID)) { //hvis ikke der oprettes nyt kontoID eller hvis det ikke er et tal, sendes:
+     if (!nyKontoID || isNaN(nyKontoID)) { 
      throw new Error("Konto blev ikke oprettet korrekt");
-}
-      res.redirect(`/konto/${nyKontoID}`); //hvis konto oprettes, sendes brugeren til sin konto side for den nyoprettede konto.
+    }   
+
+    ////hvis konto oprettes, sendes brugeren til sin konto side for den nyoprettede konto.
+    res.redirect(`/konto/${nyKontoID}`); 
+
     } catch (err) {
       //console.error("kontooprettelse:", err);
       res.status(500).send("Kunne ikke oprette konto");
@@ -169,9 +182,10 @@ async function opretKonto(req, res) {
   }
   
 
-//når brugeren vil deaktivere sin konto
+//når brugeren vil deaktivere/lukke sin konto
 async function lukKonto(req, res) {
-  const kontoID = req.params.id; //tager fat i kontoID fra URL
+  const kontoID = req.params.id; 
+  
   try {
     await accountModel.sætAktivStatus(kontoID, false); //venter på status bliver sat til false som betyder lukket.
     res.redirect(`/konto/${kontoID}`); //omdirigerer til den givne konto baseret på kontoID

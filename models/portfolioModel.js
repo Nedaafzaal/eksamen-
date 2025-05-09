@@ -488,15 +488,18 @@ async function hentKontiForBruger(brugerID) {
     return result.recordset;
   }
   
-  async function hentTotalRealiseretGevinst() {
+  async function hentTotalRealiseretGevinst(brugerID) {
     const db = await hentDB();
-  
-    const result = await db.request().query(`
-      SELECT 
-        SUM(CASE WHEN transaktionstype = 'salg' THEN (pris - gebyr) ELSE 0 END) AS totalSalg,
-        SUM(CASE WHEN transaktionstype = 'køb' THEN (pris + gebyr) ELSE 0 END) AS totalKøb
-      FROM dbo.transaktioner
-    `);
+    const result = await db.request()
+      .input("brugerID", sql.Int, brugerID)
+      .query(`
+        SELECT 
+          SUM(CASE WHEN t.transaktionstype = 'salg' THEN (t.pris - t.gebyr) ELSE 0 END) AS totalSalg,
+          SUM(CASE WHEN t.transaktionstype = 'køb' THEN (t.pris + t.gebyr) ELSE 0 END) AS totalKøb
+        FROM dbo.transaktioner t
+        JOIN dbo.porteføljer p ON t.porteføljeID = p.porteføljeID
+        WHERE p.brugerID = @brugerID
+      `);
   
     const { totalSalg, totalKøb } = result.recordset[0];
     return (totalSalg || 0) - (totalKøb || 0);
