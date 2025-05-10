@@ -6,7 +6,7 @@ async function hentDB() {
 }
 
 class BrugerData {
-  // Hent én bruger fra databasen ud fra brugernavn
+  //metode som henter brugerens informationer ud fra brugernavn
   async hentBruger(brugernavn) {
     const database = await sql.connect(sqlConfig);
     const resultat = await database.request()
@@ -15,11 +15,10 @@ class BrugerData {
         SELECT * FROM dbo.bruger
         WHERE brugernavn = @brugernavn
       `);
-
-    return resultat.recordset[0]; // returnér den første (eller undefined hvis ingen findes)
+    return resultat.recordset[0]; 
   }
 
-  // Hent én bruger fra databasen ud fra brugerID
+  //henter en bruger med brugerID
   async hentBrugerMedID(brugerID) {
     const db = await hentDB();
     const resultat = await db.request()
@@ -29,10 +28,10 @@ class BrugerData {
         WHERE brugerID = @brugerID
       `);
 
-    return resultat.recordset[0]; // fx { brugernavn: 'Yasaman' }
+    return resultat.recordset[0];
   }
 
-  // Opret en ny bruger med info fra formularen
+  //metode som opretter en ny bruger. Bliver brugt i opretBruger formular
   async opretBruger(data) {
     const db = await hentDB();
     await db.request()
@@ -44,38 +43,37 @@ class BrugerData {
       .input("fødselsdato", sql.Date, data.fødselsdag)
       .input("telefonnummer", sql.NVarChar, data.telefonnummer)
       .query(`
-        INSERT INTO [dbo].[bruger]
-        (fornavn, efternavn, brugernavn, adgangskode, email, fødselsdato, telefonnummer)
+        INSERT INTO dbo.bruger (fornavn, efternavn, brugernavn, adgangskode, email, fødselsdato, telefonnummer)
         VALUES (@fornavn, @efternavn, @brugernavn, @adgangskode, @email, @fødselsdato, @telefonnummer)
       `);
   }
 
-  // Tjek om brugernavn OG adgangskode passer sammen
+  //validering af adgangskode for når bruger prøver at logge ind
   async tjekAdgangskode(brugernavn, adgangskode) {
     const db = await hentDB();
     const resultat = await db.request()
       .input("brugernavn", sql.NVarChar, brugernavn)
       .input("adgangskode", sql.NVarChar, adgangskode)
       .query(`
-        SELECT * FROM [dbo].[bruger]
+        SELECT * FROM dbo.bruger
         WHERE brugernavn = @brugernavn AND adgangskode = @adgangskode
       `);
-
-    return resultat.recordset.length > 0;
+    return resultat.recordset.length > 0; //returnerer true hvis adgangskode passer overens med brugernavn
   }
 
-  // Skift brugerens adgangskode
+  //metode til når bruger ønsker at opdatere/skifte sin adgangskode, som går ind i tabellen bruger og sætter adgangskoden til nyKode, der hvor brugernavn i databasen er = brugerens brugernavn
   async opdaterAdgangskode(brugernavn, nyKode) {
     const db = await hentDB();
     await db.request()
       .input("brugernavn", sql.NVarChar, brugernavn)
       .input("nyKode", sql.NVarChar, nyKode)
       .query(`
-        UPDATE [dbo].[bruger]
+        UPDATE dbo.bruger
         SET adgangskode = @nyKode
         WHERE brugernavn = @brugernavn
       `);
   }
 }
 
+//eksportere ny instans af klassen BrugerData
 module.exports = new BrugerData();

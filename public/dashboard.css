@@ -133,11 +133,10 @@ button.pil {
 }
 
 .sidemenu.lukket {
-left: -220px; /* Skub siden helt uden for skærmen */
+left: -220px; 
 width: 0;
 }
 
-/*CSS til boks med top 5 værdipapirer baseret på værdi*/
 .top5-header, .top5-row {
   display: flex;
   justify-content: space-between;
@@ -160,7 +159,7 @@ width: 0;
 }
 
 .positiv {
-  color: #4caf50; /* grøn */
+  color: #4caf50; 
 }
 
 .negativ {

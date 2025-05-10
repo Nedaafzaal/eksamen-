@@ -1,65 +1,45 @@
+//importerer model
 const brugerData = require("../models/userModel");
 
+//funktion til at vise login side
 function visLoginSide(req, res) {
-  res.render("login", { fejl: null }); //fejl er tom i starten
+  res.render("login", { fejl: null }); //fejl sættes til null til at starte med
 }
 
-//funktionaliteteer når bruger forsøger at logge ind
+//funktion der sikrer bruger logger ind med rigtig brugernavn og adgangskode
 async function login(req, res) {
-  const { brugernavn, adgangskode } = req.body;
+  const brugernavn = req.body.brugernavn;
+  const adgangskode = req.body.adgangskode;
+
+  //henter bruger fra databasen ud fra det brugernavn, der logges ind med
   const bruger = await brugerData.hentBruger(brugernavn);
 
   if (!bruger) {
     return res.render("login", { fejl: "Forkert brugernavn" });
   }
 
+  //hvis adgangskoden passer til den eksisterende brugers adgangskode, gemmes brugerens ID i en cookie, således bruger kan forblive logget ind
   if (adgangskode === bruger.adgangskode) {
-    
-    res.cookie("brugerID", bruger.brugerID, { httpOnly: true });//cookie der sørger for at gemme brugerID
+    res.cookie("brugerID", bruger.brugerID, { httpOnly: true });
     return res.redirect("/dashboard");
   } else {
-    return res.render("login", { fejl: "Forkert adgangskode" });
+    return res.render("login", { fejl: "Forkert adgangskode" }); //hvis ikke adgangskode passer, sendes fejl meddelelse
   }
 }
-//sørger for at visualisere opret bruger side 
+
+//funktion som henter siden til opret bruger side
 function visOpretBrugerSide(req, res) {
   res.render("opretbruger"); 
 }
 
-//hvad der sker når brugeren indtaster oplysninger og forsøger at oprette bruger
+//funktion der opretter bruger
 async function opretBruger(req, res) {
   try {
     await brugerData.opretBruger(req.body); // gemmer det brugeren skrev i databasen
     res.redirect("/dashboard"); //omdirigerer brugeren videre til dashboard 
   } catch (err) {
-    console.error("Noget gik galt:", err); //fejlmeddelse hvis oprettelsen ikke går igennem
+    console.error("Noget gik galt:", err); 
     res.status(500).send("Der skete en fejl, prøv igen senere");
-  }
-}
-
-//når brugeren vil skifte adgangskode
-async function skiftAdgangskode(req, res) {
-  const { brugernavn, gammelAdgangskode, nyAdgangskode } = req.body;
-
-  const adgangskodePasser = await brugerData.tjekAdgangskode(brugernavn, gammelAdgangskode);
-
-  if (!adgangskodePasser) { //tjekker om den gamle kode var forkert
-    return res.render("indstillinger", {
-      alert: "Forkert adgangskode",
-      brugernavn: brugernavn,
-    });
-  }
-
-  try {
-    await brugerData.opdaterAdgangskode(brugernavn, nyAdgangskode); //forsøger at ændre adgangskode til tilhørende brugerog giver en alert besked, hvis ændringen sker 
-    res.render("indstillinger", {
-      alert: "Adgangskode opdateret!",
-      brugernavn: brugernavn,
-    });
-
-  } catch (err) { //ellers sendes en fejlmeddelse
-    console.error("Fejl:", err);
-    res.status(500).send("Noget gik galt med opdatering af kode");
   }
 }
 
@@ -71,11 +51,41 @@ function visIndstillinger(req, res) {
   });
 }
 
+//funktion til ændring af adgangskode
+async function skiftAdgangskode(req, res) {
+  const brugernavn = req.body.adgangskode;
+  const gammelAdgangskode = req.body.gammelAdgangskode;
+  const nyAdgangskode = req.body.nyAdgangskode;
+
+  const adgangskodeKorrekt = await brugerData.tjekAdgangskode(brugernavn, gammelAdgangskode);
+
+  if (!adgangskodeKorrekt) { //hvis gammel adgangskode ikke passer overens med databasen, sendes alert
+    return res.render("indstillinger", {
+      alert: "Forkert adgangskode",
+      brugernavn: brugernavn,
+    });
+  }
+
+  try {
+    //forsøger at opdatere den nye adgangskode i databasen
+    await brugerData.opdaterAdgangskode(brugernavn, nyAdgangskode); 
+    res.render("indstillinger", {
+      alert: "Adgangskode opdateret!",
+      brugernavn: brugernavn,
+    });
+
+  } catch (err) { 
+    //ellers sendes en fejlmeddelse
+    console.error("Fejl:", err);
+    res.status(500).send("Noget gik galt med opdatering af kode");
+  }
+}
+
 module.exports = {
   visLoginSide,
   login,
   visOpretBrugerSide,
   opretBruger,
-  skiftAdgangskode,
-  visIndstillinger
+  visIndstillinger,
+  skiftAdgangskode
 };

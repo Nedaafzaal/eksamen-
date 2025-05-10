@@ -1,6 +1,8 @@
 const express = require("express"); 
 const router = express.Router(); 
-const portfolioController = require("../controllers/portfolioController"); //impoterer portofolioController, der indeholder logikken for porteføljer
+
+//impoterer portofolioController, der indeholder logikken for porteføljer
+const portfolioController = require("../controllers/portfolioController"); 
 
 //GET-anmodningene sørger for at de enkelte funktioner bliver kaldt i de enkelte controllers, når man er på den pågældende rute.
 router.get("/oversigt", portfolioController.visPorteføljeOversigt);
@@ -24,10 +26,8 @@ router.get("/vaerdipapir/:id/sellPapir", portfolioController.sælgPapirForm);
 
 router.post("/vaerdipapir/:id/sellPapir", portfolioController.købEllerSælg);
 
-
-// Denne route til sidst!
-router.get("/:id", portfolioController.visEtPortefølje);
-
 router.get("/vaerdipapir/:symbol/historik", portfolioController.hentKursudvikling);
+
 module.exports = router;
 
+router.get("/:id", portfolioController.visEtPortefølje);

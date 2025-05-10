@@ -1,4 +1,5 @@
-const assert = require("assert"); //importere assert til at lave test
+//importere assert til at lave test og importere portefølje controller og model
+const assert = require("assert"); 
 const portfolioController = require("../controllers/portfolioController");
 const portfolioModel = require("../models/portfolioModel");
 

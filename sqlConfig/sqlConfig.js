@@ -1,3 +1,5 @@
+//information om vores database. Eksporterer den således vores modeller har adgang til at forbinde til databasen
+
 module.exports = {
     user: 'prog584',
     password: 'Hejhej123!',
