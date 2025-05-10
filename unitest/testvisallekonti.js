@@ -1,12 +1,12 @@
 const assert = require("assert");
 const kontoController = require("../controllers/accountController");
-const kontoModel = require("../models/accountModel");
+const kontoData = require("../models/accountModel");
 
 //uni test på funktionen VisAlleKonti
 async function testVisAlleKonti() {
   
   //test 1: skal retunere to fiktive konti i stedet for at hente fra databasen 
-  kontoModel.hentAlleKonti = async () => [
+  kontoData.hentAlleKontiForBruger = async () => [
     { kontoID: 1, navn: "Konto A" },
     { kontoID: 2, navn: "Konto B" }
   ];
@@ -28,8 +28,15 @@ async function testVisAlleKonti() {
     }
   };
 
+  //mock request med cookies
+  const req = {
+    cookies: {
+      brugerID: 1
+    }
+  };
+
   //kør controller funktionen 
-  await kontoController.visAlleKonti({}, res);
+  await kontoController.visAlleKonti(req, res);
 
   //det skal væere den rigtige ejs fil der bliver brugt 
   assert.strictEqual(res.view, "kontiOversigt");
