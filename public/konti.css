@@ -80,12 +80,12 @@ button.pil {
   }
     
 .sidemenu.lukket {
-    left: -220px; /* Skub siden helt uden for skærmen */
+    left: -220px; 
     width: 0;
   }
   
-  /* CSS til indhol på siden*/
 
+  /* CSS til indhold på siden*/
 h1 {
     margin-left: 250px;
   }

@@ -6,6 +6,7 @@ function visLoginSide(req, res) {
   res.render("login", { fejl: null }); //fejl sættes til null til at starte med
 }
 
+
 //funktion der sikrer bruger logger ind med rigtig brugernavn og adgangskode
 async function login(req, res) {
   const brugernavn = req.body.brugernavn;
@@ -15,7 +16,7 @@ async function login(req, res) {
   const bruger = await brugerData.hentBruger(brugernavn);
 
   if (!bruger) {
-    return res.render("login", { fejl: "Forkert brugernavn" });
+    return res.render("login", { fejl: "Forkert brugernavn, prøv venligst igen" });
   }
 
   //hvis adgangskoden passer til den eksisterende brugers adgangskode, gemmes brugerens ID i en cookie, således bruger kan forblive logget ind
@@ -23,14 +24,16 @@ async function login(req, res) {
     res.cookie("brugerID", bruger.brugerID, { httpOnly: true });
     return res.redirect("/dashboard");
   } else {
-    return res.render("login", { fejl: "Forkert adgangskode" }); //hvis ikke adgangskode passer, sendes fejl meddelelse
+    return res.render("login", { fejl: "Forkert adgangskode, prøv venligst igen" }); //hvis ikke adgangskode passer, sendes fejl meddelelse
   }
 }
+
 
 //funktion som henter siden til opret bruger side
 function visOpretBrugerSide(req, res) {
   res.render("opretbruger"); 
 }
+
 
 //funktion der opretter bruger
 async function opretBruger(req, res) {
@@ -38,10 +41,11 @@ async function opretBruger(req, res) {
     await brugerData.opretBruger(req.body); // gemmer det brugeren skrev i databasen
     res.redirect("/dashboard"); //omdirigerer brugeren videre til dashboard 
   } catch (err) {
-    console.error("Noget gik galt:", err); 
+    console.error("Noget gik galt", err); 
     res.status(500).send("Der skete en fejl, prøv igen senere");
   }
 }
+
 
 //viser indstillinger-siden
 function visIndstillinger(req, res) {
@@ -59,13 +63,12 @@ async function skiftAdgangskode(req, res) {
 
   const adgangskodeKorrekt = await brugerData.tjekAdgangskode(brugernavn, gammelAdgangskode);
 
-  if (!adgangskodeKorrekt) { //hvis gammel adgangskode ikke passer overens med databasen, sendes alert
+  if (!adgangskodeKorrekt) { //hvis gammel adgangskode ikke stemmer overens med databasen, sendes alert
     return res.render("indstillinger", {
       alert: "Forkert adgangskode",
       brugernavn: brugernavn,
     });
   }
-
   try {
     //forsøger at opdatere den nye adgangskode i databasen
     await brugerData.opdaterAdgangskode(brugernavn, nyAdgangskode); 
@@ -76,8 +79,8 @@ async function skiftAdgangskode(req, res) {
 
   } catch (err) { 
     //ellers sendes en fejlmeddelse
-    console.error("Fejl:", err);
-    res.status(500).send("Noget gik galt med opdatering af kode");
+    console.error("Fejl", err);
+    res.status(500).send("Noget gik galt med opdatering af kode, prøv igen");
   }
 }
 

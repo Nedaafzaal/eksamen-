@@ -17,11 +17,10 @@ async function hentTopAktier() {
   for (const symbol of symbols) { 
     const url = `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${API_KEY}`;
     
-    //for hver iteration sendes GET-anmoding til URL vha. fetch og parser svaret som JSON-objekt
-    const svar = await fetch(url); 
-    const data = await svar.json(); 
+    const svar = await fetch(url); //sender en GET request til det angivne url og venter på svar
+    const data = await svar.json(); //læser svaret som json
 
-    //hvis data indeholder markedsværdi, skal følgende skubbes ind i resultatslisten:
+    //hvis data indeholder markedsværdi, skal følgende skubbes ind i resultatslisten
     if (data.marketCapitalization) { 
       resultater.push({
         symbol: symbol,
@@ -30,19 +29,19 @@ async function hentTopAktier() {
       });
     }
   }
-
   //resultatslisten skal vises fra størst til mindst, og kun 5 svar skal gemmes
   return resultater
     .sort((a, b) => b.marketCap - a.marketCap)
     .slice(0, 5);
 }
 
+
 //funktion til at vise dashboard for den bruger, der er logget ind
 async function visDashboard(req, res) {
   try {
     const brugerID = parseInt(req.cookies.brugerID);
     const bruger = await userModel.hentBrugerMedID(brugerID);
-    const brugernavn = bruger.brugernavn || "Ukendt"; //hvis ikke brugernavn kan hentes, skal "ukendt" vises.
+    const brugernavn = bruger.brugernavn || "Ukendt"; //hvis ikke brugernavn kan hentes, skal "ukendt" vises
 
     const porteføljer = await dashboardModel.hentPorteføljerMedAktierForBruger(brugerID);
     const totalRealiseret = await portfolioModel.hentTotalRealiseretGevinst(brugerID);
@@ -74,15 +73,12 @@ async function visDashboard(req, res) {
         samletVærdi,
       });
     }
-
-    //henter top 5 aktier fra brugerens portefølje, fra størst til mindst. 
+    //henter top 5 aktier fra brugerens portefølje, fra størst til mindst
     const top5Profit = aktieData
       .sort((a, b) => b.urealiseretGevinst - a.urealiseretGevinst)
       .slice(0, 5);
 
-    
-    //vi kalder på funktionen hentTopAktier
-    const top5 = await hentTopAktier();
+    const top5 = await hentTopAktier(); //vi kalder på funktionen hentTopAktier
 
     //videresender følgende egenskaber til dashboard.ejs
     res.render("dashboard", {
@@ -95,12 +91,11 @@ async function visDashboard(req, res) {
     });
 
   } catch (err) {
-    console.error("Fejl i dashboard:", err);
-    res.status(500).send("Noget gik galt med dashboardet.");
+    console.error("Fejl i dashboard indhold", err);
+    res.status(500).send("Noget gik galt ved dashboardet");
   }
 }
 
-//eksporterer funktionerne så de kan benyttes i routes
 module.exports = {
   visDashboard,
   hentTopAktier,

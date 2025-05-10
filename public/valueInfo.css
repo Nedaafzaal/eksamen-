@@ -117,12 +117,12 @@ body {
 
   #lineChart {
     width: 100%;
-    height: 260px; /* tilpas højde efter behov */
+    height: 260px; 
   }
   
   #pieChart {
     width: 100%;
-    height: 260px; /* ens med linechart for symmetri */
+    height: 260px; 
   }
   
 
@@ -160,7 +160,7 @@ body {
     align-items: center;
     margin-left: 140px;
     margin-right: 100px;
-    margin-top: 40px; /* lidt mere luft nedad */
+    margin-top: 40px; 
   }
   
   .sælgKnapBox {

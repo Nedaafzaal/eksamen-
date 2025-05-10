@@ -163,11 +163,11 @@ width: 0;
 }
 
 .negativ {
-  color: #f44336; /* rød */
+  color: #f44336; 
 }
 
 .grafHeader h2 {
-  font-size: 12px;       /* Mindre skrift */
+  font-size: 12px;  
   margin: 0;
   color: white;
   font-weight: normal;
@@ -178,7 +178,7 @@ width: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 5px 15px 0 15px;  /* Mindre padding */
+  padding: 5px 15px 0 15px;
 }
 
 

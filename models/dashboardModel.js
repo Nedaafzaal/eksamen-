@@ -1,5 +1,3 @@
-//impoterer Node.js-pakken Microsoft SQL Server-database
-//importerer vores databaseoplysninger
 const sql = require("mssql");
 const sqlConfig = require("../sqlConfig/sqlConfig");
 
@@ -8,11 +6,9 @@ async function hentDB(){
     return await sql.connect(sqlConfig);
 }
 
-//opretter en klasse DashboardData
-class DashboardData {
 
-    //metode som henter porteføljer med aktier for den bruger som er logget ind.
-    //da porteføljetabellen ikke har brugerID som FK, må porteføljer joines med konto- og værdipapirtabel.
+class DashboardData {
+    //metode som henter porteføljer med aktier for den bruger som er logget ind, da porteføljetabellen ikke har brugerID som FK, må porteføljer joines med konto- og værdipapirtabel
     async hentPorteføljerMedAktierForBruger(brugerID) {
         const db = await hentDB();
         const result = await db.request()

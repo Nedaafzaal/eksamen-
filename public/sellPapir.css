@@ -74,7 +74,7 @@ body {
   .speciel {
     display: flex;
     flex-direction: column;
-    align-items: center; /* centrér indholdet vandret */
+    align-items: center; 
     margin-bottom: 29px;
   }
   
@@ -86,7 +86,7 @@ body {
   }
   
   .speciel input {
-    width: 20%; /* eller hvad der passer pænt */
+    width: 20%; 
     text-align: center;
     height: 30px;
     padding: 10px 15px;

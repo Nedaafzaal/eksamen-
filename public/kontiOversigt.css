@@ -92,7 +92,7 @@ button.pil {
 
 .tilføjKnapBox {
     display: flex;
-    justify-content: flex-end; /* skubber indholdet (knappen) helt til højre */
+    justify-content: flex-end; 
     margin-right: 317px;
     margin-bottom: 20px;
       }

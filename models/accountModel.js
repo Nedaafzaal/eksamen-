@@ -8,8 +8,8 @@ async function hentDB(){
     return await sql.connect(sqlConfig);
 }
 
-class KontoData {
 
+class KontoData {
 //metode som henter alle konti for brugeren, på baggrund af brugerens ID
 async hentAlleKontiForBruger(brugerID) {
     const db = await hentDB(); 
@@ -21,6 +21,7 @@ async hentAlleKontiForBruger(brugerID) {
   `); 
   return result.recordset; //retunerer en liste af alle konti
 }
+
 
 //metode som henter en bestemt konto for brugeren
 async hentKontoMedID(kontoID) {
@@ -35,6 +36,7 @@ async hentKontoMedID(kontoID) {
   return result.recordset[0]; //her forventes kun en konto, hvorfor vi returnerer element med [0].
 }
 
+
 //metode som henter alle transaktioner for en konto
 async hentTransaktionerForKonto(kontoID) {
   const db = await hentDB();
@@ -46,6 +48,7 @@ async hentTransaktionerForKonto(kontoID) {
   `); 
   return result.recordset; 
 }
+
 
 //metode som sætter penge til eller fra saldo, alt efter transaktionstypen: indsæt, hæv, køb eller salg. Beløbets fortegn bestemmes i controller
 async opdaterSaldo(kontoID, beløb) {
@@ -60,12 +63,13 @@ async opdaterSaldo(kontoID, beløb) {
     `);
 }
 
+
 //metode der gemmer transaktioner
 async gemTransaktion(data) {
     const db = await hentDB();
     const nu = new Date(); //tager tidspunkt som det tidspunkt, hvor transaktionen udføres
     
-    //da denne metode både benyttes til handel og indsæt/hæv, må vi skelne mellem hvilken type. Derfor laver vi en konstant "harPortefølje". Hvis konstanten er sand, må det betyde der er tale om handel, da handler er afhængige af porteføljeID, mens indsæt/hæv ikke er:
+    //da denne metode både benyttes til handel og indsæt/hæv, må vi skelne mellem hvilken type. Derfor laver vi en konstant "harPortefølje". Hvis konstanten er sand, må det betyde der er tale om handel, da handler er afhængige af porteføljeID, mens indsæt/hæv ikke er
     const harPortefølje = data.porteføljeID !== undefined && data.porteføljeID !== null; 
 
     //starter opbygning af SQL-request
@@ -114,12 +118,11 @@ async gemTransaktion(data) {
     }
 }
 
-
-    //metode som opretter ny konto ud fra brugerID og det brugeren afsender i formularen. Benytter OUTPUT INSERTED.kontoID til at returnere det automatisk generede kontoID
+//metode som opretter ny konto ud fra brugerID og det brugeren afsender i formularen. Benytter OUTPUT INSERTED.kontoID til at returnere det automatisk generede kontoID
     async opretNyKonto(formularData, brugerID) {
         const db = await hentDB();
         const result = await db.request()
-        .input("navn", sql.NVarChar, formularData.navn) //tekstværdi
+        .input("navn", sql.NVarChar, formularData.navn) 
         .input("saldo", sql.Decimal(18, 2), parseFloat(formularData.saldo))
         .input("valuta", sql.NVarChar, formularData.valuta)
         .input("dato", sql.Date, new Date())
@@ -135,7 +138,8 @@ async gemTransaktion(data) {
         return result.recordset[0].kontoID; //returnerer kontoID på nyoprettet konto
     }
 
-    //metode der ændrer en kontos status vha. BIT, 1=true=aktiv 0=false=deaktiv
+
+//metode der ændrer en kontos status vha. BIT, 1=true=aktiv 0=false=deaktiv
     async sætAktivStatus(kontoID, aktiv) {
         const db = await hentDB();
         await db.request()
@@ -149,5 +153,4 @@ async gemTransaktion(data) {
     }
 }
 
-//opretter ny instans og eksporterer den således vi kan benytte os af objektet i controller
 module.exports = new KontoData();

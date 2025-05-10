@@ -22,7 +22,7 @@
             <!--laver en drop down menu, så bruger kan bestemme hvilken konto de ønsker at tilknytte portefølje til. Vi henter konto vha. emredded JavaScript-->
             <select name="kontoID" id="kontoID" required>
 
-              <!--forloop gennem hver konto (listearray) som er tilsendt fra serveren. For hver konto laves der en valgmulighed (option). Value bliver= konto.kontoID sendes tilbage til server, når bruger vælger-->
+              <!--foreach gennem hver konto (listearray) som er tilsendt fra serveren. For hver konto laves der en valgmulighed (option). Value bliver= konto.kontoID sendes tilbage til server, når bruger vælger-->
               <% konti.forEach(konto => { %>
                 <option value="<%= konto.kontoID %>">
                   <%= konto.kontonavn %> (Saldo: <%= konto.saldo %>)
