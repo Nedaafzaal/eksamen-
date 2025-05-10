@@ -1,8 +1,8 @@
-//importerer node-fetch og modeller
+//importerer node-fetch og klasser
 const fetch = require("node-fetch");
-const dashboardModel = require("../models/dashboardModel");
-const portfolioModel = require("../models/portfolioModel");
-const userModel = require("../models/userModel");
+const dashboardData = require("../models/dashboardModel");
+const portefoljeData = require("../models/portfolioModel");
+const brugerData = require("../models/userModel");
 
 //henter vores API-nøgle fra Finnhub og gemmer 5 af de største aktievirksomheder med størst markedsværdi i en liste
 const API_KEY = "d0ad5fpr01qm3l9kmfg0d0ad5fpr01qm3l9kmfgg";
@@ -40,11 +40,11 @@ async function hentTopAktier() {
 async function visDashboard(req, res) {
   try {
     const brugerID = parseInt(req.cookies.brugerID);
-    const bruger = await userModel.hentBrugerMedID(brugerID);
+    const bruger = await brugerData.hentBrugerMedID(brugerID);
     const brugernavn = bruger.brugernavn || "Ukendt"; //hvis ikke brugernavn kan hentes, skal "ukendt" vises
 
-    const porteføljer = await dashboardModel.hentPorteføljerMedAktierForBruger(brugerID);
-    const totalRealiseret = await portfolioModel.hentTotalRealiseretGevinst(brugerID);
+    const porteføljer = await dashboardData.hentPorteføljerMedAktierForBruger(brugerID);
+    const totalRealiseret = await portefoljeData.hentTotalRealiseretGevinst(brugerID);
 
     let totalVærdi = 0;
     let totalUrealiseret = 0;

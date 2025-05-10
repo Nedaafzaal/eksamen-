@@ -1,7 +1,7 @@
 //importerer node-fetch og modeller
 const fetch = require("node-fetch"); 
-const portfolioModel = require("../models/portfolioModel");
-const accountModel = require("../models/accountModel");
+const portefoljeData = require("../models/portfolioModel");
+const kontoData = require("../models/accountModel");
 
 
 //funktion til at vise alle porteføljer for brugeren
@@ -13,11 +13,11 @@ async function visPorteføljeOversigt(req, res) {
         return res.status(401).send("Bruger er ikke logget ind");
       }
 
-      const porteføljer = await portfolioModel.hentAllePorteføljerForBruger(brugerID);
+      const porteføljer = await portefoljeData.hentAllePorteføljerForBruger(brugerID);
     
     //ydre forloop som gennemgår hver portefølje og henter dens tilknyttede aktier
     for (const portefølje of porteføljer) {
-        const aktier = await portfolioModel.hentVærdipapirTilPortefølje(portefølje.porteføljeID);
+        const aktier = await portefoljeData.hentVærdipapirTilPortefølje(portefølje.porteføljeID);
         let samletVærdi = 0; //initialisere samletværdi fra denne portefølje
         
       
@@ -56,13 +56,13 @@ async function visEtPortefølje(req, res) {
   }
 
   try {
-    const portefølje = await portfolioModel.hentPorteføljeMedID(porteføljeID);
+    const portefølje = await portefoljeData.hentPorteføljeMedID(porteføljeID);
     if (!portefølje) {
       return res.status(404).send("Portefølje blev ikke fundet");
     }
 
-    const værdipapirer = await portfolioModel.hentVærdipapirTilPortefølje(porteføljeID);
-    const historik = await portfolioModel.hentVærdiHistorik(porteføljeID);
+    const værdipapirer = await portefoljeData.hentVærdipapirTilPortefølje(porteføljeID);
+    const historik = await portefoljeData.hentVærdiHistorik(porteføljeID);
 
     let samletVærdi = 0; //initialiserer samlet værdi til 0
 
@@ -82,7 +82,7 @@ async function visEtPortefølje(req, res) {
 async function visOpretPorteføljeFormular(req, res) {
     const brugerID = parseInt(req.cookies.brugerID);
     try {
-      const konti = await portfolioModel.hentKontiForBruger(brugerID);
+      const konti = await portefoljeData.hentKontiForBruger(brugerID);
       res.render("opretportefolje", { konti });
     } catch (err) {
       console.error("Fejl ved hentning af konto", err);
@@ -103,7 +103,7 @@ async function opretPortefølje(req, res) {
   
     try {
         //sender det hentede navn og kontoID videre til modellen
-        await portfolioModel.opretNyPortefølje({
+        await portefoljeData.opretNyPortefølje({
             navn,
             kontoID: parseInt(kontoID)
           });
@@ -123,8 +123,8 @@ async function hentTransaktionerForPortefølje(req, res) {
     }
 
     try {
-      const transaktioner = await portfolioModel.hentTransaktionerForPortefølje(porteføljeID);
-      const portefølje = await portfolioModel.hentPorteføljeMedID(porteføljeID);
+      const transaktioner = await portefoljeData.hentTransaktionerForPortefølje(porteføljeID);
+      const portefølje = await portefoljeData.hentPorteføljeMedID(porteføljeID);
   
       res.render("handelshistorik", { transaktioner, portefølje });
 
@@ -170,7 +170,7 @@ async function søgEfterPapir(req, res) {
     const pris = prisData["Global Quote"]["05. price"] || "Ukendt";
 
     const brugerID = req.cookies.brugerID;
-    const konti = await portfolioModel.hentKontiForBruger(brugerID);
+    const konti = await portefoljeData.hentKontiForBruger(brugerID);
     
     let kontoID = null; //sætter kontoID lig null
 
@@ -205,11 +205,11 @@ async function visBuyPapirForm(req, res) {
     }
   
     try {
-      const portefølje = await portfolioModel.hentPorteføljeMedID(porteføljeID);
+      const portefølje = await portefoljeData.hentPorteføljeMedID(porteføljeID);
       if (!portefølje) {
         return res.status(404).send("Portefølje kunne ikke findes");
       }
-      const konto = await accountModel.hentKontoMedID(portefølje.kontoID);
+      const konto = await kontoData.hentKontoMedID(portefølje.kontoID);
       if(!konto){
         return res.status(404).send("Tilknyttet konto findes ikke");
       }
@@ -250,15 +250,15 @@ async function købEllerSælg(req, res) {
         navn: req.body.navn
       };
     
-      const konto = await accountModel.hentKontoMedID(data.kontoID);
+      const konto = await kontoData.hentKontoMedID(data.kontoID);
         if (!konto || !konto.aktiv) {
         return res.status(403).send("Kontoen er lukket, dermed er ingen handel mulig");
         }
   
-      await portfolioModel.registrerHandel(data);
+      await portefoljeData.registrerHandel(data);
   
       //opdaterer sidste handelsdato
-      await portfolioModel.opdaterSidsteHandelsDato(data.porteføljeID);
+      await portefoljeData.opdaterSidsteHandelsDato(data.porteføljeID);
   
       //omdirigerer bruger til sit portefølje med oversigt over værdipapirer
       res.redirect(`/portefolje/${data.porteføljeID}`);
@@ -277,13 +277,13 @@ async function visVærdipapirDetaljer(req, res) {
     }
     try {
       //henter og opdaterer urealiseret gevinst/tab fra model
-      const værdipapir = await portfolioModel.hentOgOpdaterVærdipapirMedAktuelVærdi(værdipapirID);
+      const værdipapir = await portefoljeData.hentOgOpdaterVærdipapirMedAktuelVærdi(værdipapirID);
       if (!værdipapir) {
         return res.status(404).send("Værdipapir blev ikke fundet");
       }
 
   //henter historik for værdipapir
-  const historik = await portfolioModel.hentHistorikForVærdipapir(værdipapirID);
+  const historik = await portefoljeData.hentHistorikForVærdipapir(værdipapirID);
       res.render("valueInfo", { værdipapir, historik });
     } catch (err) {
       console.error(err);
@@ -295,7 +295,7 @@ async function visVærdipapirDetaljer(req, res) {
   //funktion der henter formular for sælg papir
   async function sælgPapirForm(req, res) {
     const værdipapirID = parseInt(req.params.id);
-    const værdipapir = await portfolioModel.hentVærdipapirMedID(værdipapirID);   
+    const værdipapir = await portefoljeData.hentVærdipapirMedID(værdipapirID);   
     if (!værdipapir) {
       return res.status(404).send("Værdipapir blev ikke fundet");
     }
@@ -303,13 +303,13 @@ async function visVærdipapirDetaljer(req, res) {
     const porteføljeID = værdipapir.porteføljeID;
   
     //henter det portefølje som værdipapir tilhører
-    const portefølje = await portfolioModel.hentPorteføljeMedID(porteføljeID);
+    const portefølje = await portefoljeData.hentPorteføljeMedID(porteføljeID);
     if (!portefølje) {
       return res.status(404).send("Portefølje blev ikke fundet");
     }
   
     //henter den konto, portefølje tilhører
-    const konto = await accountModel.hentKontoMedID(portefølje.kontoID);
+    const konto = await kontoData.hentKontoMedID(portefølje.kontoID);
     if (!konto) {
       return res.status(404).send("Konto blev ikke fundet");
     }

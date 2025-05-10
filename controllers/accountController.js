@@ -1,5 +1,5 @@
-//importerer model så metoderne kan benyttes 
-const accountModel = require("../models/accountModel"); 
+//importerer klassen så metoderne kan benyttes 
+const kontoData = require("../models/accountModel"); 
 
 //funktion som viser alle konti for brugeren
 async function visAlleKonti(req, res) {
@@ -9,7 +9,7 @@ async function visAlleKonti(req, res) {
         return res.status(401).send("Bruger er ikke logget ind");
       }
 
-      const konti = await accountModel.hentAlleKontiForBruger(brugerID);
+      const konti = await kontoData.hentAlleKontiForBruger(brugerID);
       res.render("kontiOversigt", { konti }); //videresender konti objekt og dermed alle dens egenskaber videre til visning, kontiOversigt.ejs.
   
     } catch (err) {
@@ -23,11 +23,11 @@ async function visAlleKonti(req, res) {
 async function visEnKonto(req, res) {
   const kontoID = parseInt(req.params.id); //tager konto id'et fra url (ruten), som sendes ved forespørgslen, og laver den om fra string til heltal
 
-  const konto = await accountModel.hentKontoMedID(kontoID);
+  const konto = await kontoData.hentKontoMedID(kontoID);
   if (!konto) {
     return res.status(404).send("Konto med ID: " + kontoID + " blev ikke fundet desværre");
   }
-  const transaktioner = await accountModel.hentTransaktionerForKonto(kontoID); 
+  const transaktioner = await kontoData.hentTransaktionerForKonto(kontoID); 
   res.render("konti", { konto, transaktioner });  //videresender til visning
 }
 
@@ -38,7 +38,7 @@ async function visIndsætFormular(req, res) {
 
   //beder program om at prøve at hente konto med ID og sende konto videre
   try { 
-    const konto = await accountModel.hentKontoMedID(kontoID);
+    const konto = await kontoData.hentKontoMedID(kontoID);
     res.render("insertValue", { konto }); 
 
     //hvis ikke konto kan hentes
@@ -59,7 +59,7 @@ async function indsætVærdi(req, res) {
     const valuta = req.body.valuta;
   
     try {
-      const konto = await accountModel.hentKontoMedID(kontoID);
+      const konto = await kontoData.hentKontoMedID(kontoID);
       if (!konto || isNaN(kontoID)) {
         return res.status(400).send("Konto blev desværre ikke fundet");
       }
@@ -70,11 +70,11 @@ async function indsætVærdi(req, res) {
       }
   
       //hvis konto findes og ID er et tal, opdateres saldo
-      await accountModel.opdaterSaldo(kontoID, beløb);
+      await kontoData.opdaterSaldo(kontoID, beløb);
   
 
       //transaktionen gemmes som typen "indsæt" og med tilhørende egenskaber
-      await accountModel.gemTransaktion({
+      await kontoData.gemTransaktion({
         type: "indsæt",
         kontoID,
         valuta,
@@ -95,7 +95,7 @@ async function visHævFormular(req, res) {
   const kontoID = parseInt(req.params.id);
 
   try { 
-    const konto = await accountModel.hentKontoMedID(kontoID);
+    const konto = await kontoData.hentKontoMedID(kontoID);
     res.render("withdrawValue", { konto });
   } catch (err) {
     console.error("Fejl ved hæv: ", err);
@@ -111,7 +111,7 @@ async function hævVærdi(req, res) {
     const valuta = req.body.valuta;
   
     try {
-      const konto = await accountModel.hentKontoMedID(kontoID);
+      const konto = await kontoData.hentKontoMedID(kontoID);
   
       if (!konto || isNaN(kontoID)) {
         return res.status(400).send("Noget gik galt");
@@ -121,10 +121,10 @@ async function hævVærdi(req, res) {
         return res.status(400).send("Konto er lukket og der kan dermed ikke hæves en værdi");
       }
       
-      await accountModel.opdaterSaldo(kontoID, -beløb); //da der er tale om hæv og der dermed reduceres penge på konto, vil det være minus beløb 
+      await kontoData.opdaterSaldo(kontoID, -beløb); //da der er tale om hæv og der dermed reduceres penge på konto, vil det være minus beløb 
       
       //transaktionen gemmes som typen "hæv" og med tilhørende egenskaber
-      await accountModel.gemTransaktion({
+      await kontoData.gemTransaktion({
         type: "hæv",
         beløb,
         kontoID,
@@ -168,7 +168,7 @@ async function opretKonto(req, res) {
       }
       
       //opretter kontoen og gemmer det automatisk generede kontoID
-      const nyKontoID = await accountModel.opretNyKonto(req.body, brugerID); 
+      const nyKontoID = await kontoData.opretNyKonto(req.body, brugerID); 
 
      if (!nyKontoID || isNaN(nyKontoID)) { 
      throw new Error("Konto blev ikke oprettet");
@@ -186,7 +186,7 @@ async function lukKonto(req, res) {
   const kontoID = req.params.id; 
 
   try {
-    await accountModel.sætAktivStatus(kontoID, false); //venter på status på aktiv bliver sat til false
+    await kontoData.sætAktivStatus(kontoID, false); //venter på status på aktiv bliver sat til false
     res.redirect(`/konto/${kontoID}`); //omdirigerer til den givne konto baseret på kontoID
   } catch (err) {
     console.error("Fejl ved lukning af konto:", err);
@@ -199,7 +199,7 @@ async function lukKonto(req, res) {
 async function åbnKonto(req, res) {
   const kontoID = req.params.id;
   try {
-    await accountModel.sætAktivStatus(kontoID, true); //venter på status på aktiv bliver sat til true
+    await kontoData.sætAktivStatus(kontoID, true); //venter på status på aktiv bliver sat til true
     res.redirect(`/konto/${kontoID}`); 
   } catch (err) {
     console.error("fejl ved åbning af konto:", err);
