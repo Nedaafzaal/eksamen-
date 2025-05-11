@@ -38,8 +38,10 @@ function visOpretBrugerSide(req, res) {
 //funktion der opretter bruger
 async function opretBruger(req, res) {
   try {
-    await brugerData.opretBruger(req.body); // gemmer det brugeren skrev i databasen
-    res.redirect("/dashboard"); //omdirigerer brugeren videre til dashboard
+    const bruger = await brugerData.opretBruger(req.body);
+    res.cookie("brugerID", bruger.brugerID, { httpOnly: true });
+    res.redirect("/dashboard");
+
   } catch (err) {
     console.error("Bruger kunne ikke oprettes", err);
     res.status(500).send("Der skete en fejl, prøv igen senere");

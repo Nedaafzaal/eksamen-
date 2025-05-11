@@ -32,10 +32,10 @@ class BrugerData {
   }
 
 
-  //metode som opretter en ny bruger. Bliver brugt i opretBruger formular
+  //metode som opretter ny bruger
   async opretBruger(data) {
     const db = await hentDB();
-    await db
+    const result = await db
       .request()
       .input("fornavn", sql.NVarChar, data.fornavn)
       .input("efternavn", sql.NVarChar, data.efternavn)
@@ -43,10 +43,14 @@ class BrugerData {
       .input("adgangskode", sql.NVarChar, data.opretadgangskode)
       .input("email", sql.NVarChar, data.email)
       .input("fødselsdato", sql.Date, data.fødselsdag)
-      .input("telefonnummer", sql.NVarChar, data.telefonnummer).query(`
+      .input("telefonnummer", sql.NVarChar, data.telefonnummer)
+      .query(`
         INSERT INTO dbo.bruger (fornavn, efternavn, brugernavn, adgangskode, email, fødselsdato, telefonnummer)
+        OUTPUT INSERTED.brugerID
         VALUES (@fornavn, @efternavn, @brugernavn, @adgangskode, @email, @fødselsdato, @telefonnummer)
       `);
+
+    return { brugerID: result.recordset[0].brugerID }; 
   }
 
 
