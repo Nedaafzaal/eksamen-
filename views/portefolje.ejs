@@ -55,7 +55,7 @@
     <!--øverste sektion -->
     <div class="øverste">
       <div class="grafboks">
-        <h3>Samlet værdi</h3>
+        <h3>Samlet værdi og graf over forventet urealiseret gevinst</h3>
         <!--hvis der findes værdipapirer i portefølje, skal samlet værdi vises i dansk valutaform-->
         <% if (værdipapirer.length > 0) { %>
           <p><%= samletVærdi.toLocaleString('da-DK', { style: 'currency', currency: 'DKK' }) %></p>

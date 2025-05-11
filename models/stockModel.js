@@ -160,7 +160,6 @@ class VærdipapirData {
   }
 }
 
-
 class HandelData {
   //metode som registrerer handlen
   async registrerHandel(data) {
@@ -170,6 +169,7 @@ class HandelData {
       data.gebyr = 19; //sætter gebyr på hvis det er en salgshandel 
     } else {
       data.gebyr = 0; //ellers ingen gebyr 
+    } // FIX: lukket else-blokken korrekt
 
     //henter kontoID via porteføljeID
     const kontoQuery = await db
@@ -210,9 +210,7 @@ class HandelData {
           WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
         `);
 
-      const antalEjet = beholdning.recordset[0].antal; //hvor mange aktier brugeren har
-
-     
+      const antalEjet = beholdning.recordset[0]?.antal ?? 0; //hvor mange aktier brugeren har
       if (antalEjet < data.antal)
         throw new Error("Du forsøger at sælge flere aktier end du ejer");
 
@@ -227,7 +225,7 @@ class HandelData {
           WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
         `);
 
-      //henter GAK og antal til at beregne gevinst eller tab
+      //henter GAK og nyt antal til at beregne gevinst eller tab
       const gevinstResult = await db
         .request()
         .input("porteføljeID", sql.Int, data.porteføljeID)
@@ -236,14 +234,13 @@ class HandelData {
           WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
         `);
 
-      //henter antal og GAK fra første række vores database giver
       const række = gevinstResult.recordset[0] || {};
-      const antal = række.antal;
+      const antalTilbage = række.antal ?? 0;
       const GAK = række.GAK;
 
       //hvis antal og GAK er et tal, skal gevinst bestemmes og værdipapirer skal opdateres med den nye gevinst
-      if (!isNaN(antal) && !isNaN(GAK)) {
-        const gevinst = antal * data.pris - antal * GAK;
+      if (!isNaN(antalTilbage) && !isNaN(GAK)) {
+        const gevinst = data.antal * (data.pris - GAK); // FIX: korrekt gevinstberegning baseret på antal solgt
         await db
           .request()
           .input("gevinst", sql.Decimal(18, 2), gevinst)
@@ -256,7 +253,7 @@ class HandelData {
       }
 
       //hvis alle værdipapirer sælges og antal=0, skal den slettes fra portefølje
-      if (antal === 0) {
+      if (antalTilbage === 0) { // FIX: tjekker antal efter opdatering
         await db
           .request()
           .input("porteføljeID", sql.Int, data.porteføljeID)
@@ -267,11 +264,47 @@ class HandelData {
       }
     }
 
+    // Hvis det er et køb, skal vi enten opdatere eksisterende værdipapir eller oprette nyt
+    if (data.type === "køb") {
+      const eksisterendePapir = await db.request()
+        .input("porteføljeID", sql.Int, data.porteføljeID)
+        .input("ticker", sql.NVarChar, data.tickerSymbol)
+        .query(`
+          SELECT værdipapirID FROM dbo.værdipapir
+          WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
+        `);
+
+      if (eksisterendePapir.recordset.length > 0) {
+        // opdater antal
+        await db.request()
+          .input("porteføljeID", sql.Int, data.porteføljeID)
+          .input("ticker", sql.NVarChar, data.tickerSymbol)
+          .input("antal", sql.Int, data.antal)
+          .query(`
+            UPDATE dbo.værdipapir
+            SET antal = antal + @antal
+            WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
+          `);
+      } else {
+        // opret nyt værdipapir
+        await db.request()
+          .input("porteføljeID", sql.Int, data.porteføljeID)
+          .input("navn", sql.NVarChar, data.navn)
+          .input("tickerSymbol", sql.NVarChar, data.tickerSymbol)
+          .input("pris", sql.Decimal(18, 2), data.pris / data.antal) // enhedspris
+          .input("antal", sql.Int, data.antal)
+          .query(`
+            INSERT INTO dbo.værdipapir (porteføljeID, navn, tickerSymbol, pris, antal)
+            VALUES (@porteføljeID, @navn, @tickerSymbol, @pris, @antal)
+          `);
+      }
+    }
+
     //udregner saldo således ved køb af værdipapirer, at saldo reduceres
     const nySaldo =
       data.type === "køb"
         ? pengePåSaldo - data.pris //hvis det er et køb trækkes prisen fra saldoen
-        : pengePåSaldo + data.pris; //hvis det ikke er et køb ligges prisen til
+        : pengePåSaldo + (data.pris - data.gebyr); //hvis det ikke er et køb ligges prisen til
 
     //opdater saldo til nySaldo
     await db
@@ -306,8 +339,6 @@ class HandelData {
       `);
   }
 }
-}
-
 
 module.exports = {
   værdipapirData: new VærdipapirData(),
