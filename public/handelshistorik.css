@@ -122,6 +122,6 @@ button.pil {
 }
 
 .sidemenu.lukket {
-left: -220px; /* Skub siden helt uden for skærmen */
+left: -220px; /*skub siden helt uden for skærmen */
 width: 0;
 }

@@ -18,6 +18,7 @@ async function visAlleKonti(req, res) {
     }
 }
 
+
 //funktion som viser en konto og dens tilhørende transaktioner af typen indsæt og hæv
 async function visEnKonto(req, res) {
     const kontoID = parseInt(req.params.id); //tager konto id'et fra URL, og konverterer dem fra string til heltal
@@ -29,6 +30,7 @@ async function visEnKonto(req, res) {
     const kontoTransaktioner = await kontoData.hentKontoTransaktionerForKonto(kontoID); 
     res.render("konti", { konto, kontoTransaktioner });  //videresenderobjekterne konto og kontoTransaktioner (og dermed deres egenskaber) til konti.ejs (views)
 }
+
 
 //funktion som viser formular for når bruger ønsker at indsætte penge 
 async function visIndsætFormular(req, res) {
@@ -45,6 +47,7 @@ async function visIndsætFormular(req, res) {
         res.status(500).send("Konto kunne desværre ikke findes");
     }
 }
+
 
 //funktionen hvor selve indsættelsen af penge foregår
 async function indsætVærdi(req, res) {
@@ -82,6 +85,7 @@ async function indsætVærdi(req, res) {
     }
 }
 
+
 //funktion som henter hæv-formular
 async function visHævFormular(req, res) {
     const kontoID = parseInt(req.params.id);
@@ -94,6 +98,7 @@ async function visHævFormular(req, res) {
         res.status(500).send("Kunne ikke finde eksisterende konto");
     }
 }
+
 
 //funktion hvor penge hæves fra konto
 async function hævVærdi(req, res) {
@@ -129,6 +134,7 @@ async function hævVærdi(req, res) {
     }
 }
 
+
 //funktion som skal vise formular når bruger ønsker at oprette konto
 async function visOpretFormular(req, res) {
     try {
@@ -144,6 +150,7 @@ async function visOpretFormular(req, res) {
         res.status(500).send("Noget gik galt");
     }
 }
+
 
 //funktion hvor oprettelsen sker/går igennem
 async function opretKonto(req, res) {
@@ -168,6 +175,7 @@ async function opretKonto(req, res) {
     }
 }
 
+
 //funktion til at lukke konto
 async function lukKonto(req, res) {
     const kontoID = req.params.id; 
@@ -180,6 +188,7 @@ async function lukKonto(req, res) {
         res.status(500).send("Kunne ikke lukke konto desværre");
     }
 }
+
 
 //funktion til at åbne konto
 async function åbnKonto(req, res) {

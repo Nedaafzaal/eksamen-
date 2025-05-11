@@ -24,6 +24,7 @@ class PortefoljeData {
     return result.recordset;
   }
 
+
   //metode som henter portefølje med ID
   async hentPorteføljeMedID(porteføljeID) {
     const db = await hentDB();
@@ -38,6 +39,7 @@ class PortefoljeData {
     return result.recordset[0];
   }
 
+
   //metode som opretter ny portefølje
   async opretNyPortefølje(data) {
     const db = await hentDB();
@@ -50,6 +52,7 @@ class PortefoljeData {
         VALUES (@navn, @kontoID, @oprettelsesDato)
       `);
   }
+
 
   //metode der henter alle køb- og salgstransaktioner for brugerens portefølje ved at joine konto og transaktion, sorteret fra nyeste til ældste
   async hentTransaktionerForPortefølje(porteføljeID) {
@@ -70,6 +73,7 @@ class PortefoljeData {
     return result.recordset; //returnerer listen af transaktioner for givet portefølje
   }
 
+
   //metode som henter konti ejet af brugeren der er logget ind
   async hentKontiForBruger(brugerID) {
     const db = await hentDB();
@@ -80,6 +84,7 @@ class PortefoljeData {
     return result.recordset;
   }
 
+  
   //metode der opdaterer sidste handels dato
   async opdaterSidsteHandelsDato(porteføljeID) {
     const db = await hentDB();

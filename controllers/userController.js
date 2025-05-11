@@ -6,6 +6,7 @@ function visLoginSide(req, res) {
   res.render("login", { fejl: null }); //fejl sættes til null til at starte med
 }
 
+
 //funktion der sikrer bruger logger ind med rigtig brugernavn og adgangskode
 async function login(req, res) {
   const brugernavn = req.body.brugernavn;
@@ -27,10 +28,12 @@ async function login(req, res) {
   }
 }
 
+
 //funktion som henter siden til opret bruger side
 function visOpretBrugerSide(req, res) {
   res.render("opretbruger");
 }
+
 
 //funktion der opretter bruger
 async function opretBruger(req, res) {
@@ -43,13 +46,15 @@ async function opretBruger(req, res) {
   }
 }
 
-//viser indstillinger-siden
+
+//funktion der viser indstillinger-siden
 function visIndstillinger(req, res) {
   res.render("indstillinger", {
     brugernavn: "", //tom til at starte med
     alert: null,
   });
 }
+
 
 //funktion til ændring af adgangskode
 async function skiftAdgangskode(req, res) {

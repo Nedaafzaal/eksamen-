@@ -20,6 +20,7 @@ class KontoData {
     return result.recordset; //retunerer en liste af alle konti
   }
 
+
   //metode som henter en bestemt konto for brugeren
   async hentKontoMedID(kontoID) {
     const db = await hentDB();
@@ -31,6 +32,7 @@ class KontoData {
     return result.recordset[0]; //her forventes kun en konto, hvorfor vi returnerer element med [0].
   }
 
+
   //metode som henter konti ejet af brugeren der er logget ind
   async hentKontiForBruger(brugerID) {
     const db = await hentDB();
@@ -41,7 +43,8 @@ class KontoData {
     return result.recordset;
   }
 
-  //gemmer indsæt eller hæv for konti
+
+  //metode der gemmer indsæt eller hæv for konti
   async gemKontoTransaktion(data) {
     const db = await hentDB();
     const nu = new Date();
@@ -59,6 +62,7 @@ class KontoData {
         `);
   }
 
+
   //metode som henter alle transaktioner for en konto
   async hentKontoTransaktionerForKonto(kontoID) {
     const db = await hentDB();
@@ -69,6 +73,7 @@ class KontoData {
         `);
     return result.recordset;
   }
+
 
   //metode som sætter penge til eller fra saldo, alt efter transaktionstypen: indsæt, hæv, køb eller salg. Beløbets fortegn bestemmes i controller
   async opdaterSaldo(kontoID, beløb) {
@@ -83,6 +88,7 @@ class KontoData {
         `);
   }
 
+
   //metode som henter alle transaktioner for en konto
   async hentTransaktionerForKonto(kontoID) {
     const db = await hentDB();
@@ -92,6 +98,7 @@ class KontoData {
     `);
     return result.recordset;
   }
+
 
   //metode som opretter ny konto ud fra brugerID og det brugeren afsender i formularen. Benytter OUTPUT INSERTED.kontoID til at returnere det automatisk generede kontoID
   async opretNyKonto(formularData, brugerID) {
@@ -113,6 +120,7 @@ class KontoData {
     return result.recordset[0].kontoID; //returnerer kontoID på nyoprettet konto
   }
 
+  
   //metode der ændrer en kontos status vha. BIT, 1=true=aktiv 0=false=deaktiv
   async sætAktivStatus(kontoID, aktiv) {
     const db = await hentDB();

@@ -18,6 +18,7 @@ class BrugerData {
     return resultat.recordset[0];
   }
 
+
   //metode der henter en bruger med brugerID
   async hentBrugerMedID(brugerID) {
     const db = await hentDB();
@@ -29,6 +30,7 @@ class BrugerData {
 
     return resultat.recordset[0];
   }
+
 
   //metode som opretter en ny bruger. Bliver brugt i opretBruger formular
   async opretBruger(data) {
@@ -47,6 +49,7 @@ class BrugerData {
       `);
   }
 
+
   //metode for validering af adgangskode for når bruger prøver at logge ind
   async tjekAdgangskode(brugernavn, adgangskode) {
     const db = await hentDB();
@@ -59,6 +62,7 @@ class BrugerData {
       `);
     return resultat.recordset.length > 0; //returnerer true hvis adgangskode passer overens med brugernavn
   }
+  
 
   //metode til når bruger ønsker at opdatere/skifte sin adgangskode, som går ind i tabellen bruger og sætter adgangskoden til nyKode, der hvor brugernavn i databasen er = brugerens brugernavn
   async opdaterAdgangskode(brugernavn, nyKode) {

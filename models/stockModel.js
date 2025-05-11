@@ -24,6 +24,8 @@ class VærdipapirData {
       `);
   }
 
+
+  //metode der henter værdipapir til den specifikke portefølje
   async hentVærdipapirTilPortefølje(porteføljeID) {
     const db = await hentDB();
     const result = await db
@@ -34,6 +36,7 @@ class VærdipapirData {
       `);
     return result.recordset;
   }
+
 
   //metode som henter værdipapir ud fra ID
   async hentVærdipapirMedID(værdipapirID) {
@@ -47,6 +50,7 @@ class VærdipapirData {
 
     return result.recordset[0];
   }
+
 
   //metode som henter værdiudvikling for givet portefølje. Den starter med at konvertere købsdatoen til dato uden tid, summerer urealiseret gevinst/tab som værdi for det bestemte portefølje. Dette grupperes efter dato
   async hentVærdiHistorik(porteføljeID) {
@@ -65,6 +69,7 @@ class VærdipapirData {
     return result.recordset;
   }
 
+
   //metode der henter et enkelt værdipapir fra portefølje og opdaterer dets pris og urealiseret gevinst/tab
   async hentOgOpdaterVærdipapirMedAktuelVærdi(værdipapirID) {
     const db = await hentDB();
@@ -72,8 +77,7 @@ class VærdipapirData {
       .request()
       .input("værdipapirID", sql.Int, værdipapirID)
       .query(
-        `
-          SELECT værdipapirID, porteføljeID, navn, tickerSymbol, type, antal, pris, GAK, urealiseretPorteføljeGevinstTab
+        `SELECT værdipapirID, porteføljeID, navn, tickerSymbol, type, antal, pris, GAK, urealiseretPorteføljeGevinstTab
           FROM dbo.værdipapir
           WHERE værdipapirID = @værdipapirID
         `
@@ -114,6 +118,7 @@ class VærdipapirData {
     return værdipapir;
   }
 
+
   //metode der henter historik for værdipapir
   async hentHistorikForVærdipapir(værdipapirID) {
     const db = await hentDB();
@@ -135,6 +140,7 @@ class VærdipapirData {
     return result.recordset;
   }
 
+  
   //beregner den samlede realiserede gevinst eller tab
   async hentTotalRealiseretGevinst(brugerID) {
     const db = await hentDB();
@@ -153,18 +159,19 @@ class VærdipapirData {
     return (totalSalg || 0) - (totalKøb || 0);
   }
 }
+
+
 class HandelData {
   //metode som registrerer handlen
   async registrerHandel(data) {
     const db = await hentDB();
     data.antal = parseInt(data.antal);
     if (data.type === "salg") {
-      data.gebyr = 19;
+      data.gebyr = 19; //sætter gebyr på hvis det er en salgshandel 
     } else {
-      data.gebyr = 0;
-    }
+      data.gebyr = 0; //ellers ingen gebyr 
 
-    //henter kontoID via portefølje
+    //henter kontoID via porteføljeID
     const kontoQuery = await db
       .request()
       .input("porteføljeID", sql.Int, data.porteføljeID)
@@ -172,22 +179,24 @@ class HandelData {
         "SELECT kontoID FROM dbo.porteføljer WHERE porteføljeID = @porteføljeID"
       );
 
-    const kontoID = kontoQuery.recordset[0]?.kontoID;
-    if (!kontoID) throw new Error("Konto til portefølje ikke fundet");
-    data.kontoID = kontoID; // gem kontoID til brug nedenfor
+    const kontoID = kontoQuery.recordset[0]?.kontoID; //udtrækker kontoID
+    if (!kontoID) throw new Error("Konto til portefølje ikke fundet"); //fejlhåndtering
+    data.kontoID = kontoID; //gem kontoID til brug nedenfor
 
+    //henter saldo for den konto der blev fundet
     const saldoResult = await db
       .request()
       .input("kontoID", sql.Int, kontoID)
       .query("SELECT saldo FROM dbo.konto WHERE kontoID = @kontoID");
 
-    const pengePåSaldo = saldoResult.recordset[0].saldo;
+    const pengePåSaldo = saldoResult.recordset[0].saldo; //udtrækker saldo
     if (pengePåSaldo == null)
       throw new Error("Der er ikke nogle penge på den valgte konto");
 
+    //beregner prisen inkl. eller ekskl. gebyr afhængigt af typen 
     const prisMedGebyr =
-      data.type === "salg" ? data.pris - data.gebyr : data.pris;
-    if (data.type === "køb" && pengePåSaldo < prisMedGebyr) {
+      data.type === "salg" ? data.pris - data.gebyr : data.pris; //hvis transaktion er et salg trækkes gebyret fra prisen ellers bruges prisen som den er
+    if (data.type === "køb" && pengePåSaldo < prisMedGebyr) { //hvis det er et køb og saldoen ikke rækker til prisen kastes en fejl 
       throw new Error("Du har ikke nok penge til at købe.");
     }
 
@@ -201,14 +210,13 @@ class HandelData {
           WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
         `);
 
-      const antalEjet = beholdning.recordset[0].antal;
+      const antalEjet = beholdning.recordset[0].antal; //hvor mange aktier brugeren har
 
-      if (antalEjet == null)
-        throw new Error("Du ejer desværre ikke dette værdipapir");
+     
       if (antalEjet < data.antal)
         throw new Error("Du forsøger at sælge flere aktier end du ejer");
 
-      //opdaterer beholdning efter salget er gået igennem
+      //opdaterer antallet efter salget er gået igennem i databasen
       await db
         .request()
         .input("porteføljeID", sql.Int, data.porteføljeID)
@@ -219,7 +227,7 @@ class HandelData {
           WHERE porteføljeID = @porteføljeID AND tickerSymbol = @ticker
         `);
 
-      //beregning og opdatering af gevinst eller tab
+      //henter GAK og antal til at beregne gevinst eller tab
       const gevinstResult = await db
         .request()
         .input("porteføljeID", sql.Int, data.porteføljeID)
@@ -274,11 +282,11 @@ class HandelData {
 
     //transaktionen gemmes med sælgerID og modtagerID, alt efter transaktionstypen
     const sælgerID =
-      data.type === "salg" || data.type === "hæv" ? data.kontoID : null; //hvis transaktionen er et salg eller en hævning, sættes sælgerID til kontoID, ellers null
+      data.type === "salg" ? data.kontoID : null; //hvis transaktionen er et salg eller en hævning, sættes sælgerID til kontoID, ellers null
     const modtagerID =
-      data.type === "køb" || data.type === "indsæt" ? data.kontoID : null; //hvis transaktionen er et køb eller en indsætning, sættes modtagerID til kontoID, ellers null
+      data.type === "køb" ? data.kontoID : null; //hvis transaktionen er et køb eller en indsætning, sættes modtagerID til kontoID, ellers null
 
-    //transaktionen gemmes - kun én gang, med sælger/modtager
+    //transaktionen gemmes i databasen
     await db
       .request()
       .input("porteføljeID", sql.Int, data.porteføljeID)
@@ -297,6 +305,7 @@ class HandelData {
         VALUES (@porteføljeID, @type, @pris, @gebyr, @dato, @tid, @antal, @sælgerKontoID, @modtagerKontoID, @ticker, @værditype)
       `);
   }
+}
 }
 
 

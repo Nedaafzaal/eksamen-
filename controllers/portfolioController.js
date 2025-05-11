@@ -50,6 +50,7 @@ async function visPorteføljeOversigt(req, res) {
   }
 }
 
+
 //funktion som henter portefølje og dens tihørende aktier
 async function visEtPortefølje(req, res) {
   const porteføljeID = parseInt(req.params.id);
@@ -87,6 +88,7 @@ async function visEtPortefølje(req, res) {
   }
 }
 
+
 //funktion som viser formular for oprettelse af portefølje
 async function visOpretPorteføljeFormular(req, res) {
   const brugerID = parseInt(req.cookies.brugerID);
@@ -98,6 +100,7 @@ async function visOpretPorteføljeFormular(req, res) {
     res.status(500).send("Kunne ikke hente den ønskede konto");
   }
 }
+
 
 //funktion hvor oprettelsen sker af portefølje
 async function opretPortefølje(req, res) {
@@ -121,6 +124,7 @@ async function opretPortefølje(req, res) {
     res.status(500).send("Kunne ikke oprette den ønskede portefølje");
   }
 }
+
 
 //funktion som henter transaktioner for portefølje
 async function hentTransaktionerForPortefølje(req, res) {

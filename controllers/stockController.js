@@ -111,6 +111,7 @@ async function visBuyPapirForm(req, res) {
   }
 }
 
+
 //funktion der viser detaljer om værdipapir
 async function visVærdipapirDetaljer(req, res) {
   try {
@@ -137,11 +138,13 @@ async function visVærdipapirDetaljer(req, res) {
   }
 }
 
+
+//funktion når man vil købe eller sælge
 async function købEllerSælg(req, res) {
   try {
     const porteføljeID = parseInt(req.body.porteføljeID);
 
-    // Hent kontoID via porteføljeID
+    //hent kontoID via porteføljeID
     const portefølje = await portefoljeData.hentPorteføljeMedID(porteføljeID);
     if (!portefølje) {
       return res.status(404).send("Portefølje findes ikke");
@@ -168,7 +171,7 @@ async function købEllerSælg(req, res) {
       navn: req.body.navn,
     };
 
-    //kalder på registrer handel og opdater sidstehandels dat0
+    //kalder på registrer handel og opdater sidstehandels dato
     await handelData.registrerHandel(data);
     await portefoljeData.opdaterSidsteHandelsDato(porteføljeID);
     res.redirect(`/portefolje/${porteføljeID}`);
@@ -177,6 +180,7 @@ async function købEllerSælg(req, res) {
     res.status(400).send("Fejl under handel: " + err.message);
   }
 }
+
 
 //funktion der henter formular for sælg papir
 async function sælgPapirForm(req, res) {
@@ -210,6 +214,7 @@ async function sælgPapirForm(req, res) {
     tidspunkt: new Date().toISOString(),
   });
 }
+
 
 //funktion som henter kurs udvikling til visualisering
 async function hentKursudvikling(req, res) {

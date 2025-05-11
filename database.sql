@@ -1,5 +1,5 @@
 CREATE TABLE dbo.bruger (
-    brugerID INT IDENTITY (1,1), --betyder at den starter  ved 1 og og tæller autoimatisk op 
+    brugerID INT IDENTITY (1,1), --betyder at den starter ved 1 og og tæller autoimatisk op 
     brugernavn VARCHAR(256),
     adgangskode VARCHAR(256),
     email VARCHAR(256),
@@ -24,14 +24,24 @@ CREATE TABLE dbo.konto (
         REFERENCES dbo.bruger(brugerID)
 );
 
+CREATE TABLE dbo.kontoTransaktioner (
+    kontoTransaktionsID INT IDENTITY (1,1),
+    kontoID INT, 
+    beløb DECIMAL,
+    transaktionstype NVARCHAR,
+    dato DATE,
+    tidspunkt DATETIME,
+    valuta NVARCHAR,
+    CONSTRAINT PK_kontoTransaktionID PRIMARY KEY (kontoTransaktionsID),
+    CONSTRAINT FK_kontoID FOREIGN KEY (kontoID)
+    REFERENCES dbo.konto(kontoID)
+);
+
 CREATE TABLE dbo.porteføljer (
     porteføljeID INT IDENTITY (1,1),
     kontoID INT,
     navn VARCHAR(256),
-    kontotilknytning INT,
     sidsteHandelsDato DATE,
-    forventetVærdi DECIMAL,
-    værdipapirNavn VARCHAR(256),
     oprettelsesDato DATE,
     CONSTRAINT PK_porteføljeID PRIMARY KEY (porteføljeID),
     CONSTRAINT FK_kontoID FOREIGN KEY (kontoID)
@@ -40,23 +50,22 @@ CREATE TABLE dbo.porteføljer (
 
 CREATE TABLE dbo.transaktioner (
     transaktionID INT IDENTITY (1,1),
+    porteføljeID INT,
+    værdipapirID INT, 
     sælgerKontoID INT,
     modtagerKontoId INT,
-    porteføljeID INT,
     værditype VARCHAR(256),
     dato DATE,
     tidspunkt TIME,
     transaktionstype VARCHAR(256),
+    pris DECIMAL,
     gebyr DECIMAL,
     antal INT, 
     tickersymbol VARCHAR(256),
     CONSTRAINT PK_transaktionID PRIMARY KEY (transaktionID),
 
-    CONSTRAINT FK_sælgerKontoID FOREIGN KEY (sælgerKontoID)
-        REFERENCES dbo.konto(kontoID),
-
-    CONSTRAINT FK_modtagerKontoID FOREIGN KEY (modtagerKontoID)
-        REFERENCES dbo.konto(kontoID),
+    CONSTRAINT FK_værdipapirID FOREIGN KEY (værdipapirID)
+        REFERENCES dbo.værdipapir(værdipapirID),
     
     CONSTRAINT FK_porteføljeID FOREIGN KEY (porteføljeID)
         REFERENCES dbo.porteføljer(porteføljeID)
@@ -65,7 +74,7 @@ CREATE TABLE dbo.transaktioner (
 
 CREATE TABLE dbo.værdipapir (
     værdipapirID INT IDENTITY (1,1), 
-    transaktionID INT,
+    porteføljeID INT,
     navn VARCHAR(256),
     GAK DECIMAL,
     forventetVærdi DECIMAL,
@@ -78,8 +87,8 @@ CREATE TABLE dbo.værdipapir (
 
     CONSTRAINT PK_værdipapirID PRIMARY KEY (værdipapirID),
 
-    CONSTRAINT FK_transaktionId FOREIGN KEY (transaktionID)
-        REFERENCES dbo.transaktioner(transaktionID)
+    CONSTRAINT FK_porteføljeID FOREIGN KEY (porteføljeID)
+        REFERENCES dbo.porteføljer(porteføljeID)
 );
 
 

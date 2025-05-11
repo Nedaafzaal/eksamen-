@@ -14,7 +14,7 @@ function testVisLoginSide() {
     }
   };
 
-// kør controller funktionen
+//kør controller funktionen
   brugerController.visLoginSide({}, res);
 
 //tjekker om det rigtige view bliver brugt

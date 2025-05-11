@@ -80,7 +80,7 @@ body {
   margin-right: 520px;
   margin-top: 20px;
   margin-bottom: 20px;
-  flex-wrap: wrap; /*hvis de ikke kan være på én linje, rykkes de pænt ned*/
+  flex-wrap: wrap; /*hvis de ikke kan være på en linje, rykkes de pænt ned*/
 }
 
 .tilføjKnapBox {
