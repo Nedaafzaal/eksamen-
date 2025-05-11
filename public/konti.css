@@ -135,7 +135,7 @@ h1 {
   
 .listeOverskrifter, .transaktionRække {
     display: grid;
-    grid-template-columns: 190px 180px 180px 180px 180px 180px; 
+    grid-template-columns: 200px 200px 200px 200px 200px; 
     padding: 12px 0;
     padding-bottom: 10px;
     align-items: center;

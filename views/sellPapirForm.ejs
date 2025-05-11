@@ -10,8 +10,7 @@
    <!--formular til at sælge værdipapir-->
   <div class="sælgVærdipapir">
     <h3>Sælg værdipapir <%= værdipapir.navn %></h3>
-    <form action="/portefolje/vaerdipapir/<%= værdipapir.værdipapirID %>/sellPapir" method="POST">
-
+    <form action="/aktier/vaerdipapir/<%= værdipapir.værdipapirID %>/sellPapir" method="POST">
       <div class="speciel">
         <label>Pris per stk.</label>
         <input type="text" name="pris" value="<%= pris %>" readonly />
@@ -22,8 +21,7 @@
       </div>
 
       <div class="opretBox">
-        <label>Penge indsættes på <%= konto.kontoID%></label>
-        <input type="hidden" name="kontoID" value="<%= konto.kontoID %>">
+        <label>Penge indsættes på konto: <%= konto.kontonavn%></label>
       </div>
       
 

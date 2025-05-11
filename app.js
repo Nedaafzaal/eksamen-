@@ -4,10 +4,12 @@ const path = require("path"); //importere node.js indbyggede modul til at arbejd
 const cookieParser = require("cookie-parser"); //bruges til at læse cookies fra brugeren 
 
 //importerer ruterne 
-const userRoutes = require("./routes/userRoute"); 
+const userRoute = require("./routes/userRoute"); 
 const dashboardRoute = require("./routes/dashboardRoute"); 
 const accountRoute = require("./routes/accountRoute"); 
-const portfolioRoutes = require("./routes/portfolioRoute"); 
+const portfolioRoute = require("./routes/portfolioRoute"); 
+const stockRoute = require("./routes/stockRoute");
+
 
 const app = express(); //opretter express applikation
 
@@ -21,15 +23,22 @@ app.set("view engine", "ejs"); //fortæller at vi bruger ejs til at vise html si
 app.set("views", path.join(__dirname, "views")); //fortæller at ejs ligger i views 
 
 //brug de forskellige ruter 
-app.use("/", userRoutes);
+app.use("/", userRoute);
 app.use("/dashboard", dashboardRoute);
 app.use("/konto", accountRoute);
-app.use("/portefolje", portfolioRoutes);
+app.use("/portefolje", portfolioRoute);
+app.use("/aktier", stockRoute);
+
+
 
 //start serveren 
 app.listen(3000, () => {
   console.log("http://localhost:3000");
 });
+
+
+
+
 
 
 

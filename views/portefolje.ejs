@@ -39,7 +39,7 @@
 
       <!--søgefelt-->
       <!--laver en form som sender data til serveren. Dynamisk URL som indsætter porteføljeID. Gør det via. GET, som gør at porteføljeID tilsendes som en del af URL-->
-      <form action="/portefolje/<%= portefølje.porteføljeID %>/searchPapir" method="GET" class="søgForm">
+      <form action="/aktier/<%= portefølje.porteføljeID %>/searchPapir" method="GET" class="søgForm">
         <input type="text" name="query" placeholder="Søg efter navn på værdipapir" required>
         <button type="submit">Søg</button>
       </form>
@@ -95,7 +95,7 @@
         <!--forloop gennem hvert værdipapir hvor den henter navn, symbol osv.-->
         <% værdipapirer.forEach(v => { %> 
           <!--gør hele rækken trykbar-->
-          <a href="/portefolje/vaerdipapir/<%= v.id %>" class="aktieLink">
+          <a href="/aktier/vaerdipapir/<%= v.værdipapirID %>" class="aktieLink">
             <div class="aktieRække"> 
               <div><%= v.navn || 'Ukendt' %></div> 
               <div><%= v.tickerSymbol || 'Ukendt' %></div>

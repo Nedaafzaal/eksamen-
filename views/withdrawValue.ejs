@@ -13,10 +13,7 @@
     <h1>Hæv værdi på <br> <%=konto.kontonavn %> </h1> 
 
     <!--formularen der sender en POST-anmodning til serveren for at hæve penge-->
-    <form action="/konto/withdraw" method="POST">
-
-      <!--skjult input, der gemmer kontoID som er nødvendigt for serveren at identificere, hvilket konto hævelsen gælder for-->
-      <input type="hidden" name="kontoID" value="<%= konto.kontoID %>"> 
+    <form action="/konto/withdraw/<%=konto.kontoID%>" method="POST">
 
       <!--input felter, der er påkrævet for at hæve beløbet-->
       <div class="opretBox">

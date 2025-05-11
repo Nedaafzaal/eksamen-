@@ -39,7 +39,7 @@
     <div class="overskrift">
       <h2>Detaljer for <%= værdipapir.navn %></h2>
       <div class="sælgKnapBox">
-        <a href="/portefolje/vaerdipapir/<%= værdipapir.værdipapirID %>/sellPapir" class="sælgKnap">Sælg værdipapir</a>
+        <a href="/aktier/vaerdipapir/<%= værdipapir.værdipapirID %>/sellPapir" class="sælgKnap">Sælg værdipapir</a>
       </div>
     </div>
 
@@ -88,7 +88,7 @@
   <script>
     async function hentOgVisKursGraf() {
       const symbol = "<%= værdipapir.tickerSymbol %>";
-      const response = await fetch(`/portefolje/vaerdipapir/${symbol}/historik`);
+      const response = await fetch(`/aktier/vaerdipapir/${symbol}/historik`);
       const data = await response.json();
 const options = {
   chart: {

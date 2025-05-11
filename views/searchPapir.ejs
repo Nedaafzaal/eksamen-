@@ -29,11 +29,10 @@
 </div>
 
   <div class="køb"> <!--sektion med køb knap-->
-    <form action="/portefolje/<%= porteføljeID %>/buyPapir" method="GET"> <!--formular til køb af værdipapir-->
+    <form action="/aktier/<%= porteføljeID %>/buyPapir" method="GET"> <!--formular til køb af værdipapir-->
       <input type="hidden" name="symbol" value="<%= result.symbol %>"> <!--indsætter resultaterne fra serveren-->
       <input type="hidden" name="navn" value="<%= result.navn %>">
       <input type="hidden" name="pris" value="<%= result.pris %>">
-      <input type="hidden" name="kontoID" value="<%= kontoID %>">
       <button class="købKnap">Køb og tilføj til portefølje</button>
     </form>
   </div>

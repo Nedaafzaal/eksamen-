@@ -69,26 +69,24 @@
     <div class="listeOverskrifter">
       <span>Transaktionstype</span> 
       <span>Valuta</span>
-      <span>Pris</span> 
+      <span>Beløb</span> 
       <span>Dato</span> 
       <span>Tidspunkt</span> 
-      <span>Gebyr</span> 
     </div>
   
   <!--starter ejs if sætning, tjekker om der findes transaktioner-->
-    <% if (transaktioner.length > 0) { %> 
+    <% if (kontoTransaktioner.length > 0) { %> 
   
     <!--løber igennem alle transaktioner-->
-      <% transaktioner.forEach(t => { %> 
+      <% kontoTransaktioner.forEach(k => { %> 
         
         <!--en række for hver transaktion-->
         <div class="transaktionRække">
-            <div><%= t.transaktionstype %></div>
-            <div><%= t.værditype %></div>
-            <div><%= new Intl.NumberFormat('da-DK').format(t.pris) %> kr</div> <!--pris med KR-->
-            <div><%= new Date(t.dato).toLocaleDateString('da-DK') %></div>
-            <div><%= new Date(t.tidspunkt).toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' }) %></div>
-            <div><%= t.gebyr %> kr</div>
+            <div><%= k.transaktionstype %></div>
+            <div><%= k.valuta %></div>
+            <div><%= new Intl.NumberFormat('da-DK').format(k.beløb) %> kr</div>
+            <div><%= new Date(k.dato).toLocaleDateString('da-DK') %></div>
+            <div><%= new Date(k.tidspunkt).toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' }) %></div>
         </div> 
       <% }); %> <!--slut på forEach-->
   
