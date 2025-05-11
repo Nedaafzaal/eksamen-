@@ -129,7 +129,7 @@ body {
 
   .listeOverskrifter, .aktieRække {
     display: grid;
-    grid-template-columns: 140px 120px 130px 100px 150px 120px 110px 120px; 
+    grid-template-columns: 140px 140px 140px 140px 140px 140px 140px;
     padding: 12px 0;
     padding-bottom: 25px;
     border-bottom: 1px solid #333;
